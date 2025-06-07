@@ -1,4 +1,4 @@
-import 'package:sqflite/sqflite.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 import './dao_factory.dart';
 import '../../models/chapitre_model.dart';
@@ -6,10 +6,20 @@ import '../../models/chapitre_model.dart';
 class ChapitreDao {
   final DaoFactory _daofactory;
 
-  static const String table = 'Chapitre';
+  static const String table = 'Chapitres';
 
   ChapitreDao(this._daofactory);
 
+  /// Enregistre un chapitre dans la base de données
+  Future<void> storeOne(ChapitreModel chapitre) async {
+    final Database db = await _daofactory.getDatabaseInstance();
+    
+    final Map<String, Object?> mappedChapitre = chapitre.toMap();
+
+    await db.insert(table, mappedChapitre);
+  }
+
+  /// Enregistre plusieurs chapitres dans la base de données
   Future<void> storeMultiple(List<ChapitreModel> chapitres) async {
     final Database db = await _daofactory.getDatabaseInstance();
     
@@ -26,23 +36,46 @@ class ChapitreDao {
     });
   }
 
-  Future<List<ChapitreModel>> selectAll() async {
-    List<ChapitreModel> chapitres = List.empty();
 
+  /// Récupère un chapitre de la base de données
+  Future<ChapitreModel?> selectOne(int id) async {
     final Database db = await _daofactory.getDatabaseInstance();
 
-    List<Map<String, Object?>> list = await db.rawQuery("select * from ?", [table]);
-  
-    list.map((element) {
-      ChapitreModel matiere = ChapitreModel.fromMap(element);
-      chapitres.add(matiere);
-    });
+    List<Map<String, Object?>> results = await db.query(
+      table,
+      where: 'id = ?',
+      whereArgs: [id],
+      limit: 1
+    );
+
+    if(results.isEmpty) return null;
+
+    return ChapitreModel.fromMap(results.first);
+  }
+
+  /// Récupère toutes les chapitres de la base de données
+  Future<List<ChapitreModel>> selectAll() async {
+    final Database db = await _daofactory.getDatabaseInstance();
+
+    // Récuperer les lignes
+    List<Map<String, Object?>> list = await db.query(table);
+
+    List<ChapitreModel> chapitres = [];
+    for (var element in list) {
+      chapitres.add(ChapitreModel.fromMap(element));
+    }
 
     return chapitres;
   }
 
 
-  // Future<MatiereModel> detail(int id) async {
+  Future<void> delete(int id) async {
+    final Database db = await _daofactory.getDatabaseInstance();
 
-  // }
+    db.delete(
+      table, 
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+  }
 }

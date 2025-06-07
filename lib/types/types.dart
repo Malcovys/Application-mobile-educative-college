@@ -23,7 +23,7 @@ enum Niveau {
   quatre,
   trois;
 
-  String get libelle {
+  String get value {
     switch(this) {
       case Niveau.six: return "Sixième";
       case Niveau.cinq: return "Cinquième";

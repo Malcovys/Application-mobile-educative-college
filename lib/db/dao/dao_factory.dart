@@ -1,5 +1,8 @@
-import 'package:sqflite/sqflite.dart';
-import '../database_helper.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
+import '../helpers/database_helper.dart';
+
+import 'matiere_dao.dart';
+import 'chapitre_dao.dart';
 
 class DaoFactory {
   static final DaoFactory _instance = DaoFactory._initialize();
@@ -14,5 +17,11 @@ class DaoFactory {
     return await DatabaseHelper().getDatabase();
   }
 
-  
+  MatiereDao getMatiereDao() {
+    return MatiereDao(this);
+  }
+
+  ChapitreDao getChapitreDao() {
+    return ChapitreDao(this);
+  }
 }

@@ -1,6 +1,7 @@
-import 'package:sqflite/sqflite.dart';
+import 'dart:io';
 import 'package:path/path.dart';
 import 'sqlfile_helper.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 /// Classe DatabaseHelper pour gérer la base de données SQLite
 class DatabaseHelper {
@@ -9,13 +10,20 @@ class DatabaseHelper {
   static final DatabaseHelper _instance = DatabaseHelper._internal();
   
 
-  /// Factory constructor pour obtenir l'instance unique de DatabaseHelper
   factory DatabaseHelper() {
     return _instance;
   }
 
-  // Contructeur nommé privé
-  DatabaseHelper._internal();
+  DatabaseHelper._internal() {
+     _initializeSQLiteFfi();
+  }
+
+  static void _initializeSQLiteFfi() {
+    if(Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
+      sqfliteFfiInit();
+      databaseFactory = databaseFactoryFfi;
+    }
+  }
 
   /// Méthode pour obtenir une instance de la base de données
   Future<Database> getDatabase() async {
@@ -24,7 +32,7 @@ class DatabaseHelper {
     return _database!;
   }
 
-  _initDatabase() async {
+  Future<Database> _initDatabase() async {
     String path = join(await getDatabasesPath(), _dbDbName);
 
     return await openDatabase(

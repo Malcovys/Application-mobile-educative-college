@@ -15,7 +15,7 @@ class MatiereModel {
       map['id'] as int, 
       map['nom'].toString(),
       Niveau.fromString(map['niveau'].toString()), 
-      map['description'].toString(), 
+      map['description']?.toString() ?? '', 
       DateTime.parse(map['created_at'].toString()),
       DateTime.parse(map['updated_at'].toString())
     );
@@ -25,7 +25,7 @@ class MatiereModel {
     var map = <String, Object> {
       "id": _id,
       "nom": _nom,
-      "niveau": _niveau.libelle,
+      "niveau": _niveau.value,
       "description": _description,
       "created_at": _createdAt.toIso8601String(),
       "updated_at": _updatedAt.toIso8601String(),
