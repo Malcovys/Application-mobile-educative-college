@@ -6,7 +6,6 @@ create table Matieres (
     nom text not null,
     niveau text not null,
     description text,
-    etat text not null,
     created_at datetime default current_timestamp,
     updated_at datetime default current_timestamp
 );
@@ -16,7 +15,6 @@ create table Chapitres (
     id integer primary key autoincrement,
     matiere_id integer not null,
     nom text not null,
-    etat text not null,
     description text,
     created_at datetime default current_timestamp,
     updated_at datetime default current_timestamp,
@@ -28,7 +26,6 @@ create table Lecons (
     id integer primary key autoincrement,
     chapitre_id integer not null,
     titre text not null,
-    etat text not null,
     contenu text,
     created_at datetime default current_timestamp,
     updated_at datetime default current_timestamp,
@@ -40,7 +37,6 @@ create table Exercices (
     id integer primary key autoincrement,
     lecon_id integer not null,
     nom text not null,
-    etat text not null,
     questions blob,
     created_at datetime default current_timestamp,
     updated_at datetime default current_timestamp,
