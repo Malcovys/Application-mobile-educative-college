@@ -1,6 +1,6 @@
-import 'package:application_mobile_educative_college/db/dao/dao_factory.dart';
-
+import '../dao/dao_factory.dart';
 import '../dao/matiere_dao.dart';
+
 import '../../models/matiere_model.dart';
 
 import '../../types/types.dart';
@@ -42,7 +42,7 @@ class DatabaseMatiereService {
   }
 
 
-  static List<MatiereModel> _generateMatieres() {
+  static List<MatiereModel> seed() {
     List<MatiereModel> matieres = [];
 
     matieres.addAll([

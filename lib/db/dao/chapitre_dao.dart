@@ -53,21 +53,28 @@ class ChapitreDao {
     return ChapitreModel.fromMap(results.first);
   }
 
-  /// Récupère toutes les chapitres de la base de données
-  Future<List<ChapitreModel>> selectAll() async {
+  /// Récupère toutes les chapitres d'une matiere de la base de données
+  Future<List<ChapitreModel>> selectChapitresByMatiere(int id) async {
     final Database db = await _daofactory.getDatabaseInstance();
 
     // Récuperer les lignes
-    List<Map<String, Object?>> list = await db.query(table);
+    List<Map<String, Object?>> list = await db.query(
+      table,
+      where: 'matiere_id = ?',
+      whereArgs: [id],
+    );
 
     List<ChapitreModel> chapitres = [];
     for (var element in list) {
       chapitres.add(ChapitreModel.fromMap(element));
     }
 
+    print(chapitres);
+
     return chapitres;
   }
 
+  
 
   Future<void> delete(int id) async {
     final Database db = await _daofactory.getDatabaseInstance();
