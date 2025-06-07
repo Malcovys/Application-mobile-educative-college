@@ -1,7 +1,7 @@
 # application_mobile_educative_college
 
 ### Organisation des dossier
-
+```markdown
 lib/
 ├── api/                      # Gestion des appels API
 │   ├── endpoints.dart        # Définitions des endpoints
@@ -45,9 +45,11 @@ lib/
 │   ├── app_constants.dart
 │   └── api_constants.dart
 │
-├── localization/             # Internationalisation
+├── localization/             # Gestion des traductions et de l'internationalisation
 │
 └── main.dart                 # Point d'entrée de l'application
+```
+
 
 ### Explications clés pour la gestion online/offline
 
