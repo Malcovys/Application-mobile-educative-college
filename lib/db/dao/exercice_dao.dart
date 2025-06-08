@@ -10,14 +10,14 @@ class ExerciceDao  {
 
   ExerciceDao (this._daofactory);
 
-  /// Enregistre une leçon dans la base de données
+  /// Enregistre une exercice dans la base de données
   Future<void> storeOne(ExerciceModel exercice) async {
     final Database db = await _daofactory.getDatabaseInstance();
 
     await db.insert(table, exercice.toJson());
   }
 
-  /// Enregistre plusieurs leçons dans la base de données
+  /// Enregistre plusieurs exercices dans la base de données
   Future<void> storeMultiple(List<ExerciceModel> exercices) async {
     final Database db = await _daofactory.getDatabaseInstance();
     
@@ -33,7 +33,7 @@ class ExerciceDao  {
   }
 
 
-  /// Récupère une leçon de la base de données
+  /// Récupère une exercice de la base de données
   Future<ExerciceModel?> selectOne(int id) async {
     final Database db = await _daofactory.getDatabaseInstance();
 
@@ -49,7 +49,7 @@ class ExerciceDao  {
     return ExerciceModel.fromJson(results.first);
   }
 
-  /// Récupère toutes les exercices d'une leçon dans la base de données
+  /// Récupère toutes les exercices d'une leçons dans la base de données
   Future<List<ExerciceModel>> selectByLecon(int id) async {
     final Database db = await _daofactory.getDatabaseInstance();
 

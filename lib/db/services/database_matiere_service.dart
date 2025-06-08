@@ -1,7 +1,6 @@
 import '../dao/dao_factory.dart';
 import '../dao/matiere_dao.dart';
 import '../../models/matiere_model.dart';
-import '../../types/types.dart';
 
 class DatabaseMatiereService {
   static late MatiereDao _matiereDao;

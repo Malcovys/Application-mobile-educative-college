@@ -49,25 +49,34 @@ class DatabaseExerciceService {
     exercices.addAll([
       ExerciceModel.fromJson({
         'id': 1, 
-        'chapitre_id': 1,
-        'titre': '',
-        'contenu': '', 
-        'created_at': DateTime.now(),
-        'updated_at': DateTime.now()
-      }),
-        ExerciceModel.fromJson({
-        'id': 2, 
-        "chapitre_id": 1,
-        'titre': '',
-        'contenu': '',
-        'created_at': DateTime.now(),
-        'updated_at': DateTime.now()
-      }),
-      ExerciceModel.fromJson({
-        'id': 2, 
-        'chapitre_id': 1,
-        'titre': '',
-        'contenu': '', 
+        'lecon_id': 1,
+        'nom': '',
+        'questions': [
+          {
+            'ennonce': '',
+            'options': [
+              {'label': 'A', 'value': '', 'correct': true},
+              {'label': 'B', 'value': '', 'correct': false},
+              {'label': 'C', 'value': '', 'correct': false}
+            ]
+          },
+          {
+            'ennonce': '',
+            'options': [
+              {'label': 'I', 'value': '', 'correct': false},
+              {'label': 'II', 'value': '', 'correct': true},
+              {'label': 'III', 'value': '', 'correct': false}
+            ]
+          },
+          {
+            'ennonce': '',
+            'options': [
+              {'label': '1', 'value': '', 'correct': false},
+              {'label': '2', 'value': '', 'correct': false},
+              {'label': '3', 'value': '', 'correct': true}
+            ]
+          }
+        ], 
         'created_at': DateTime.now(),
         'updated_at': DateTime.now()
       }),
