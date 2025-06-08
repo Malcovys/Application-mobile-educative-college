@@ -12,26 +12,26 @@ class DatabaseChapitreService {
   }
 
   static Future<void> storeOneChapitreFromAPI(Map<String, Object?> data) async {
-    await _chapitreDao.storeOne(ChapitreModel.fromMap(data));
+    await _chapitreDao.storeOne(ChapitreModel.fromJson(data));
   }
 
   static Future<void> storeMultipleMarieresFormAPI(List<Map<String, Object?>> data) async {
     List<ChapitreModel> toStoredChapitres = [];
     
     for(var element in data) {
-      toStoredChapitres.add(ChapitreModel.fromMap(element));
+      toStoredChapitres.add(ChapitreModel.fromJson(element));
     }
 
     await _chapitreDao.storeMultiple(toStoredChapitres);
   }
 
+  
   static Future<ChapitreModel?> getStoredChapitreById(int id) async {
     return await _chapitreDao.selectOne(id);
   }
 
-  // Récupère les chapitres d'un matière
   static Future<List<ChapitreModel>> getStoredChapitresOfMatiere(int id) async {
-    return await _chapitreDao.selectChapitresByMatiere(id);
+    return await _chapitreDao.selectByMatiere(id);
   }
   
 
@@ -48,7 +48,7 @@ class DatabaseChapitreService {
     List<ChapitreModel> chapitres = [];
 
     chapitres.addAll([
-      ChapitreModel.fromMap({
+      ChapitreModel.fromJson({
         'id': 1, 
         "matiere_id": 1,
         'nom': 'Les états de la matière',
@@ -56,7 +56,7 @@ class DatabaseChapitreService {
         'created_at': DateTime.now(),
         'updated_at': DateTime.now()
       }),
-        ChapitreModel.fromMap({
+        ChapitreModel.fromJson({
         'id': 2, 
         "matiere_id": 1,
         'nom': 'Les transformations chimiques',
@@ -64,7 +64,7 @@ class DatabaseChapitreService {
         'created_at': DateTime.now(),
         'updated_at': DateTime.now()
       }),
-      ChapitreModel.fromMap({
+      ChapitreModel.fromJson({
         'id': 3, 
         "matiere_id": 1,
         'nom': "L'organisation de la matière dans l'Univers",

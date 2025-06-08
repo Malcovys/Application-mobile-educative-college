@@ -1,8 +1,6 @@
 import '../dao/dao_factory.dart';
 import '../dao/matiere_dao.dart';
-
 import '../../models/matiere_model.dart';
-
 import '../../types/types.dart';
 
 class DatabaseMatiereService {
@@ -14,14 +12,14 @@ class DatabaseMatiereService {
   }
 
   static Future<void> storeOneMatiereFromAPI(Map<String, Object?> data) async {
-    await _matiereDao.storeOne(MatiereModel.fromMap(data));
+    await _matiereDao.storeOne(MatiereModel.fromJson(data));
   }
 
   static Future<void> storeMultipleMarieresFormAPI(List<Map<String, Object?>> data) async {
     List<MatiereModel> toStoredMatieres = [];
     
     for(var element in data) {
-      toStoredMatieres.add(MatiereModel.fromMap(element));
+      toStoredMatieres.add(MatiereModel.fromJson(element));
     }
 
     await _matiereDao.storeMultiple(toStoredMatieres);
@@ -46,7 +44,7 @@ class DatabaseMatiereService {
     List<MatiereModel> matieres = [];
 
     matieres.addAll([
-      MatiereModel.fromMap({
+      MatiereModel.fromJson({
       'id': 1, 
       'nom': 'Physique & chimie',
       'niveau': Niveau.trois.value, 
@@ -54,7 +52,7 @@ class DatabaseMatiereService {
       'created_at': DateTime.now(),
       'updated_at': DateTime.now()
     }),
-      MatiereModel.fromMap({
+      MatiereModel.fromJson({
       'id': 2, 
       'nom': 'Science de la vie et de la terre',
       'niveau': Niveau.trois, 

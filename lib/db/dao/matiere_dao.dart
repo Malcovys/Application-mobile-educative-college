@@ -14,7 +14,7 @@ class MatiereDao {
   Future<void> storeOne(MatiereModel matiere) async {
     final Database db = await _daofactory.getDatabaseInstance();
     
-    final Map<String, Object?> mappedMatiere = matiere.toMap();
+    final Map<String, dynamic> mappedMatiere = matiere.toJson();
 
     await db.insert(table, mappedMatiere);
   }
@@ -27,7 +27,7 @@ class MatiereDao {
       Batch batch = trx.batch();
       
       for(var matiere in matieres) {
-        final Map<String, Object?> mappedMatiere = matiere.toMap();
+        final Map<String, dynamic> mappedMatiere = matiere.toJson();
 
         batch.insert(table, mappedMatiere);
       }
@@ -41,7 +41,7 @@ class MatiereDao {
   Future<MatiereModel?> selectOne(int id) async {
     final Database db = await _daofactory.getDatabaseInstance();
 
-    List<Map<String, Object?>> results = await db.query(
+    List<Map<String, dynamic>> results = await db.query(
       table,
       where: 'id = ?',
       whereArgs: [id],
@@ -50,7 +50,7 @@ class MatiereDao {
 
     if(results.isEmpty) return null;
 
-    return MatiereModel.fromMap(results.first);
+    return MatiereModel.fromJson(results.first);
   }
 
   /// Récupère toutes les matieres de la base de données
@@ -58,29 +58,15 @@ class MatiereDao {
     final Database db = await _daofactory.getDatabaseInstance();
 
     // Récuperer les lignes
-    List<Map<String, Object?>> list = await db.query(table);
+    List<Map<String, dynamic>> list = await db.query(table);
 
     List<MatiereModel> matieres = [];
     for (var element in list) {
-      matieres.add(MatiereModel.fromMap(element));
+      matieres.add(MatiereModel.fromJson(element));
     }
 
     return matieres;
   }
-
-  // /// Met à jour une matiere dans la base de données
-  // Future<void> updateOne(MatiereModel matiere) async {
-  //   final Database db = await _daofactory.getDatabaseInstance();
-    
-  //   final Map<String, Object?> mappedMatiere = matiere.toMap();
-
-  //   await db.update(
-  //     table, 
-  //     mappedMatiere, 
-  //     where: 'id = ?', 
-  //     whereArgs: [matiere.getId()]
-  //   );
-  // }
 
 
   Future<void> delete(int id) async {

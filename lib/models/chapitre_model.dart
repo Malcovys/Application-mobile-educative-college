@@ -1,32 +1,38 @@
 
 class ChapitreModel {
-  final int _id,_matiereId;
-  final String _nom, _description;
-  final DateTime _createdAt, _updatedAt;
+  final int id, matiereId;
+  final String nom;
+  final String? description;
+  final DateTime createdAt, updatedAt;
 
-  ChapitreModel._internal(this._id, this._matiereId, this._nom, this._description, this._createdAt, this._updatedAt);
+  ChapitreModel({
+    required this.id, 
+    required this.matiereId, 
+    required this.nom, 
+    this.description, 
+    required this.createdAt, 
+    required this.updatedAt
+  });
 
-  factory ChapitreModel.fromMap(Map<String, Object?> map) {
-    return ChapitreModel._internal(
-      map['id'] as int, 
-      map['matiere_id'] as int,
-      map['nom'].toString(),
-      map['description'].toString(), 
-      DateTime.parse(map['created_at'].toString()),
-      DateTime.parse(map['updated_at'].toString())
+  factory ChapitreModel.fromJson(Map<String, dynamic> json) {
+    return ChapitreModel(
+      id: json['id'], 
+      matiereId: json['matiere_id'],
+      nom: json['nom'],
+      description: json['description'], 
+      createdAt: DateTime.parse(json['created_at']),
+      updatedAt: DateTime.parse(json['updated_at'])
     );
   }
 
-  Map<String, Object?> toMap() {
-    var map = <String, Object?> {
-      "id": _id,
-      "matiere_id": _matiereId,
-      "nom": _nom,
-      "description": _description,
-      "created_at": _createdAt.toIso8601String(),
-      "updated_at": _updatedAt.toIso8601String(),
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'matiere_id': matiereId,
+      'nom': nom,
+      'description': description,
+      'created_at': createdAt.toIso8601String(),
+      'updated_at': updatedAt.toIso8601String(),
     };
-
-    return map;
   }
 }

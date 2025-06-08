@@ -14,7 +14,7 @@ class ChapitreDao {
   Future<void> storeOne(ChapitreModel chapitre) async {
     final Database db = await _daofactory.getDatabaseInstance();
     
-    final Map<String, Object?> mappedChapitre = chapitre.toMap();
+    final Map<String, dynamic> mappedChapitre = chapitre.toJson();
 
     await db.insert(table, mappedChapitre);
   }
@@ -27,7 +27,7 @@ class ChapitreDao {
       Batch batch = trx.batch();
       
       for(var chapitre in chapitres) {
-        final Map<String, Object?> mappedChapitre = chapitre.toMap();
+        final Map<String, dynamic> mappedChapitre = chapitre.toJson();
 
         batch.insert(table, mappedChapitre);
       }
@@ -41,7 +41,7 @@ class ChapitreDao {
   Future<ChapitreModel?> selectOne(int id) async {
     final Database db = await _daofactory.getDatabaseInstance();
 
-    List<Map<String, Object?>> results = await db.query(
+    List<Map<String, dynamic>> results = await db.query(
       table,
       where: 'id = ?',
       whereArgs: [id],
@@ -50,15 +50,15 @@ class ChapitreDao {
 
     if(results.isEmpty) return null;
 
-    return ChapitreModel.fromMap(results.first);
+    return ChapitreModel.fromJson(results.first);
   }
 
   /// Récupère toutes les chapitres d'une matiere de la base de données
-  Future<List<ChapitreModel>> selectChapitresByMatiere(int id) async {
+  Future<List<ChapitreModel>> selectByMatiere(int id) async {
     final Database db = await _daofactory.getDatabaseInstance();
 
     // Récuperer les lignes
-    List<Map<String, Object?>> list = await db.query(
+    List<Map<String, dynamic>> list = await db.query(
       table,
       where: 'matiere_id = ?',
       whereArgs: [id],
@@ -66,7 +66,7 @@ class ChapitreDao {
 
     List<ChapitreModel> chapitres = [];
     for (var element in list) {
-      chapitres.add(ChapitreModel.fromMap(element));
+      chapitres.add(ChapitreModel.fromJson(element));
     }
 
     print(chapitres);

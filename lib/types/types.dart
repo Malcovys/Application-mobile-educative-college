@@ -44,3 +44,17 @@ enum Niveau {
   }
   
 }
+
+class Question {
+  final int id;
+  final String ennonce;
+  final List<String> options;
+  final List<String> bonneReponses;
+
+  Question({
+    required this.id,
+    required this.ennonce,
+    required this.options,
+    required this.bonneReponses,
+  });
+}

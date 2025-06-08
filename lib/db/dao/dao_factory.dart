@@ -3,6 +3,8 @@ import '../helpers/database_helper.dart';
 
 import 'matiere_dao.dart';
 import 'chapitre_dao.dart';
+import 'lecon_dao.dart';
+import 'exercice_dao.dart';
 
 class DaoFactory {
   static final DaoFactory _instance = DaoFactory._initialize();
@@ -23,5 +25,13 @@ class DaoFactory {
 
   ChapitreDao getChapitreDao() {
     return ChapitreDao(this);
+  }
+
+  LeconDao getLeconDao() {
+    return LeconDao(this);
+  }
+
+  ExerciceDao getExerciceDao() {
+    return ExerciceDao(this);
   }
 }
