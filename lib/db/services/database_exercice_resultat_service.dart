@@ -57,7 +57,7 @@ class DatabaseExerciceResultatService {
         ],
         'score': 10,
         'etat': ResultatEtat.sync,
-        'date_de_soumission': DateTime.now()
+        'date_de_soumission': DateTime.now().toIso8601String()
       }),
     ]);
 

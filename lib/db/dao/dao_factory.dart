@@ -1,6 +1,5 @@
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import '../helpers/database_helper.dart';
-
 import 'matiere_dao.dart';
 import 'chapitre_dao.dart';
 import 'lecon_dao.dart';

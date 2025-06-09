@@ -38,29 +38,32 @@ class DatabaseMatiereService {
     await _matiereDao.delete(id);
   }
 
+  static Future<void> seed() async {
+    await _seedMatieres();
+  }
 
-  static List<MatiereModel> seed() {
+  static Future<void> _seedMatieres() async {
     List<MatiereModel> matieres = [];
 
     matieres.addAll([
-      MatiereModel.fromJson({
-      'id': 1, 
-      'nom': 'Physique & chimie',
-      'niveau': Niveau.trois.value, 
-      'description': '', 
-      'created_at': DateTime.now(),
-      'updated_at': DateTime.now()
-    }),
-      MatiereModel.fromJson({
-      'id': 2, 
-      'nom': 'Science de la vie et de la terre',
-      'niveau': Niveau.trois, 
-      'description': '', 
-      'created_at': DateTime.now(),
-      'updated_at': DateTime.now()
-    }),
-    ]) ;
+        MatiereModel.fromJson({
+        'id': 1, 
+        'nom': 'Physique & chimie',
+        'niveau': Niveau.trois.value, 
+        'description': '', 
+        'created_at': DateTime.now().toIso8601String(),
+        'updated_at': DateTime.now().toIso8601String()
+      }),
+        MatiereModel.fromJson({
+        'id': 2, 
+        'nom': 'Science de la vie et de la terre',
+        'niveau': Niveau.trois.value, 
+        'description': '', 
+        'created_at': DateTime.now().toIso8601String(),
+        'updated_at': DateTime.now().toIso8601String()
+      }),
+    ]);
 
-    return matieres;
+    await _matiereDao.storeMultiple(matieres);
   }
 }

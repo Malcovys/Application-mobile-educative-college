@@ -1,5 +1,4 @@
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
-
 import './dao_factory.dart';
 import '../../models/lecon_model.dart';
 

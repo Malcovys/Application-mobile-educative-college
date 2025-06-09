@@ -1,6 +1,5 @@
 import '../dao/dao_factory.dart';
 import '../dao/lecon_dao.dart';
-
 import '../../models/lecon_model.dart';
 
 class DatabaseLeconService {
@@ -53,24 +52,24 @@ class DatabaseLeconService {
         'chapitre_id': 1,
         'titre': '',
         'contenu': '', 
-        'created_at': DateTime.now(),
-        'updated_at': DateTime.now()
+        'created_at': DateTime.now().toIso8601String(),
+        'updated_at': DateTime.now().toIso8601String()
       }),
         LeconModel.fromJson({
         'id': 2, 
         "chapitre_id": 1,
         'titre': '',
         'contenu': '',
-        'created_at': DateTime.now(),
-        'updated_at': DateTime.now()
+        'created_at': DateTime.now().toIso8601String(),
+        'updated_at': DateTime.now().toIso8601String()
       }),
       LeconModel.fromJson({
         'id': 2, 
         'chapitre_id': 1,
         'titre': '',
         'contenu': '', 
-        'created_at': DateTime.now(),
-        'updated_at': DateTime.now()
+        'created_at': DateTime.now().toIso8601String(),
+        'updated_at': DateTime.now().toIso8601String()
       }),
     ]);
 

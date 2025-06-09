@@ -1,5 +1,4 @@
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
-
 import './dao_factory.dart';
 import '../../models/matiere_model.dart';
 
@@ -64,6 +63,8 @@ class MatiereDao {
     for (var element in list) {
       matieres.add(MatiereModel.fromJson(element));
     }
+
+    print(matieres);
 
     return matieres;
   }

@@ -1,6 +1,5 @@
 import '../dao/dao_factory.dart';
 import '../dao/chapitre_dao.dart';
-
 import '../../models/chapitre_model.dart';
 
 class DatabaseChapitreService {
@@ -53,24 +52,24 @@ class DatabaseChapitreService {
         "matiere_id": 1,
         'nom': 'Les états de la matière',
         'description': '', 
-        'created_at': DateTime.now(),
-        'updated_at': DateTime.now()
+        'created_at': DateTime.now().toIso8601String(),
+        'updated_at': DateTime.now().toIso8601String()
       }),
         ChapitreModel.fromJson({
         'id': 2, 
         "matiere_id": 1,
         'nom': 'Les transformations chimiques',
         'description': '', 
-        'created_at': DateTime.now(),
-        'updated_at': DateTime.now()
+        'created_at': DateTime.now().toIso8601String(),
+        'updated_at': DateTime.now().toIso8601String()
       }),
       ChapitreModel.fromJson({
         'id': 3, 
         "matiere_id": 1,
         'nom': "L'organisation de la matière dans l'Univers",
         'description': '', 
-        'created_at': DateTime.now(),
-        'updated_at': DateTime.now()
+        'created_at': DateTime.now().toIso8601String(),
+        'updated_at': DateTime.now().toIso8601String()
       }),
     ]);
 
