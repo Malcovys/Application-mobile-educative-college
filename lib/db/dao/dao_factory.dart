@@ -5,6 +5,7 @@ import 'matiere_dao.dart';
 import 'chapitre_dao.dart';
 import 'lecon_dao.dart';
 import 'exercice_dao.dart';
+import 'exercice_resultat_dao.dart';
 
 class DaoFactory {
   static final DaoFactory _instance = DaoFactory._initialize();
@@ -33,5 +34,9 @@ class DaoFactory {
 
   ExerciceDao getExerciceDao() {
     return ExerciceDao(this);
+  }
+
+  ExerciceResultatDao getExerciceResultatDao() {
+    return ExerciceResultatDao(this);
   }
 }

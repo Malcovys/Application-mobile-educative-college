@@ -2,23 +2,27 @@
 class ReponseModel {
   final String selectionne;
   final bool correcte;
+  final int questionIdx;
 
   ReponseModel({
     required this.selectionne,
-    required this.correcte
+    required this.correcte,
+    required this.questionIdx
   });
 
   factory ReponseModel.fromJson(Map<String, dynamic> json) {
     return ReponseModel(
       selectionne: json['selected'], 
-      correcte: json['correct']
+      correcte: json['correct'],
+      questionIdx: json['question_idx']
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
       'selected': selectionne,
-      'correct': correcte
+      'correct': correcte,
+      'question_idx': questionIdx
     };
   }  
 }
@@ -32,7 +36,7 @@ class ExerciceResultatModel {
   final int id, exerciceId;
   final List<ReponseModel> reponses;
   final int score;
-  final ResultatEtat etat;
+  ResultatEtat etat;
   final DateTime dateDeSoumission;
 
   ExerciceResultatModel({
@@ -51,8 +55,8 @@ class ExerciceResultatModel {
       reponses: (json['reponses'] as List)
         .map((r) => ReponseModel.fromJson(r))
         .toList(), 
-      score: json['score'], 
-      etat: json['etat'], 
+      score: json['score'] ?? ExerciceResultatModel._calculateScore(), 
+      etat: json['etat'] ?? ResultatEtat.sync, 
       dateDeSoumission: json['date_de_soumission']
     );
   }
@@ -66,5 +70,10 @@ class ExerciceResultatModel {
       'etat': etat,
       'date_de_soumission': dateDeSoumission
     };
+  }
+
+  // à implémenté
+  static int _calculateScore() {
+    return 0;
   }
 }
