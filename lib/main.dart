@@ -1,19 +1,8 @@
 import 'package:flutter/material.dart';
 import '../pages/home_page.dart';
 
-import './db/services/database_chapitre_service.dart';
-import './db/services/database_matiere_service.dart';
-
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-
-  DatabaseMatiereService.initialize();
-  // DatabaseMatiereService.seed();
-  // DatabaseMatiereService.getAllStoredMatieres();
-
-  // DatabaseChapitreService.initialize();
-  // DatabaseChapitreService.getStoredChapitresOfMatiere(1);
-
   runApp(const MyApp());
 }
 
