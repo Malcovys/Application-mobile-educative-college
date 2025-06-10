@@ -1,5 +1,5 @@
-import 'package:application_mobile_educative_college/widgets/navbar.dart';
 import 'package:flutter/material.dart';
+import '../pages/login_page.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'EduLearn - Apprendre Ensemble',
       themeMode: ThemeMode.system,
-      home: const NavBar(),
+      home: const LoginPage(),
       debugShowCheckedModeBanner: false,
     );
   }

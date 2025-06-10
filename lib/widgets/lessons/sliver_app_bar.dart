@@ -28,7 +28,7 @@ class LessonSliverAppBar extends StatelessWidget {
             margin: const EdgeInsets.only(right: 16),
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: Colors.green.withOpacity(0.2),
+              color: Colors.green.withAlpha((0.2 * 255).toInt()),
               borderRadius: BorderRadius.circular(20),
             ),
             child: const Icon(Icons.check_circle, color: Colors.white),
@@ -46,14 +46,17 @@ class LessonSliverAppBar extends StatelessWidget {
         background: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
-              colors: [subjectColor, subjectColor.withOpacity(0.8)],
+              colors: [
+                subjectColor,
+                subjectColor.withAlpha((0.8 * 255).toInt()),
+              ],
             ),
           ),
           child: Center(
             child: Container(
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.1),
+                color: Colors.white.withAlpha((0.1 * 255).toInt()),
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Icon(

@@ -14,14 +14,24 @@ class LessonContent extends StatelessWidget {
       decoration: BoxDecoration(
         color: theme.colorScheme.surface,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: theme.colorScheme.outline.withOpacity(0.2)),
+        border: Border.all(
+          color: theme.colorScheme.outline.withAlpha((0.2 * 255).toInt()),
+        ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Lesson Content', style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold)),
+          Text(
+            'Lesson Content',
+            style: theme.textTheme.titleLarge?.copyWith(
+              fontWeight: FontWeight.bold,
+            ),
+          ),
           const SizedBox(height: 16),
-          Text(content, style: theme.textTheme.bodyMedium?.copyWith(height: 1.6)),
+          Text(
+            content,
+            style: theme.textTheme.bodyMedium?.copyWith(height: 1.6),
+          ),
         ],
       ),
     );

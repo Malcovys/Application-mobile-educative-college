@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import './dao_factory.dart';
 import '../../models/lecon_model.dart';
@@ -68,7 +69,9 @@ class LeconDao  {
       lecons.add(LeconModel.fromJson(element));
     }
 
-    print(lecons);
+    if (kDebugMode) {
+      print(lecons);
+    }
 
     return lecons;
   }

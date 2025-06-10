@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import './dao_factory.dart';
 import '../../models/exercice_resultat_model.dart';
@@ -64,7 +65,9 @@ class ExerciceResultatDao  {
       resultats.add(ExerciceResultatModel.fromJson(element));
     }
 
-    print(resultats);
+    if (kDebugMode) {
+      print(resultats);
+    }
 
     return resultats;
   }

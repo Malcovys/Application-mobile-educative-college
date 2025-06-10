@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import './dao_factory.dart';
 import '../../models/matiere_model.dart';
@@ -64,7 +65,9 @@ class MatiereDao {
       matieres.add(MatiereModel.fromJson(element));
     }
 
-    print(matieres);
+    if (kDebugMode) {
+      print(matieres);
+    }
 
     return matieres;
   }
