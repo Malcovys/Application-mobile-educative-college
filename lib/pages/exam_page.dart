@@ -16,7 +16,7 @@ class _ExamPageState extends State<ExamPage> with TickerProviderStateMixin {
   late AnimationController _animationController;
   late Animation<double> _fadeAnimation;
   late Animation<Offset> _slideAnimation;
-  
+
   int currentQuestionIndex = 0;
   List<int?> userAnswers = [];
   Timer? timer;
@@ -31,27 +31,22 @@ class _ExamPageState extends State<ExamPage> with TickerProviderStateMixin {
     super.initState();
     userAnswers = List.filled(widget.exam.questions.length, null);
     remainingTime = widget.exam.timeLimit * 60; // Convert to seconds
-    
+
     _animationController = AnimationController(
       duration: const Duration(milliseconds: 600),
       vsync: this,
     );
 
-    _fadeAnimation = Tween<double>(
-      begin: 0.0,
-      end: 1.0,
-    ).animate(CurvedAnimation(
-      parent: _animationController,
-      curve: Curves.easeInOut,
-    ));
+    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _animationController, curve: Curves.easeInOut),
+    );
 
     _slideAnimation = Tween<Offset>(
       begin: const Offset(1.0, 0),
       end: Offset.zero,
-    ).animate(CurvedAnimation(
-      parent: _animationController,
-      curve: Curves.easeOutCubic,
-    ));
+    ).animate(
+      CurvedAnimation(parent: _animationController, curve: Curves.easeOutCubic),
+    );
 
     _animationController.forward();
   }
@@ -110,7 +105,7 @@ class _ExamPageState extends State<ExamPage> with TickerProviderStateMixin {
 
   void _finishExam() {
     timer?.cancel();
-    
+
     // Calculate score
     int correctAnswers = 0;
     for (int i = 0; i < widget.exam.questions.length; i++) {
@@ -118,17 +113,17 @@ class _ExamPageState extends State<ExamPage> with TickerProviderStateMixin {
         correctAnswers++;
       }
     }
-    
+
     score = ((correctAnswers / widget.exam.questions.length) * 100).round();
-    
+
     // Save progress
     DataService.updateExamProgress(
-      widget.exam.id, 
-      true, 
-      score, 
-      userAnswers.map((e) => e ?? -1).toList()
+      widget.exam.id,
+      true,
+      score,
+      userAnswers.map((e) => e ?? -1).toList(),
     );
-    
+
     setState(() {
       isCompleted = true;
       showResults = true;
@@ -156,15 +151,15 @@ class _ExamPageState extends State<ExamPage> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final subjectColor = _getSubjectColor();
-    
+
     if (!examStarted) {
       return _buildStartPage(theme, subjectColor);
     }
-    
+
     if (showResults) {
       return _buildResultsPage(theme, subjectColor);
     }
-    
+
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -223,18 +218,14 @@ class _ExamPageState extends State<ExamPage> with TickerProviderStateMixin {
                     end: Alignment.bottomRight,
                     colors: [
                       subjectColor,
-                      subjectColor.withOpacity(0.8),
+                      subjectColor.withAlpha((0.8 * 255).toInt()),
                     ],
                   ),
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Column(
                   children: [
-                    Icon(
-                      Icons.assignment,
-                      color: Colors.white,
-                      size: 64,
-                    ),
+                    Icon(Icons.assignment, color: Colors.white, size: 64),
                     const SizedBox(height: 16),
                     Text(
                       widget.exam.title,
@@ -248,7 +239,7 @@ class _ExamPageState extends State<ExamPage> with TickerProviderStateMixin {
                     Text(
                       'Ready to begin?',
                       style: theme.textTheme.bodyLarge?.copyWith(
-                        color: Colors.white.withOpacity(0.9),
+                        color: Colors.white.withAlpha((0.9 * 255).round()),
                       ),
                     ),
                   ],
@@ -261,18 +252,40 @@ class _ExamPageState extends State<ExamPage> with TickerProviderStateMixin {
                   color: theme.colorScheme.surface,
                   borderRadius: BorderRadius.circular(16),
                   border: Border.all(
-                    color: theme.colorScheme.outline.withOpacity(0.2),
+                    color: theme.colorScheme.outline.withAlpha(
+                      (0.2 * 255).round(),
+                    ),
                   ),
                 ),
                 child: Column(
                   children: [
-                    _buildExamInfo(theme, 'Questions', '${widget.exam.questions.length}', Icons.help_outline),
+                    _buildExamInfo(
+                      theme,
+                      'Questions',
+                      '${widget.exam.questions.length}',
+                      Icons.help_outline,
+                    ),
                     const SizedBox(height: 16),
-                    _buildExamInfo(theme, 'Duration', '${widget.exam.timeLimit} minutes', Icons.timer),
+                    _buildExamInfo(
+                      theme,
+                      'Duration',
+                      '${widget.exam.timeLimit} minutes',
+                      Icons.timer,
+                    ),
                     const SizedBox(height: 16),
-                    _buildExamInfo(theme, 'Required Score', '${widget.exam.passingScore}%', Icons.grade),
+                    _buildExamInfo(
+                      theme,
+                      'Required Score',
+                      '${widget.exam.passingScore}%',
+                      Icons.grade,
+                    ),
                     const SizedBox(height: 16),
-                    _buildExamInfo(theme, 'Difficulty', widget.exam.difficulty, Icons.trending_up),
+                    _buildExamInfo(
+                      theme,
+                      'Difficulty',
+                      widget.exam.difficulty,
+                      Icons.trending_up,
+                    ),
                   ],
                 ),
               ),
@@ -280,19 +293,15 @@ class _ExamPageState extends State<ExamPage> with TickerProviderStateMixin {
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: Colors.orange.withOpacity(0.1),
+                  color: Colors.orange.withAlpha((0.1 * 255).round()),
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(
-                    color: Colors.orange.withOpacity(0.3),
+                    color: Colors.orange.withAlpha((0.3 * 255).round()),
                   ),
                 ),
                 child: Row(
                   children: [
-                    Icon(
-                      Icons.warning_amber,
-                      color: Colors.orange,
-                      size: 24,
-                    ),
+                    Icon(Icons.warning_amber, color: Colors.orange, size: 24),
                     const SizedBox(width: 12),
                     Expanded(
                       child: Text(
@@ -342,19 +351,20 @@ class _ExamPageState extends State<ExamPage> with TickerProviderStateMixin {
     );
   }
 
-  Widget _buildExamInfo(ThemeData theme, String label, String value, IconData icon) {
+  Widget _buildExamInfo(
+    ThemeData theme,
+    String label,
+    String value,
+    IconData icon,
+  ) {
     return Row(
       children: [
-        Icon(
-          icon,
-          color: _getSubjectColor(),
-          size: 20,
-        ),
+        Icon(icon, color: _getSubjectColor(), size: 20),
         const SizedBox(width: 12),
         Text(
           label,
           style: theme.textTheme.bodyMedium?.copyWith(
-            color: theme.colorScheme.onSurface.withOpacity(0.7),
+            color: theme.colorScheme.onSurface.withAlpha((0.7 * 255).round()),
           ),
         ),
         const Spacer(),
@@ -376,10 +386,7 @@ class _ExamPageState extends State<ExamPage> with TickerProviderStateMixin {
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [
-            subjectColor,
-            subjectColor.withOpacity(0.8),
-          ],
+          colors: [subjectColor, subjectColor.withAlpha((0.8 * 255).round())],
         ),
       ),
       child: Column(
@@ -402,9 +409,15 @@ class _ExamPageState extends State<ExamPage> with TickerProviderStateMixin {
                 ),
               ),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 6,
+                ),
                 decoration: BoxDecoration(
-                  color: remainingTime < 300 ? Colors.red.withOpacity(0.3) : Colors.white.withOpacity(0.2),
+                  color:
+                      remainingTime < 300
+                          ? Colors.red.withAlpha((0.3 * 255).round())
+                          : Colors.white.withAlpha((0.2 * 255).round()),
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Row(
@@ -412,14 +425,20 @@ class _ExamPageState extends State<ExamPage> with TickerProviderStateMixin {
                   children: [
                     Icon(
                       Icons.timer,
-                      color: remainingTime < 300 ? Colors.red.shade100 : Colors.white,
+                      color:
+                          remainingTime < 300
+                              ? Colors.red.shade100
+                              : Colors.white,
                       size: 16,
                     ),
                     const SizedBox(width: 4),
                     Text(
                       _formatTime(remainingTime),
                       style: TextStyle(
-                        color: remainingTime < 300 ? Colors.red.shade100 : Colors.white,
+                        color:
+                            remainingTime < 300
+                                ? Colors.red.shade100
+                                : Colors.white,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -435,8 +454,9 @@ class _ExamPageState extends State<ExamPage> with TickerProviderStateMixin {
 
   Widget _buildProgressIndicator(ThemeData theme, Color subjectColor) {
     final progress = (currentQuestionIndex + 1) / widget.exam.questions.length;
-    final answeredQuestions = userAnswers.where((answer) => answer != null).length;
-    
+    final answeredQuestions =
+        userAnswers.where((answer) => answer != null).length;
+
     return Container(
       padding: const EdgeInsets.all(20),
       child: Column(
@@ -463,7 +483,7 @@ class _ExamPageState extends State<ExamPage> with TickerProviderStateMixin {
           const SizedBox(height: 8),
           LinearProgressIndicator(
             value: progress,
-            backgroundColor: subjectColor.withOpacity(0.2),
+            backgroundColor: subjectColor.withAlpha((0.2 * 255).round()),
             valueColor: AlwaysStoppedAnimation<Color>(subjectColor),
             minHeight: 6,
           ),
@@ -474,7 +494,7 @@ class _ExamPageState extends State<ExamPage> with TickerProviderStateMixin {
 
   Widget _buildQuestionCard(ThemeData theme, Color subjectColor) {
     final question = widget.exam.questions[currentQuestionIndex];
-    
+
     return Container(
       margin: const EdgeInsets.all(20),
       padding: const EdgeInsets.all(24),
@@ -482,7 +502,7 @@ class _ExamPageState extends State<ExamPage> with TickerProviderStateMixin {
         color: theme.colorScheme.surface,
         borderRadius: BorderRadius.circular(20),
         border: Border.all(
-          color: theme.colorScheme.outline.withOpacity(0.2),
+          color: theme.colorScheme.outline.withAlpha((0.2 * 255).round()),
         ),
       ),
       child: Column(
@@ -491,7 +511,7 @@ class _ExamPageState extends State<ExamPage> with TickerProviderStateMixin {
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: subjectColor.withOpacity(0.1),
+              color: subjectColor.withAlpha((0.1 * 255).round()),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Text(
@@ -508,7 +528,7 @@ class _ExamPageState extends State<ExamPage> with TickerProviderStateMixin {
             final index = entry.key;
             final option = entry.value;
             final isSelected = userAnswers[currentQuestionIndex] == index;
-            
+
             return Container(
               margin: const EdgeInsets.only(bottom: 12),
               child: Material(
@@ -519,14 +539,18 @@ class _ExamPageState extends State<ExamPage> with TickerProviderStateMixin {
                   child: Container(
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
-                      color: isSelected 
-                          ? subjectColor.withOpacity(0.1)
-                          : theme.colorScheme.surface,
+                      color:
+                          isSelected
+                              ? subjectColor.withAlpha((0.1 * 255).round())
+                              : theme.colorScheme.surface,
                       borderRadius: BorderRadius.circular(12),
                       border: Border.all(
-                        color: isSelected 
-                            ? subjectColor
-                            : theme.colorScheme.outline.withOpacity(0.3),
+                        color:
+                            isSelected
+                                ? subjectColor
+                                : theme.colorScheme.outline.withAlpha(
+                                  (0.3 * 255).round(),
+                                ),
                         width: isSelected ? 2 : 1,
                       ),
                     ),
@@ -536,18 +560,22 @@ class _ExamPageState extends State<ExamPage> with TickerProviderStateMixin {
                           width: 32,
                           height: 32,
                           decoration: BoxDecoration(
-                            color: isSelected 
-                                ? subjectColor
-                                : theme.colorScheme.outline.withOpacity(0.2),
+                            color:
+                                isSelected
+                                    ? subjectColor
+                                    : theme.colorScheme.outline.withAlpha(
+                                      (0.2 * 255).round(),
+                                    ),
                             borderRadius: BorderRadius.circular(16),
                           ),
                           child: Center(
                             child: Text(
                               String.fromCharCode(65 + index), // A, B, C, D
                               style: theme.textTheme.bodyMedium?.copyWith(
-                                color: isSelected 
-                                    ? Colors.white
-                                    : theme.colorScheme.onSurface,
+                                color:
+                                    isSelected
+                                        ? Colors.white
+                                        : theme.colorScheme.onSurface,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -559,7 +587,10 @@ class _ExamPageState extends State<ExamPage> with TickerProviderStateMixin {
                             option,
                             style: theme.textTheme.bodyMedium?.copyWith(
                               color: theme.colorScheme.onSurface,
-                              fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
+                              fontWeight:
+                                  isSelected
+                                      ? FontWeight.w600
+                                      : FontWeight.normal,
                             ),
                           ),
                         ),
@@ -582,10 +613,12 @@ class _ExamPageState extends State<ExamPage> with TickerProviderStateMixin {
   }
 
   Widget _buildNavigationButtons(ThemeData theme, Color subjectColor) {
-    final isLastQuestion = currentQuestionIndex == widget.exam.questions.length - 1;
-    final answeredQuestions = userAnswers.where((answer) => answer != null).length;
+    final isLastQuestion =
+        currentQuestionIndex == widget.exam.questions.length - 1;
+    final answeredQuestions =
+        userAnswers.where((answer) => answer != null).length;
     final allAnswered = answeredQuestions == widget.exam.questions.length;
-    
+
     return Container(
       padding: const EdgeInsets.all(20),
       child: Column(
@@ -595,7 +628,7 @@ class _ExamPageState extends State<ExamPage> with TickerProviderStateMixin {
               padding: const EdgeInsets.all(12),
               margin: const EdgeInsets.only(bottom: 16),
               decoration: BoxDecoration(
-                color: Colors.orange.withOpacity(0.1),
+                color: Colors.orange.withAlpha((0.1 * 255).round()),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Row(
@@ -683,12 +716,19 @@ class _ExamPageState extends State<ExamPage> with TickerProviderStateMixin {
   }
 
   Widget _buildResultsPage(ThemeData theme, Color subjectColor) {
-    final correctAnswers = userAnswers.asMap().entries
-        .where((entry) => entry.value == widget.exam.questions[entry.key].correctAnswerIndex)
-        .length;
-    
+    final correctAnswers =
+        userAnswers
+            .asMap()
+            .entries
+            .where(
+              (entry) =>
+                  entry.value ==
+                  widget.exam.questions[entry.key].correctAnswerIndex,
+            )
+            .length;
+
     final isPassed = score >= widget.exam.passingScore;
-    
+
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -703,7 +743,9 @@ class _ExamPageState extends State<ExamPage> with TickerProviderStateMixin {
                     end: Alignment.bottomRight,
                     colors: [
                       isPassed ? Colors.green : Colors.red,
-                      isPassed ? Colors.green.withOpacity(0.8) : Colors.red.withOpacity(0.8),
+                      isPassed
+                          ? Colors.green.withAlpha((0.8 * 255).round())
+                          : Colors.red.withAlpha((0.8 * 255).round()),
                     ],
                   ),
                   borderRadius: BorderRadius.circular(20),
@@ -725,12 +767,12 @@ class _ExamPageState extends State<ExamPage> with TickerProviderStateMixin {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      isPassed 
+                      isPassed
                           ? 'Congratulations! You passed the exam.'
                           : 'Do not give up, you can try again.',
                       textAlign: TextAlign.center,
                       style: theme.textTheme.bodyLarge?.copyWith(
-                        color: Colors.white.withOpacity(0.9),
+                        color: Colors.white.withAlpha((0.9 * 255).round()),
                       ),
                     ),
                   ],
@@ -743,7 +785,9 @@ class _ExamPageState extends State<ExamPage> with TickerProviderStateMixin {
                   color: theme.colorScheme.surface,
                   borderRadius: BorderRadius.circular(16),
                   border: Border.all(
-                    color: theme.colorScheme.outline.withOpacity(0.2),
+                    color: theme.colorScheme.outline.withAlpha(
+                      (0.2 * 255).round(),
+                    ),
                   ),
                 ),
                 child: Column(
@@ -751,17 +795,42 @@ class _ExamPageState extends State<ExamPage> with TickerProviderStateMixin {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        _buildScoreStat(theme, 'Final Score', '$score%', isPassed ? Colors.green : Colors.red),
-                        _buildScoreStat(theme, 'Required', '${widget.exam.passingScore}%', Colors.grey),
+                        _buildScoreStat(
+                          theme,
+                          'Final Score',
+                          '$score%',
+                          isPassed ? Colors.green : Colors.red,
+                        ),
+                        _buildScoreStat(
+                          theme,
+                          'Required',
+                          '${widget.exam.passingScore}%',
+                          Colors.grey,
+                        ),
                       ],
                     ),
                     const SizedBox(height: 20),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        _buildScoreStat(theme, 'Correct', '$correctAnswers', Colors.green),
-                        _buildScoreStat(theme, 'Incorrect', '${widget.exam.questions.length - correctAnswers}', Colors.red),
-                        _buildScoreStat(theme, 'Total', '${widget.exam.questions.length}', Colors.blue),
+                        _buildScoreStat(
+                          theme,
+                          'Correct',
+                          '$correctAnswers',
+                          Colors.green,
+                        ),
+                        _buildScoreStat(
+                          theme,
+                          'Incorrect',
+                          '${widget.exam.questions.length - correctAnswers}',
+                          Colors.red,
+                        ),
+                        _buildScoreStat(
+                          theme,
+                          'Total',
+                          '${widget.exam.questions.length}',
+                          Colors.blue,
+                        ),
                       ],
                     ),
                   ],
@@ -772,10 +841,10 @@ class _ExamPageState extends State<ExamPage> with TickerProviderStateMixin {
                 Container(
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    color: Colors.blue.withOpacity(0.1),
+                    color: Colors.blue.withAlpha((0.1 * 255).round()),
                     borderRadius: BorderRadius.circular(12),
                     border: Border.all(
-                      color: Colors.blue.withOpacity(0.3),
+                      color: Colors.blue.withAlpha((0.3 * 255).round()),
                     ),
                   ),
                   child: Row(
@@ -807,7 +876,10 @@ class _ExamPageState extends State<ExamPage> with TickerProviderStateMixin {
                         onPressed: () {
                           // Reset and restart exam
                           setState(() {
-                            userAnswers = List.filled(widget.exam.questions.length, null);
+                            userAnswers = List.filled(
+                              widget.exam.questions.length,
+                              null,
+                            );
                             currentQuestionIndex = 0;
                             remainingTime = widget.exam.timeLimit * 60;
                             isCompleted = false;
@@ -865,7 +937,12 @@ class _ExamPageState extends State<ExamPage> with TickerProviderStateMixin {
     );
   }
 
-  Widget _buildScoreStat(ThemeData theme, String label, String value, Color color) {
+  Widget _buildScoreStat(
+    ThemeData theme,
+    String label,
+    String value,
+    Color color,
+  ) {
     return Column(
       children: [
         Text(
@@ -879,7 +956,7 @@ class _ExamPageState extends State<ExamPage> with TickerProviderStateMixin {
         Text(
           label,
           style: theme.textTheme.bodySmall?.copyWith(
-            color: theme.colorScheme.onSurface.withOpacity(0.7),
+            color: theme.colorScheme.onSurface.withAlpha((0.7 * 255).round()),
           ),
         ),
       ],
@@ -895,23 +972,26 @@ class _ExamPageState extends State<ExamPage> with TickerProviderStateMixin {
   void _showExitDialog() {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Exit exam?'),
-        content: const Text('Warning! If you exit now, your progress will be lost and the exam will be considered failed.'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Continue'),
+      builder:
+          (context) => AlertDialog(
+            title: const Text('Exit exam?'),
+            content: const Text(
+              'Warning! If you exit now, your progress will be lost and the exam will be considered failed.',
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('Continue'),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                },
+                child: const Text('Exit'),
+              ),
+            ],
           ),
-          TextButton(
-            onPressed: () {
-              Navigator.pop(context);
-              Navigator.pop(context);
-            },
-            child: const Text('Exit'),
-          ),
-        ],
-      ),
     );
   }
 }

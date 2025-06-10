@@ -10,14 +10,15 @@ import 'exam_page.dart';
 
 class SubjectsPage extends StatefulWidget {
   final String? initialSubject;
-  
+
   const SubjectsPage({super.key, this.initialSubject});
 
   @override
   State<SubjectsPage> createState() => _SubjectsPageState();
 }
 
-class _SubjectsPageState extends State<SubjectsPage> with TickerProviderStateMixin {
+class _SubjectsPageState extends State<SubjectsPage>
+    with TickerProviderStateMixin {
   late TabController _tabController;
   String selectedSubject = '';
   List<LessonModel> lessons = [];
@@ -67,7 +68,7 @@ class _SubjectsPageState extends State<SubjectsPage> with TickerProviderStateMix
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final subjectColor = _getSubjectColor();
-    
+
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -98,10 +99,7 @@ class _SubjectsPageState extends State<SubjectsPage> with TickerProviderStateMix
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [
-            subjectColor,
-            subjectColor.withOpacity(0.8),
-          ],
+          colors: [subjectColor, subjectColor.withAlpha((0.8 * 255).round())],
         ),
       ),
       child: Column(
@@ -110,10 +108,7 @@ class _SubjectsPageState extends State<SubjectsPage> with TickerProviderStateMix
             children: [
               IconButton(
                 onPressed: () => Navigator.pop(context),
-                icon: const Icon(
-                  Icons.arrow_back,
-                  color: Colors.white,
-                ),
+                icon: const Icon(Icons.arrow_back, color: Colors.white),
               ),
               const SizedBox(width: 8),
               Expanded(
@@ -128,7 +123,7 @@ class _SubjectsPageState extends State<SubjectsPage> with TickerProviderStateMix
               Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.2),
+                  color: Colors.white.withAlpha((0.2 * 255).round()),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Icon(
@@ -158,7 +153,7 @@ class _SubjectsPageState extends State<SubjectsPage> with TickerProviderStateMix
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.2),
+        color: Colors.white.withAlpha((0.2 * 255).round()),
         borderRadius: BorderRadius.circular(20),
       ),
       child: Row(
@@ -190,7 +185,7 @@ class _SubjectsPageState extends State<SubjectsPage> with TickerProviderStateMix
         itemBuilder: (context, index) {
           final subject = DataService.subjects[index];
           final isSelected = subject == selectedSubject;
-          
+
           return Container(
             margin: const EdgeInsets.only(right: 12),
             child: FilterChip(
@@ -205,17 +200,21 @@ class _SubjectsPageState extends State<SubjectsPage> with TickerProviderStateMix
                 }
               },
               backgroundColor: theme.colorScheme.surface,
-              selectedColor: _getSubjectColor().withOpacity(0.2),
+              selectedColor: _getSubjectColor().withAlpha((0.2 * 255).round()),
               labelStyle: TextStyle(
-                color: isSelected 
-                    ? _getSubjectColor()
-                    : theme.colorScheme.onSurface,
+                color:
+                    isSelected
+                        ? _getSubjectColor()
+                        : theme.colorScheme.onSurface,
                 fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
               ),
               side: BorderSide(
-                color: isSelected 
-                    ? _getSubjectColor()
-                    : theme.colorScheme.outline.withOpacity(0.5),
+                color:
+                    isSelected
+                        ? _getSubjectColor()
+                        : theme.colorScheme.outline.withAlpha(
+                          (0.5 * 255).round(),
+                        ),
               ),
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             ),
@@ -231,30 +230,23 @@ class _SubjectsPageState extends State<SubjectsPage> with TickerProviderStateMix
         color: theme.colorScheme.surface,
         border: Border(
           bottom: BorderSide(
-            color: theme.colorScheme.outline.withOpacity(0.2),
+            color: theme.colorScheme.outline.withAlpha((0.2 * 255).round()),
           ),
         ),
       ),
       child: TabBar(
         controller: _tabController,
         labelColor: subjectColor,
-        unselectedLabelColor: theme.colorScheme.onSurface.withOpacity(0.6),
+        unselectedLabelColor: theme.colorScheme.onSurface.withAlpha(
+          (0.6 * 255).round(),
+        ),
         indicatorColor: subjectColor,
         indicatorWeight: 3,
         padding: const EdgeInsets.symmetric(horizontal: 20),
         tabs: const [
-          Tab(
-            icon: Icon(Icons.book),
-            text: 'Lessons',
-          ),
-          Tab(
-            icon: Icon(Icons.quiz),
-            text: 'Exercises',
-          ),
-          Tab(
-            icon: Icon(Icons.assignment),
-            text: 'Exams',
-          ),
+          Tab(icon: Icon(Icons.book), text: 'Lessons'),
+          Tab(icon: Icon(Icons.quiz), text: 'Exercises'),
+          Tab(icon: Icon(Icons.assignment), text: 'Exams'),
         ],
       ),
     );
@@ -271,15 +263,13 @@ class _SubjectsPageState extends State<SubjectsPage> with TickerProviderStateMix
         itemCount: lessons.length,
         itemBuilder: (context, index) {
           final lesson = lessons[index];
-          
+
           return AnimationConfiguration.staggeredList(
             position: index,
             duration: const Duration(milliseconds: 375),
             child: SlideAnimation(
               verticalOffset: 50.0,
-              child: FadeInAnimation(
-                child: _buildLessonCard(lesson, index),
-              ),
+              child: FadeInAnimation(child: _buildLessonCard(lesson, index)),
             ),
           );
         },
@@ -298,7 +288,7 @@ class _SubjectsPageState extends State<SubjectsPage> with TickerProviderStateMix
         itemCount: exercises.length,
         itemBuilder: (context, index) {
           final exercise = exercises[index];
-          
+
           return AnimationConfiguration.staggeredList(
             position: index,
             duration: const Duration(milliseconds: 375),
@@ -325,15 +315,13 @@ class _SubjectsPageState extends State<SubjectsPage> with TickerProviderStateMix
         itemCount: exams.length,
         itemBuilder: (context, index) {
           final exam = exams[index];
-          
+
           return AnimationConfiguration.staggeredList(
             position: index,
             duration: const Duration(milliseconds: 375),
             child: SlideAnimation(
               verticalOffset: 50.0,
-              child: FadeInAnimation(
-                child: _buildExamCard(exam, index),
-              ),
+              child: FadeInAnimation(child: _buildExamCard(exam, index)),
             ),
           );
         },
@@ -344,14 +332,14 @@ class _SubjectsPageState extends State<SubjectsPage> with TickerProviderStateMix
   Widget _buildLessonCard(LessonModel lesson, int index) {
     final theme = Theme.of(context);
     final subjectColor = _getSubjectColor();
-    
+
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
       decoration: BoxDecoration(
         color: theme.colorScheme.surface,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: theme.colorScheme.outline.withOpacity(0.2),
+          color: theme.colorScheme.outline.withAlpha((0.2 * 255).round()),
         ),
       ),
       child: Material(
@@ -374,7 +362,7 @@ class _SubjectsPageState extends State<SubjectsPage> with TickerProviderStateMix
                   width: 50,
                   height: 50,
                   decoration: BoxDecoration(
-                    color: subjectColor.withOpacity(0.1),
+                    color: subjectColor.withAlpha((0.1 * 255).round()),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Center(
@@ -405,13 +393,17 @@ class _SubjectsPageState extends State<SubjectsPage> with TickerProviderStateMix
                           Icon(
                             Icons.access_time,
                             size: 16,
-                            color: theme.colorScheme.onSurface.withOpacity(0.6),
+                            color: theme.colorScheme.onSurface.withAlpha(
+                              (0.6 * 255).round(),
+                            ),
                           ),
                           const SizedBox(width: 4),
                           Text(
                             '${lesson.duration} min',
                             style: theme.textTheme.bodySmall?.copyWith(
-                              color: theme.colorScheme.onSurface.withOpacity(0.6),
+                              color: theme.colorScheme.onSurface.withAlpha(
+                                (0.6 * 255).round(),
+                              ),
                             ),
                           ),
                           const SizedBox(width: 16),
@@ -421,7 +413,9 @@ class _SubjectsPageState extends State<SubjectsPage> with TickerProviderStateMix
                               vertical: 4,
                             ),
                             decoration: BoxDecoration(
-                              color: _getDifficultyColor(lesson.difficulty).withOpacity(0.1),
+                              color: _getDifficultyColor(
+                                lesson.difficulty,
+                              ).withAlpha((0.1 * 255).round()),
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: Text(
@@ -438,11 +432,7 @@ class _SubjectsPageState extends State<SubjectsPage> with TickerProviderStateMix
                   ),
                 ),
                 if (lesson.isCompleted)
-                  const Icon(
-                    Icons.check_circle,
-                    color: Colors.green,
-                    size: 24,
-                  )
+                  const Icon(Icons.check_circle, color: Colors.green, size: 24)
                 else
                   Icon(
                     Icons.play_circle_outline,
@@ -460,14 +450,14 @@ class _SubjectsPageState extends State<SubjectsPage> with TickerProviderStateMix
   Widget _buildExerciseCard(ExerciseModel exercise, int index) {
     final theme = Theme.of(context);
     final subjectColor = _getSubjectColor();
-    
+
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
       decoration: BoxDecoration(
         color: theme.colorScheme.surface,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: theme.colorScheme.outline.withOpacity(0.2),
+          color: theme.colorScheme.outline.withAlpha((0.2 * 255).round()),
         ),
       ),
       child: Material(
@@ -490,14 +480,10 @@ class _SubjectsPageState extends State<SubjectsPage> with TickerProviderStateMix
                   width: 50,
                   height: 50,
                   decoration: BoxDecoration(
-                    color: subjectColor.withOpacity(0.1),
+                    color: subjectColor.withAlpha((0.1 * 255).round()),
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  child: Icon(
-                    Icons.quiz,
-                    color: subjectColor,
-                    size: 24,
-                  ),
+                  child: Icon(Icons.quiz, color: subjectColor, size: 24),
                 ),
                 const SizedBox(width: 16),
                 Expanded(
@@ -517,26 +503,34 @@ class _SubjectsPageState extends State<SubjectsPage> with TickerProviderStateMix
                           Icon(
                             Icons.help_outline,
                             size: 16,
-                            color: theme.colorScheme.onSurface.withOpacity(0.6),
+                            color: theme.colorScheme.onSurface.withAlpha(
+                              (0.6 * 255).round(),
+                            ),
                           ),
                           const SizedBox(width: 4),
                           Text(
                             '${exercise.questions.length} questions',
                             style: theme.textTheme.bodySmall?.copyWith(
-                              color: theme.colorScheme.onSurface.withOpacity(0.6),
+                              color: theme.colorScheme.onSurface.withAlpha(
+                                (0.6 * 255).round(),
+                              ),
                             ),
                           ),
                           const SizedBox(width: 16),
                           Icon(
                             Icons.timer,
                             size: 16,
-                            color: theme.colorScheme.onSurface.withOpacity(0.6),
+                            color: theme.colorScheme.onSurface.withAlpha(
+                              (0.6 * 255).round(),
+                            ),
                           ),
                           const SizedBox(width: 4),
                           Text(
                             '${exercise.timeLimit} min',
                             style: theme.textTheme.bodySmall?.copyWith(
-                              color: theme.colorScheme.onSurface.withOpacity(0.6),
+                              color: theme.colorScheme.onSurface.withAlpha(
+                                (0.6 * 255).round(),
+                              ),
                             ),
                           ),
                         ],
@@ -565,11 +559,7 @@ class _SubjectsPageState extends State<SubjectsPage> with TickerProviderStateMix
                   ),
                 ),
                 if (exercise.isCompleted)
-                  const Icon(
-                    Icons.check_circle,
-                    color: Colors.green,
-                    size: 24,
-                  )
+                  const Icon(Icons.check_circle, color: Colors.green, size: 24)
                 else
                   Icon(
                     Icons.play_circle_outline,
@@ -587,14 +577,14 @@ class _SubjectsPageState extends State<SubjectsPage> with TickerProviderStateMix
   Widget _buildExamCard(ExamModel exam, int index) {
     final theme = Theme.of(context);
     final subjectColor = _getSubjectColor();
-    
+
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
       decoration: BoxDecoration(
         color: theme.colorScheme.surface,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: theme.colorScheme.outline.withOpacity(0.2),
+          color: theme.colorScheme.outline.withAlpha((0.2 * 255).round()),
         ),
       ),
       child: Material(
@@ -603,9 +593,7 @@ class _SubjectsPageState extends State<SubjectsPage> with TickerProviderStateMix
           onTap: () {
             Navigator.push(
               context,
-              MaterialPageRoute(
-                builder: (context) => ExamPage(exam: exam),
-              ),
+              MaterialPageRoute(builder: (context) => ExamPage(exam: exam)),
             );
           },
           borderRadius: BorderRadius.circular(16),
@@ -617,14 +605,10 @@ class _SubjectsPageState extends State<SubjectsPage> with TickerProviderStateMix
                   width: 50,
                   height: 50,
                   decoration: BoxDecoration(
-                    color: subjectColor.withOpacity(0.1),
+                    color: subjectColor.withAlpha((0.1 * 255).round()),
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  child: Icon(
-                    Icons.assignment,
-                    color: subjectColor,
-                    size: 24,
-                  ),
+                  child: Icon(Icons.assignment, color: subjectColor, size: 24),
                 ),
                 const SizedBox(width: 16),
                 Expanded(
@@ -647,7 +631,9 @@ class _SubjectsPageState extends State<SubjectsPage> with TickerProviderStateMix
                               vertical: 2,
                             ),
                             decoration: BoxDecoration(
-                              color: _getDifficultyColor(exam.difficulty).withOpacity(0.1),
+                              color: _getDifficultyColor(
+                                exam.difficulty,
+                              ).withAlpha((0.1 * 255).round()),
                               borderRadius: BorderRadius.circular(6),
                             ),
                             child: Text(
@@ -663,13 +649,17 @@ class _SubjectsPageState extends State<SubjectsPage> with TickerProviderStateMix
                           Icon(
                             Icons.timer,
                             size: 14,
-                            color: theme.colorScheme.onSurface.withOpacity(0.6),
+                            color: theme.colorScheme.onSurface.withAlpha(
+                              (0.6 * 255).round(),
+                            ),
                           ),
                           const SizedBox(width: 2),
                           Text(
                             '${exam.timeLimit} min',
                             style: theme.textTheme.bodySmall?.copyWith(
-                              color: theme.colorScheme.onSurface.withOpacity(0.6),
+                              color: theme.colorScheme.onSurface.withAlpha(
+                                (0.6 * 255).round(),
+                              ),
                               fontSize: 12,
                             ),
                           ),
@@ -677,13 +667,17 @@ class _SubjectsPageState extends State<SubjectsPage> with TickerProviderStateMix
                           Icon(
                             Icons.help_outline,
                             size: 14,
-                            color: theme.colorScheme.onSurface.withOpacity(0.6),
+                            color: theme.colorScheme.onSurface.withAlpha(
+                              (0.6 * 255).round(),
+                            ),
                           ),
                           const SizedBox(width: 2),
                           Text(
                             '${exam.questions.length} questions',
                             style: theme.textTheme.bodySmall?.copyWith(
-                              color: theme.colorScheme.onSurface.withOpacity(0.6),
+                              color: theme.colorScheme.onSurface.withAlpha(
+                                (0.6 * 255).round(),
+                              ),
                               fontSize: 12,
                             ),
                           ),
@@ -702,7 +696,8 @@ class _SubjectsPageState extends State<SubjectsPage> with TickerProviderStateMix
                             Text(
                               'Score: ${exam.score}% (Required: ${exam.passingScore}%)',
                               style: theme.textTheme.bodySmall?.copyWith(
-                                color: exam.isPassed ? Colors.green : Colors.red,
+                                color:
+                                    exam.isPassed ? Colors.green : Colors.red,
                                 fontWeight: FontWeight.w600,
                                 fontSize: 12,
                               ),
@@ -735,7 +730,7 @@ class _SubjectsPageState extends State<SubjectsPage> with TickerProviderStateMix
 
   Widget _buildEmptyState(String message, IconData icon) {
     final theme = Theme.of(context);
-    
+
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -743,13 +738,13 @@ class _SubjectsPageState extends State<SubjectsPage> with TickerProviderStateMix
           Icon(
             icon,
             size: 64,
-            color: theme.colorScheme.onSurface.withOpacity(0.3),
+            color: theme.colorScheme.onSurface.withAlpha((0.6 * 255).round()),
           ),
           const SizedBox(height: 16),
           Text(
             message,
             style: theme.textTheme.bodyLarge?.copyWith(
-              color: theme.colorScheme.onSurface.withOpacity(0.6),
+              color: theme.colorScheme.onSurface.withAlpha((0.6 * 255).round()),
             ),
           ),
         ],
