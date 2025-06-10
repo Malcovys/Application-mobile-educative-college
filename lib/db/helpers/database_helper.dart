@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
@@ -59,7 +60,9 @@ class DatabaseHelper {
     if (await databaseFactory.databaseExists(path)) {
       await databaseFactory.deleteDatabase(path);
       _database = null;
-      print('Base de données supprimée : $path');
+      if (kDebugMode) {
+        print('Base de données supprimée : $path');
+      }
     }
   }
 }

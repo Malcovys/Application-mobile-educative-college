@@ -15,9 +15,9 @@ class LessonObjectives extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: subjectColor.withOpacity(0.05),
+        color: subjectColor.withAlpha((0.05 * 255).toInt()),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: subjectColor.withOpacity(0.2)),
+        border: Border.all(color: subjectColor.withAlpha((0.2 * 255).toInt())),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
