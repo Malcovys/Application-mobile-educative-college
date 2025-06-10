@@ -2,6 +2,7 @@
 
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter/foundation.dart';
 
 class StorageService {
   static const String _lessonsKey = 'lessons';
@@ -22,7 +23,9 @@ class StorageService {
       final jsonString = jsonEncode(data);
       return await _prefs!.setString(key, jsonString);
     } catch (e) {
-      print('Error saving data for key $key: $e');
+      if (kDebugMode) {
+        print('Error saving data for key $key: $e');
+      }
       return false;
     }
   }
@@ -36,13 +39,18 @@ class StorageService {
         return fromJson(jsonData);
       }
     } catch (e) {
-      print('Error loading data for key $key: $e');
+      if (kDebugMode) {
+        print('Error loading data for key $key: $e');
+      }
     }
     return null;
   }
 
   // Load list data
-  static List<T> loadListData<T>(String key, T Function(Map<String, dynamic>) fromJson) {
+  static List<T> loadListData<T>(
+    String key,
+    T Function(Map<String, dynamic>) fromJson,
+  ) {
     try {
       final jsonString = _prefs!.getString(key);
       if (jsonString != null) {
@@ -50,7 +58,9 @@ class StorageService {
         return jsonList.map((json) => fromJson(json)).toList();
       }
     } catch (e) {
-      print('Error loading list data for key $key: $e');
+      if (kDebugMode) {
+        print('Error loading list data for key $key: $e');
+      }
     }
     return [];
   }
@@ -61,7 +71,9 @@ class StorageService {
       final jsonList = data.map((item) => (item as dynamic).toJson()).toList();
       return await saveData(key, jsonList);
     } catch (e) {
-      print('Error saving list data for key $key: $e');
+      if (kDebugMode) {
+        print('Error saving list data for key $key: $e');
+      }
       return false;
     }
   }
@@ -79,7 +91,9 @@ class StorageService {
         return jsonList.cast<Map<String, dynamic>>();
       }
     } catch (e) {
-      print('Error loading lessons: $e');
+      if (kDebugMode) {
+        print('Error loading lessons: $e');
+      }
     }
     return [];
   }
@@ -96,7 +110,9 @@ class StorageService {
         return jsonList.cast<Map<String, dynamic>>();
       }
     } catch (e) {
-      print('Error loading exercises: $e');
+      if (kDebugMode) {
+        print('Error loading exercises: $e');
+      }
     }
     return [];
   }
@@ -113,7 +129,9 @@ class StorageService {
         return jsonList.cast<Map<String, dynamic>>();
       }
     } catch (e) {
-      print('Error loading exams: $e');
+      if (kDebugMode) {
+        print('Error loading exams: $e');
+      }
     }
     return [];
   }
@@ -129,7 +147,9 @@ class StorageService {
         return jsonDecode(jsonString);
       }
     } catch (e) {
-      print('Error loading progress: $e');
+      if (kDebugMode) {
+        print('Error loading progress: $e');
+      }
     }
     return null;
   }
@@ -139,7 +159,9 @@ class StorageService {
     try {
       return await _prefs!.clear();
     } catch (e) {
-      print('Error clearing all data: $e');
+      if (kDebugMode) {
+        print('Error clearing all data: $e');
+      }
       return false;
     }
   }
@@ -149,7 +171,9 @@ class StorageService {
     try {
       return await _prefs!.remove(key);
     } catch (e) {
-      print('Error removing key $key: $e');
+      if (kDebugMode) {
+        print('Error removing key $key: $e');
+      }
       return false;
     }
   }

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../models/progress_model.dart';
+import '../../models/progress_model.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 
 class SubjectCard extends StatelessWidget {
@@ -55,21 +55,18 @@ class SubjectCard extends StatelessWidget {
     final theme = Theme.of(context);
     final subjectColor = _getSubjectColor(subject);
     final progressValue = progress?.overallProgress ?? 0.0;
-    
+
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [
-            subjectColor,
-            subjectColor.withOpacity(0.8),
-          ],
+          colors: [subjectColor, subjectColor.withAlpha((0.8 * 255).round())],
         ),
         boxShadow: [
           BoxShadow(
-            color: subjectColor.withOpacity(0.3),
+            color: subjectColor.withAlpha((0.3 * 255).round()),
             blurRadius: 15,
             offset: const Offset(0, 8),
           ),
@@ -90,7 +87,7 @@ class SubjectCard extends StatelessWidget {
                     Container(
                       padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.2),
+                        color: Colors.white.withAlpha((0.2 * 255).round()),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Icon(
@@ -106,7 +103,7 @@ class SubjectCard extends StatelessWidget {
                         vertical: 6,
                       ),
                       decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.2),
+                        color: Colors.white.withAlpha((0.2 * 255).round()),
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: Text(
@@ -119,7 +116,7 @@ class SubjectCard extends StatelessWidget {
                     ),
                   ],
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: 8),
                 Text(
                   subject,
                   style: theme.textTheme.titleMedium?.copyWith(
@@ -127,21 +124,23 @@ class SubjectCard extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: 4),
                 if (progress != null) ...[
                   Text(
                     '${progress!.completedLessons}/${progress!.totalLessons} lessons',
                     style: theme.textTheme.bodySmall?.copyWith(
-                      color: Colors.white.withOpacity(0.9),
+                      color: Colors.white.withAlpha((0.9 * 255).round()),
                     ),
                   ),
-                  const SizedBox(height: 12),
+                  const SizedBox(height: 4),
                   LinearPercentIndicator(
                     padding: EdgeInsets.zero,
                     lineHeight: 6,
                     percent: progressValue,
                     progressColor: Colors.white,
-                    backgroundColor: Colors.white.withOpacity(0.3),
+                    backgroundColor: Colors.white.withAlpha(
+                      (0.3 * 255).round(),
+                    ),
                     barRadius: const Radius.circular(3),
                     animation: true,
                     animationDuration: 800,
@@ -150,16 +149,18 @@ class SubjectCard extends StatelessWidget {
                   Text(
                     'Start learning',
                     style: theme.textTheme.bodySmall?.copyWith(
-                      color: Colors.white.withOpacity(0.9),
+                      color: Colors.white.withAlpha((0.9 * 255).round()),
                     ),
                   ),
-                  const SizedBox(height: 12),
+                  const SizedBox(height: 8),
                   LinearPercentIndicator(
                     padding: EdgeInsets.zero,
                     lineHeight: 6,
                     percent: 0.0,
                     progressColor: Colors.white,
-                    backgroundColor: Colors.white.withOpacity(0.3),
+                    backgroundColor: Colors.white.withAlpha(
+                      (0.3 * 255).round(),
+                    ),
                     barRadius: const Radius.circular(3),
                   ),
                 ],
@@ -168,16 +169,16 @@ class SubjectCard extends StatelessWidget {
                   children: [
                     Icon(
                       Icons.timer_outlined,
-                      color: Colors.white.withOpacity(0.8),
+                      color: Colors.white.withAlpha((0.8 * 255).round()),
                       size: 16,
                     ),
-                    const SizedBox(width: 4),
+                    const SizedBox(width: 4), //4
                     Text(
-                      progress != null 
+                      progress != null
                           ? 'Last activity: ${_formatDate(progress!.lastActivity)}'
                           : 'New',
                       style: theme.textTheme.bodySmall?.copyWith(
-                        color: Colors.white.withOpacity(0.8),
+                        color: Colors.white.withAlpha((0.8 * 255).round()),
                         fontSize: 12,
                       ),
                     ),
@@ -194,7 +195,7 @@ class SubjectCard extends StatelessWidget {
   String _formatDate(DateTime date) {
     final now = DateTime.now();
     final difference = now.difference(date).inDays;
-    
+
     if (difference == 0) {
       return 'Today';
     } else if (difference == 1) {

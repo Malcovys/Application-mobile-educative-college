@@ -22,10 +22,12 @@ class SubjectProgress {
   });
 
   double get overallProgress {
-    final lessonProgress = totalLessons > 0 ? completedLessons / totalLessons : 0.0;
-    final exerciseProgress = totalExercises > 0 ? completedExercises / totalExercises : 0.0;
+    final lessonProgress =
+        totalLessons > 0 ? completedLessons / totalLessons : 0.0;
+    final exerciseProgress =
+        totalExercises > 0 ? completedExercises / totalExercises : 0.0;
     final examProgress = totalExams > 0 ? completedExams / totalExams : 0.0;
-    
+
     return (lessonProgress + exerciseProgress + examProgress) / 3;
   }
 
@@ -78,16 +80,53 @@ class UserProgress {
   double get overallProgress {
     if (subjectProgress.isEmpty) return 0.0;
     return subjectProgress
-        .map((s) => s.overallProgress)
-        .reduce((a, b) => a + b) / subjectProgress.length;
+            .map((s) => s.overallProgress)
+            .reduce((a, b) => a + b) /
+        subjectProgress.length;
+  }
+
+  // Totaux pour les leçons
+  int get completedLessons =>
+      subjectProgress.fold(0, (sum, sp) => sum + sp.completedLessons);
+  int get totalLessons =>
+      subjectProgress.fold(0, (sum, sp) => sum + sp.totalLessons);
+
+  // Totaux pour les exercices
+  int get completedExercises =>
+      subjectProgress.fold(0, (sum, sp) => sum + sp.completedExercises);
+  int get totalExercises =>
+      subjectProgress.fold(0, (sum, sp) => sum + sp.totalExercises);
+
+  // Totaux pour les examens
+  int get completedExams =>
+      subjectProgress.fold(0, (sum, sp) => sum + sp.completedExams);
+  int get totalExams =>
+      subjectProgress.fold(0, (sum, sp) => sum + sp.totalExams);
+
+  // Ratios de progression
+  double get lessonProgress =>
+      totalLessons == 0 ? 0.0 : completedLessons / totalLessons;
+  double get exerciseProgress =>
+      totalExercises == 0 ? 0.0 : completedExercises / totalExercises;
+  double get examProgress =>
+      totalExams == 0 ? 0.0 : completedExams / totalExams;
+
+  // Moyenne des scores sur toutes les matières
+  double get averageScore {
+    if (subjectProgress.isEmpty) return 0.0;
+    return subjectProgress
+            .map((sp) => sp.averageScore)
+            .reduce((a, b) => a + b) /
+        subjectProgress.length;
   }
 
   factory UserProgress.fromJson(Map<String, dynamic> json) {
     return UserProgress(
       userId: json['userId'],
-      subjectProgress: (json['subjectProgress'] as List)
-          .map((s) => SubjectProgress.fromJson(s))
-          .toList(),
+      subjectProgress:
+          (json['subjectProgress'] as List)
+              .map((s) => SubjectProgress.fromJson(s))
+              .toList(),
       totalStudyTime: json['totalStudyTime'],
       streak: json['streak'],
       lastLoginDate: DateTime.parse(json['lastLoginDate']),

@@ -22,28 +22,25 @@ class CustomProgressIndicator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     return Column(
       children: [
         CircularPercentIndicator(
           radius: size / 2,
           lineWidth: 8.0,
           percent: progress.clamp(0.0, 1.0),
-          center: showPercentage
-              ? Text(
-                  '${(progress * 100).toInt()}%',
-                  style: theme.textTheme.titleSmall?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: color,
-                  ),
-                )
-              : Icon(
-                  Icons.check_circle,
-                  color: color,
-                  size: size / 3,
-                ),
+          center:
+              showPercentage
+                  ? Text(
+                    '${(progress * 100).toInt()}%',
+                    style: theme.textTheme.titleSmall?.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: color,
+                    ),
+                  )
+                  : Icon(Icons.check_circle, color: color, size: size / 3),
           progressColor: color,
-          backgroundColor: color.withOpacity(0.2),
+          backgroundColor: color.withAlpha((0.2 * 255).round()),
           circularStrokeCap: CircularStrokeCap.round,
           animation: true,
           animationDuration: 1200,
@@ -61,7 +58,7 @@ class CustomProgressIndicator extends StatelessWidget {
         Text(
           subtitle,
           style: theme.textTheme.bodySmall?.copyWith(
-            color: theme.colorScheme.onSurface.withOpacity(0.7),
+            color: theme.colorScheme.onSurface.withAlpha((0.7 * 255).round()),
           ),
           textAlign: TextAlign.center,
         ),
@@ -87,7 +84,7 @@ class ProgressRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Column(
@@ -107,7 +104,9 @@ class ProgressRow extends StatelessWidget {
                 Text(
                   trailing!,
                   style: theme.textTheme.bodySmall?.copyWith(
-                    color: theme.colorScheme.onSurface.withOpacity(0.7),
+                    color: theme.colorScheme.onSurface.withAlpha(
+                      (0.7 * 255).round(),
+                    ),
                   ),
                 ),
             ],
@@ -118,7 +117,7 @@ class ProgressRow extends StatelessWidget {
             lineHeight: 8,
             percent: progress.clamp(0.0, 1.0),
             progressColor: color,
-            backgroundColor: color.withOpacity(0.2),
+            backgroundColor: color.withAlpha((0.2 * 255).round()),
             barRadius: const Radius.circular(4),
             animation: true,
             animationDuration: 1000,
@@ -148,14 +147,14 @@ class StatsCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: theme.colorScheme.surface,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: theme.colorScheme.outline.withOpacity(0.2),
+          color: theme.colorScheme.outline.withAlpha((0.2 * 255).round()),
         ),
       ),
       child: Column(
@@ -166,14 +165,10 @@ class StatsCard extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: color.withOpacity(0.1),
+                  color: color.withAlpha((0.1 * 255).round()),
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: Icon(
-                  icon,
-                  color: color,
-                  size: 20,
-                ),
+                child: Icon(icon, color: color, size: 20),
               ),
               const Spacer(),
               Text(
@@ -198,7 +193,9 @@ class StatsCard extends StatelessWidget {
             Text(
               subtitle!,
               style: theme.textTheme.bodySmall?.copyWith(
-                color: theme.colorScheme.onSurface.withOpacity(0.7),
+                color: theme.colorScheme.onSurface.withAlpha(
+                  (0.7 * 255).round(),
+                ),
               ),
             ),
           ],
