@@ -17,6 +17,7 @@ dependencies:
   shared_preferences: ^2.5.3
   flutter_staggered_animations: ^1.1.1
   percent_indicator: ^4.2.5
+  dio: ^5.4.0
   path: ^1.9.1
   sqflite_common_ffi: ^2.3.5
   sqlite3_flutter_libs: ^0.5.33
