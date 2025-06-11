@@ -63,7 +63,7 @@ class LessonInfo extends StatelessWidget {
               Expanded(
                 child: buildInfo(
                   Icons.access_time,
-                  'Duration',
+                  'Durée',
                   '${lesson.duration} min',
                   Colors.blue,
                 ),
@@ -72,7 +72,7 @@ class LessonInfo extends StatelessWidget {
               Expanded(
                 child: buildInfo(
                   Icons.school,
-                  'Subject',
+                  'Matière',
                   lesson.subject,
                   color,
                 ),
@@ -82,7 +82,7 @@ class LessonInfo extends StatelessWidget {
           const SizedBox(height: 16),
           buildInfo(
             Icons.trending_up,
-            'Difficulty',
+            'Difficulée',
             lesson.difficulty,
             getDifficultyColor(lesson.difficulty),
           ),

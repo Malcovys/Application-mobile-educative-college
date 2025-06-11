@@ -12,11 +12,11 @@ class DataService {
   static UserProgress? _userProgress;
 
   static final List<String> subjects = [
-    'Mathematics',
+    'Mathematique',
     'Science',
     'Literature',
-    'History',
-    'Geography',
+    'Histoire',
+    'Geographie',
   ];
 
   static Future<void> initialize() async {
@@ -35,14 +35,19 @@ class DataService {
       _lessons = lessonsData.map((json) => LessonModel.fromJson(json)).toList();
     } else {
       _lessons = _generateSampleLessons();
-      await StorageService.saveLessons(_lessons.map((l) => l.toJson()).toList());
+      await StorageService.saveLessons(
+        _lessons.map((l) => l.toJson()).toList(),
+      );
     }
 
     if (exercisesData.isNotEmpty) {
-      _exercises = exercisesData.map((json) => ExerciseModel.fromJson(json)).toList();
+      _exercises =
+          exercisesData.map((json) => ExerciseModel.fromJson(json)).toList();
     } else {
       _exercises = _generateSampleExercises();
-      await StorageService.saveExercises(_exercises.map((e) => e.toJson()).toList());
+      await StorageService.saveExercises(
+        _exercises.map((e) => e.toJson()).toList(),
+      );
     }
 
     if (examsData.isNotEmpty) {
@@ -62,70 +67,70 @@ class DataService {
 
   static List<LessonModel> _generateSampleLessons() {
     final lessons = <LessonModel>[];
-    
-    // Mathematics lessons
+
+    // Mathematique lessons
     lessons.addAll([
       LessonModel(
         id: 'math_1',
-        title: 'Linear Equations',
-        subject: 'Mathematics',
-        content: '''# Linear Equations
+        title: 'Equations Lineaire ',
+        subject: 'Mathematique',
+        content: '''# Equations Lineaire
 
 ## Introduction
-A linear equation is an equation that contains variables raised to the first power only.
+Une équation linéaire est une équation qui contient des variables portées à la première puissance seulement.
 
-## General Form
+## Forme Generale 
 ax + b = 0, where a ≠ 0
 
-## Solution Methods
-1. **Isolate the variable**: Move all terms containing x to one side
-2. **Simplify**: Perform arithmetic operations
-3. **Verify**: Substitute the solution into the original equation
+## Méthodes de résolution
+1. **Isoler la variable** : Déplacer tous les termes contenant x d’un côté
+2. **Simplifier** : Effectuer des opérations arithmétiques
+3. **Vérifier** : Remplacer la solution dans l’équation d’origine
 
-## Practical Examples
+## Exemples pratiques
 - 2x + 5 = 13 → x = 4
 - 3x - 7 = 2x + 1 → x = 8
 
 ## Applications
-Linear equations are used in many fields including physics, economics, and geometry.''',
+Les équations linéaires sont utilisées dans de nombreux domaines, notamment la physique, l’économie et la géométrie.''',
         duration: 45,
-        difficulty: 'Easy',
+        difficulty: 'Facile',
         objectives: [
-          'Understand the general form of a linear equation',
-          'Master solution techniques',
-          'Apply knowledge to concrete problems'
+          'Comprendre la forme générale d’une équation linéaire',
+          'Techniques de solution maîtresse',
+          'Appliquer les connaissances à des problèmes concrets',
         ],
       ),
       LessonModel(
         id: 'math_2',
-        title: 'Linear Functions',
-        subject: 'Mathematics',
-        content: '''# Linear Functions
+        title: 'Functions Lineaire',
+        subject: 'Mathematique',
+        content: '''# Functions Lineaire
 
 ## Definition
-A linear function is a function of the form f(x) = ax where a is a real number called the slope.
+Une fonction linéaire est une fonction de la forme f(x) = ax où a est un nombre réel appelé pente.
 
-## Graphical Representation
-- The graph of a linear function is a straight line passing through the origin
-- The slope of this line equals the coefficient a
+## Représentation graphique
+- Le graphe d’une fonction linéaire est une ligne droite passant par l’origine
+- La pente de cette ligne est égale au coefficient a
 
-## Important Properties
-1. f(0) = 0 (the function passes through the origin)
-2. f(x + y) = f(x) + f(y) (additivity)
-3. f(kx) = kf(x) (homogeneity)
+## Propriétés importantes
+1. f(0) = 0 (la fonction passe par l’origine)
+2. f(x + y) = f(x) + f(y) (additivité)
+3. f(kx) = kf(x) (homogénéité)
 
-## Examples
-- f(x) = 2x : slope = 2
-- g(x) = -0.5x : slope = -0.5
+## Exemples
+- f(x) = 2x : pente = 2
+- g(x) = -0.5x : pente = -0.5
 
-## Practical Applications
-Linear functions model many proportional situations in daily life.''',
+## Applications pratiques
+Les fonctions linéaires modélisent de nombreuses situations proportionnelles dans la vie quotidienne.''',
         duration: 50,
-        difficulty: 'Medium',
+        difficulty: 'Moyen',
         objectives: [
-          'Identify a linear function',
-          'Draw the graph of a linear function',
-          'Solve proportionality problems'
+          'Identifier une fonction linéaire',
+          'Dessiner le graphe d’une fonction linéaire',
+          'Résoudre les problèmes de proportionnalité',
         ],
       ),
     ]);
@@ -134,38 +139,38 @@ Linear functions model many proportional situations in daily life.''',
     lessons.addAll([
       LessonModel(
         id: 'sci_1',
-        title: 'Atomic Structure',
+        title: 'Structure atomique',
         subject: 'Science',
-        content: '''# Atomic Structure
+        content: '''# Structure atomique
 
 ## Introduction
-An atom is the smallest unit of matter that retains the properties of a chemical element.
+Un atome est la plus petite unité de matière qui conserve les propriétés d’un élément chimique.
 
-## Composition of the Atom
-1. **The nucleus**: Center of the atom containing:
-   - Protons (positive charge)
-   - Neutrons (neutral charge)
+## Composition de l’atome
+1. **Le noyau** : centre de l’atome contenant :
+   - Protons (charge positive)
+   - Neutrons (charge neutre)
 
-2. **Electrons**: Negatively charged particles orbiting around the nucleus
+2. **Électrons** : particules à charge négative en orbite autour du noyau
 
-## Atomic Models
-- **Rutherford Model**: Atom mostly empty with a dense nucleus
-- **Bohr Model**: Electrons on circular orbits
-- **Quantum Model**: Electron orbitals
+## Modèles atomiques
+- **Modèle Rutherford** : Atome presque vide avec un noyau dense
+- **Bohr Model** : Electrons on circular orbits
+- **Modèle quantique** : orbitales d’électrons
 
 ## Notation
-- Atomic number Z = number of protons
-- Mass number A = protons + neutrons
-- Notation: 23Na (sodium-23)
+- Nombre atomique Z = nombre de protons
+- Nombre de masse A = protons + neutrons
+- Notation : 23Na (sodium-23)
 
-## Importance
-Understanding atomic structure is fundamental to chemistry and physics.''',
+## Important
+La compréhension de la structure atomique est fondamentale pour la chimie et la physique.''',
         duration: 40,
-        difficulty: 'Medium',
+        difficulty: 'Moyen',
         objectives: [
-          'Know the composition of the atom',
-          'Distinguish different atomic models',
-          'Use atomic notation'
+          'Connaître la composition de l’atome',
+          'Distinguer les différents modèles atomiques',
+          'Utiliser des notatios atomique',
         ],
       ),
     ]);
@@ -175,99 +180,106 @@ Understanding atomic structure is fundamental to chemistry and physics.''',
 
   static List<ExerciseModel> _generateSampleExercises() {
     final exercises = <ExerciseModel>[];
-    
-    exercises.add(ExerciseModel(
-      id: 'ex_math_1',
-      title: 'Linear Equations Practice',
-      lessonId: 'math_1',
-      subject: 'Mathematics',
-      timeLimit: 20,
-      questions: [
-        QuestionModel(
-          id: 'q1',
-          question: 'Solve the equation: 2x + 5 = 13',
-          options: ['x = 4', 'x = 6', 'x = 8', 'x = 2'],
-          correctAnswerIndex: 0,
-          explanation: '2x = 13 - 5 = 8, so x = 8 ÷ 2 = 4',
-          type: 'multiple_choice',
-        ),
-        QuestionModel(
-          id: 'q2',
-          question: 'What is the solution to 3x - 7 = 2x + 1?',
-          options: ['x = 8', 'x = 6', 'x = 4', 'x = 10'],
-          correctAnswerIndex: 0,
-          explanation: '3x - 2x = 1 + 7, so x = 8',
-          type: 'multiple_choice',
-        ),
-      ],
-    ));
 
-    exercises.add(ExerciseModel(
-      id: 'ex_sci_1',
-      title: 'Atomic Structure Quiz',
-      lessonId: 'sci_1',
-      subject: 'Science',
-      timeLimit: 15,
-      questions: [
-        QuestionModel(
-          id: 'q3',
-          question: 'Protons have a positive electric charge.',
-          options: ['True', 'False'],
-          correctAnswerIndex: 0,
-          explanation: 'Protons indeed carry a positive charge.',
-          type: 'true_false',
-        ),
-        QuestionModel(
-          id: 'q4',
-          question: 'How many electrons does a neutral carbon atom (Z=6) have?',
-          options: ['4', '6', '8', '12'],
-          correctAnswerIndex: 1,
-          explanation: 'A neutral atom has as many electrons as protons.',
-          type: 'multiple_choice',
-        ),
-      ],
-    ));
+    exercises.add(
+      ExerciseModel(
+        id: 'ex_math_1',
+        title: 'Lineaire Equations Practice',
+        lessonId: 'math_1',
+        subject: 'Mathematique',
+        timeLimit: 20,
+        questions: [
+          QuestionModel(
+            id: 'q1',
+            question: 'résoudre l’équation: 2x + 5 = 13',
+            options: ['x = 4', 'x = 6', 'x = 8', 'x = 2'],
+            correctAnswerIndex: 0,
+            explanation: '2x = 13 - 5 = 8, so x = 8 ÷ 2 = 4',
+            type: 'multiple_choice',
+          ),
+          QuestionModel(
+            id: 'q2',
+            question: 'Quelle est la solution to 3x - 7 = 2x + 1?',
+            options: ['x = 8', 'x = 6', 'x = 4', 'x = 10'],
+            correctAnswerIndex: 0,
+            explanation: '3x - 2x = 1 + 7, so x = 8',
+            type: 'multiple_choice',
+          ),
+        ],
+      ),
+    );
+
+    exercises.add(
+      ExerciseModel(
+        id: 'ex_sci_1',
+        title: 'Structure atomique Quiz',
+        lessonId: 'sci_1',
+        subject: 'Science',
+        timeLimit: 15,
+        questions: [
+          QuestionModel(
+            id: 'q3',
+            question: 'Les protons ont une charge électrique positive.',
+            options: ['True', 'False'],
+            correctAnswerIndex: 0,
+            explanation: 'Les protons portent en effet une charge positive.',
+            type: 'true_false',
+          ),
+          QuestionModel(
+            id: 'q4',
+            question:
+                'Combien d’électrons possède un atome de carbone neutre (Z=6)?',
+            options: ['4', '6', '8', '12'],
+            correctAnswerIndex: 1,
+            explanation: 'Un atome neutre a autant d’électrons que de protons.',
+            type: 'multiple_choice',
+          ),
+        ],
+      ),
+    );
 
     return exercises;
   }
 
   static List<ExamModel> _generateSampleExams() {
     final exams = <ExamModel>[];
-    
-    exams.add(ExamModel(
-      id: 'exam_math_1',
-      title: 'Mathematics Exam - Algebra',
-      subject: 'Mathematics',
-      timeLimit: 60,
-      passingScore: 60,
-      difficulty: 'Medium',
-      questions: [
-        QuestionModel(
-          id: 'eq1',
-          question: 'Solve: 5x - 3 = 2x + 9',
-          options: ['x = 4', 'x = 6', 'x = 3', 'x = 2'],
-          correctAnswerIndex: 0,
-          explanation: '5x - 2x = 9 + 3, so 3x = 12, x = 4',
-          type: 'multiple_choice',
-        ),
-        QuestionModel(
-          id: 'eq2',
-          question: 'If f(x) = 3x, what is f(5)?',
-          options: ['8', '15', '25', '35'],
-          correctAnswerIndex: 1,
-          explanation: 'f(5) = 3 × 5 = 15',
-          type: 'multiple_choice',
-        ),
-        QuestionModel(
-          id: 'eq3',
-          question: 'A linear function always passes through the origin.',
-          options: ['True', 'False'],
-          correctAnswerIndex: 0,
-          explanation: 'By definition, f(x) = ax implies f(0) = 0.',
-          type: 'true_false',
-        ),
-      ],
-    ));
+
+    exams.add(
+      ExamModel(
+        id: 'exam_math_1',
+        title: 'Examen Mathematique - Algebre',
+        subject: 'Mathematique',
+        timeLimit: 60,
+        passingScore: 60,
+        difficulty: 'Moyen',
+        questions: [
+          QuestionModel(
+            id: 'eq1',
+            question: 'Resoudre: 5x - 3 = 2x + 9',
+            options: ['x = 4', 'x = 6', 'x = 3', 'x = 2'],
+            correctAnswerIndex: 0,
+            explanation: '5x - 2x = 9 + 3, so 3x = 12, x = 4',
+            type: 'multiple_choice',
+          ),
+          QuestionModel(
+            id: 'eq2',
+            question: 'Si f(x) = 3x, what is f(5)?',
+            options: ['8', '15', '25', '35'],
+            correctAnswerIndex: 1,
+            explanation: 'f(5) = 3 × 5 = 15',
+            type: 'multiple_choice',
+          ),
+          QuestionModel(
+            id: 'eq3',
+            question: 'Une fonction linéaire passe toujours par l’origine.',
+            options: ['True', 'False'],
+            correctAnswerIndex: 0,
+            explanation: 'Par definition, f(x) = ax implies f(0) = 0.',
+            type: 'true_false',
+          ),
+        ],
+      ),
+    );
 
     return exams;
   }
@@ -279,25 +291,29 @@ Understanding atomic structure is fundamental to chemistry and physics.''',
       totalStudyTime: 245,
       streak: 5,
       lastLoginDate: now,
-      achievements: ['First lesson completed', 'First week completed'],
-      subjectProgress: subjects.map((subject) {
-        final random = Random();
-        final lessonsForSubject = _lessons.where((l) => l.subject == subject).length;
-        final exercisesForSubject = _exercises.where((e) => e.subject == subject).length;
-        final examsForSubject = _exams.where((e) => e.subject == subject).length;
-        
-        return SubjectProgress(
-          subject: subject,
-          completedLessons: random.nextInt(lessonsForSubject + 1),
-          totalLessons: lessonsForSubject.clamp(1, 4),
-          completedExercises: random.nextInt(exercisesForSubject + 1),
-          totalExercises: exercisesForSubject.clamp(1, 6),
-          completedExams: random.nextInt(examsForSubject + 1),
-          totalExams: examsForSubject.clamp(1, 3),
-          averageScore: 60 + random.nextDouble() * 35,
-          lastActivity: now.subtract(Duration(days: random.nextInt(7))),
-        );
-      }).toList(),
+      achievements: ['Premier leçon términé', 'Premier semaine términee'],
+      subjectProgress:
+          subjects.map((subject) {
+            final random = Random();
+            final lessonsForSubject =
+                _lessons.where((l) => l.subject == subject).length;
+            final exercisesForSubject =
+                _exercises.where((e) => e.subject == subject).length;
+            final examsForSubject =
+                _exams.where((e) => e.subject == subject).length;
+
+            return SubjectProgress(
+              subject: subject,
+              completedLessons: random.nextInt(lessonsForSubject + 1),
+              totalLessons: lessonsForSubject.clamp(1, 4),
+              completedExercises: random.nextInt(exercisesForSubject + 1),
+              totalExercises: exercisesForSubject.clamp(1, 6),
+              completedExams: random.nextInt(examsForSubject + 1),
+              totalExams: examsForSubject.clamp(1, 3),
+              averageScore: 60 + random.nextDouble() * 35,
+              lastActivity: now.subtract(Duration(days: random.nextInt(7))),
+            );
+          }).toList(),
     );
   }
 
@@ -321,15 +337,24 @@ Understanding atomic structure is fundamental to chemistry and physics.''',
   }
 
   // Update methods
-  static Future<void> updateLessonProgress(String lessonId, bool isCompleted) async {
+  static Future<void> updateLessonProgress(
+    String lessonId,
+    bool isCompleted,
+  ) async {
     final index = _lessons.indexWhere((l) => l.id == lessonId);
     if (index != -1) {
       _lessons[index] = _lessons[index].copyWith(isCompleted: isCompleted);
-      await StorageService.saveLessons(_lessons.map((l) => l.toJson()).toList());
+      await StorageService.saveLessons(
+        _lessons.map((l) => l.toJson()).toList(),
+      );
     }
   }
 
-  static Future<void> updateExerciseProgress(String exerciseId, bool isCompleted, int score) async {
+  static Future<void> updateExerciseProgress(
+    String exerciseId,
+    bool isCompleted,
+    int score,
+  ) async {
     final index = _exercises.indexWhere((e) => e.id == exerciseId);
     if (index != -1) {
       _exercises[index] = _exercises[index].copyWith(
@@ -337,11 +362,18 @@ Understanding atomic structure is fundamental to chemistry and physics.''',
         score: score,
         completedAt: DateTime.now(),
       );
-      await StorageService.saveExercises(_exercises.map((e) => e.toJson()).toList());
+      await StorageService.saveExercises(
+        _exercises.map((e) => e.toJson()).toList(),
+      );
     }
   }
 
-  static Future<void> updateExamProgress(String examId, bool isCompleted, int score, List<int> userAnswers) async {
+  static Future<void> updateExamProgress(
+    String examId,
+    bool isCompleted,
+    int score,
+    List<int> userAnswers,
+  ) async {
     final index = _exams.indexWhere((e) => e.id == examId);
     if (index != -1) {
       _exams[index] = _exams[index].copyWith(

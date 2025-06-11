@@ -47,7 +47,7 @@ class NavigationButtons extends StatelessWidget {
                     Icon(Icons.arrow_back, color: subjectColor),
                     const SizedBox(width: 8),
                     Text(
-                      'Previous',
+                      'Precedent',
                       style: TextStyle(
                         color: subjectColor,
                         fontWeight: FontWeight.w600,
@@ -76,7 +76,7 @@ class NavigationButtons extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    isLastQuestion ? 'Finish' : 'Next',
+                    isLastQuestion ? 'Finir' : 'Suivant',
                     style: const TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,

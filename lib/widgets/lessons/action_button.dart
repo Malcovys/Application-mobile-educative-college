@@ -27,7 +27,7 @@ class ActionButton extends StatelessWidget {
           color: Colors.white,
         ),
         label: Text(
-          isCompleted ? 'Lesson Completed' : 'Mark as Completed',
+          isCompleted ? 'Leçon términé' : 'Marquer comme terminé',
           style: theme.textTheme.titleMedium?.copyWith(
             fontWeight: FontWeight.bold,
             color: Colors.white,

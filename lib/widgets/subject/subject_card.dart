@@ -18,15 +18,15 @@ class SubjectCard extends StatelessWidget {
 
   Color _getSubjectColor(String subject) {
     switch (subject) {
-      case 'Mathematics':
+      case 'Mathematique':
         return const Color(0xFF6F61EF);
       case 'Science':
         return const Color(0xFF39D2C0);
       case 'Literature':
         return const Color(0xFFEE8B60);
-      case 'History':
+      case 'Histoire':
         return const Color(0xFFFF6B95);
-      case 'Geography':
+      case 'Geographie':
         return const Color(0xFF4ECDC4);
       default:
         return const Color(0xFF6F61EF);
@@ -35,15 +35,15 @@ class SubjectCard extends StatelessWidget {
 
   IconData _getSubjectIcon(String subject) {
     switch (subject) {
-      case 'Mathematics':
+      case 'Mathematique':
         return Icons.calculate;
       case 'Science':
         return Icons.science;
       case 'Literature':
         return Icons.menu_book;
-      case 'History':
+      case 'Histoire':
         return Icons.account_balance;
-      case 'Geography':
+      case 'Geographie':
         return Icons.public;
       default:
         return Icons.school;
@@ -127,7 +127,7 @@ class SubjectCard extends StatelessWidget {
                 const SizedBox(height: 4),
                 if (progress != null) ...[
                   Text(
-                    '${progress!.completedLessons}/${progress!.totalLessons} lessons',
+                    '${progress!.completedLessons}/${progress!.totalLessons} leçons',
                     style: theme.textTheme.bodySmall?.copyWith(
                       color: Colors.white.withAlpha((0.9 * 255).round()),
                     ),
@@ -147,7 +147,7 @@ class SubjectCard extends StatelessWidget {
                   ),
                 ] else ...[
                   Text(
-                    'Start learning',
+                    'Commencer à apprendre',
                     style: theme.textTheme.bodySmall?.copyWith(
                       color: Colors.white.withAlpha((0.9 * 255).round()),
                     ),
@@ -164,7 +164,7 @@ class SubjectCard extends StatelessWidget {
                     barRadius: const Radius.circular(3),
                   ),
                 ],
-                const SizedBox(height: 8),
+                const SizedBox(height: 4),
                 Row(
                   children: [
                     Icon(
@@ -172,14 +172,13 @@ class SubjectCard extends StatelessWidget {
                       color: Colors.white.withAlpha((0.8 * 255).round()),
                       size: 16,
                     ),
-                    const SizedBox(width: 4), //4
                     Text(
                       progress != null
-                          ? 'Last activity: ${_formatDate(progress!.lastActivity)}'
-                          : 'New',
+                          ? 'Dernière activité: ${_formatDate(progress!.lastActivity)}'
+                          : 'Nouveau',
                       style: theme.textTheme.bodySmall?.copyWith(
                         color: Colors.white.withAlpha((0.8 * 255).round()),
-                        fontSize: 12,
+                        fontSize: 11,
                       ),
                     ),
                   ],
@@ -197,11 +196,11 @@ class SubjectCard extends StatelessWidget {
     final difference = now.difference(date).inDays;
 
     if (difference == 0) {
-      return 'Today';
+      return 'Actuelle';
     } else if (difference == 1) {
-      return 'Yesterday';
+      return 'Hier';
     } else {
-      return '$difference days ago';
+      return '$difference jours';
     }
   }
 }

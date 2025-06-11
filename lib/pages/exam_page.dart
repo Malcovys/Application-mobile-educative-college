@@ -132,15 +132,15 @@ class _ExamPageState extends State<ExamPage> with TickerProviderStateMixin {
 
   Color _getSubjectColor() {
     switch (widget.exam.subject) {
-      case 'Mathematics':
+      case 'Mathematique':
         return const Color(0xFF6F61EF);
       case 'Science':
         return const Color(0xFF39D2C0);
       case 'Literature':
         return const Color(0xFFEE8B60);
-      case 'History':
+      case 'Histoire':
         return const Color(0xFFFF6B95);
-      case 'Geography':
+      case 'Geographie':
         return const Color(0xFF4ECDC4);
       default:
         return const Color(0xFF6F61EF);
@@ -237,7 +237,7 @@ class _ExamPageState extends State<ExamPage> with TickerProviderStateMixin {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      'Ready to begin?',
+                      'Vous êtes prêt?',
                       style: theme.textTheme.bodyLarge?.copyWith(
                         color: Colors.white.withAlpha((0.9 * 255).round()),
                       ),
@@ -268,21 +268,21 @@ class _ExamPageState extends State<ExamPage> with TickerProviderStateMixin {
                     const SizedBox(height: 16),
                     _buildExamInfo(
                       theme,
-                      'Duration',
+                      'Duré',
                       '${widget.exam.timeLimit} minutes',
                       Icons.timer,
                     ),
                     const SizedBox(height: 16),
                     _buildExamInfo(
                       theme,
-                      'Required Score',
+                      'Score requis',
                       '${widget.exam.passingScore}%',
                       Icons.grade,
                     ),
                     const SizedBox(height: 16),
                     _buildExamInfo(
                       theme,
-                      'Difficulty',
+                      'Difficulté',
                       widget.exam.difficulty,
                       Icons.trending_up,
                     ),
@@ -305,7 +305,7 @@ class _ExamPageState extends State<ExamPage> with TickerProviderStateMixin {
                     const SizedBox(width: 12),
                     Expanded(
                       child: Text(
-                        'Once started, you cannot pause the exam.',
+                        'Une fois débuté, tu ne peux pas pausé.',
                         style: theme.textTheme.bodyMedium?.copyWith(
                           color: Colors.orange.shade800,
                           fontWeight: FontWeight.w500,
@@ -334,7 +334,7 @@ class _ExamPageState extends State<ExamPage> with TickerProviderStateMixin {
                       const Icon(Icons.play_arrow, color: Colors.white),
                       const SizedBox(width: 8),
                       Text(
-                        'Start Exam',
+                        'Commencer',
                         style: theme.textTheme.titleMedium?.copyWith(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
@@ -472,7 +472,7 @@ class _ExamPageState extends State<ExamPage> with TickerProviderStateMixin {
                 ),
               ),
               Text(
-                '$answeredQuestions answered',
+                '$answeredQuestions repondu',
                 style: theme.textTheme.bodyMedium?.copyWith(
                   fontWeight: FontWeight.bold,
                   color: subjectColor,
@@ -666,7 +666,7 @@ class _ExamPageState extends State<ExamPage> with TickerProviderStateMixin {
                         Icon(Icons.arrow_back, color: subjectColor),
                         const SizedBox(width: 8),
                         Text(
-                          'Previous',
+                          'Precedent',
                           style: TextStyle(
                             color: subjectColor,
                             fontWeight: FontWeight.w600,
@@ -693,7 +693,7 @@ class _ExamPageState extends State<ExamPage> with TickerProviderStateMixin {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        isLastQuestion ? 'Finish Exam' : 'Next',
+                        isLastQuestion ? 'Finire' : 'Suivant',
                         style: const TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
@@ -759,7 +759,7 @@ class _ExamPageState extends State<ExamPage> with TickerProviderStateMixin {
                     ),
                     const SizedBox(height: 16),
                     Text(
-                      isPassed ? 'Exam Passed!' : 'Exam Failed',
+                      isPassed ? 'Examen Passé!' : 'Echec',
                       style: theme.textTheme.headlineMedium?.copyWith(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
@@ -768,7 +768,7 @@ class _ExamPageState extends State<ExamPage> with TickerProviderStateMixin {
                     const SizedBox(height: 8),
                     Text(
                       isPassed
-                          ? 'Congratulations! You passed the exam.'
+                          ? 'Félicitations! Vous avez passez lexamen.'
                           : 'Do not give up, you can try again.',
                       textAlign: TextAlign.center,
                       style: theme.textTheme.bodyLarge?.copyWith(
@@ -797,13 +797,13 @@ class _ExamPageState extends State<ExamPage> with TickerProviderStateMixin {
                       children: [
                         _buildScoreStat(
                           theme,
-                          'Final Score',
+                          'Score Final ',
                           '$score%',
                           isPassed ? Colors.green : Colors.red,
                         ),
                         _buildScoreStat(
                           theme,
-                          'Required',
+                          'Requis',
                           '${widget.exam.passingScore}%',
                           Colors.grey,
                         ),
@@ -857,7 +857,7 @@ class _ExamPageState extends State<ExamPage> with TickerProviderStateMixin {
                       const SizedBox(width: 12),
                       Expanded(
                         child: Text(
-                          'Tip: Review the lessons and redo exercises before retaking the exam.',
+                          'Conseil : Passez en revue les leçons et refaites les exercices avant de reprendre l’examen.',
                           style: theme.textTheme.bodyMedium?.copyWith(
                             color: Colors.blue.shade800,
                             fontWeight: FontWeight.w500,
@@ -897,7 +897,7 @@ class _ExamPageState extends State<ExamPage> with TickerProviderStateMixin {
                           ),
                         ),
                         child: Text(
-                          'Try Again',
+                          'Essayer encore',
                           style: TextStyle(
                             color: subjectColor,
                             fontWeight: FontWeight.w600,
@@ -920,7 +920,7 @@ class _ExamPageState extends State<ExamPage> with TickerProviderStateMixin {
                         ),
                       ),
                       child: Text(
-                        'Back to Exams',
+                        'Revenir à lexamen',
                         style: theme.textTheme.titleMedium?.copyWith(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
@@ -974,9 +974,9 @@ class _ExamPageState extends State<ExamPage> with TickerProviderStateMixin {
       context: context,
       builder:
           (context) => AlertDialog(
-            title: const Text('Exit exam?'),
+            title: const Text('Quitter lexam?'),
             content: const Text(
-              'Warning! If you exit now, your progress will be lost and the exam will be considered failed.',
+              'Attention ! Si vous quittez maintenant, vos progrès seront perdus et l’examen sera considéré comme un échec.',
             ),
             actions: [
               TextButton(
@@ -988,7 +988,7 @@ class _ExamPageState extends State<ExamPage> with TickerProviderStateMixin {
                   Navigator.pop(context);
                   Navigator.pop(context);
                 },
-                child: const Text('Exit'),
+                child: const Text('Quitter'),
               ),
             ],
           ),

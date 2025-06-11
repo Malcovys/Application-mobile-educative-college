@@ -61,7 +61,7 @@ class _LessonPageState extends State<LessonPage> with TickerProviderStateMixin {
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: const Text('Lesson marked as completed! 🎉'),
+          content: const Text('Leçon marqué comme términé! 🎉'),
           backgroundColor: Colors.green,
           behavior: SnackBarBehavior.floating,
           shape: RoundedRectangleBorder(

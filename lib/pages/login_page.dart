@@ -21,7 +21,7 @@ class LoginPage extends StatelessWidget {
               const Icon(Icons.school, size: 100, color: Colors.deepPurple),
               const SizedBox(height: 20),
               const Text(
-                "Welcome to Edulearn",
+                "Bienvenue to Edulearn",
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 30),

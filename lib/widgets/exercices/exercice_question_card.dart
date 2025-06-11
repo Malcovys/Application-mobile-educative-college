@@ -19,16 +19,8 @@ class QuestionCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return Container(
-      margin: const EdgeInsets.all(20),
-      padding: const EdgeInsets.all(24),
-      decoration: BoxDecoration(
-        color: theme.colorScheme.surface,
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: theme.colorScheme.outline.withAlpha((0.2 * 255).round()),
-        ),
-      ),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -47,7 +39,7 @@ class QuestionCard extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(height: 24),
+          const SizedBox(height: 14),
           ...question.options.asMap().entries.map((entry) {
             final index = entry.key;
             final option = entry.value;
@@ -63,15 +55,18 @@ class QuestionCard extends StatelessWidget {
                   child: Container(
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
-                      color: isSelected
-                          ? subjectColor.withAlpha((0.1 * 255).round())
-                          : theme.colorScheme.surface,
+                      color:
+                          isSelected
+                              ? subjectColor.withAlpha((0.1 * 255).round())
+                              : theme.colorScheme.surface,
                       borderRadius: BorderRadius.circular(12),
                       border: Border.all(
-                        color: isSelected
-                            ? subjectColor
-                            : theme.colorScheme.outline
-                                .withAlpha((0.3 * 255).round()),
+                        color:
+                            isSelected
+                                ? subjectColor
+                                : theme.colorScheme.outline.withAlpha(
+                                  (0.3 * 255).round(),
+                                ),
                         width: isSelected ? 2 : 1,
                       ),
                     ),
@@ -81,19 +76,22 @@ class QuestionCard extends StatelessWidget {
                           width: 32,
                           height: 32,
                           decoration: BoxDecoration(
-                            color: isSelected
-                                ? subjectColor
-                                : theme.colorScheme.outline
-                                    .withAlpha((0.2 * 255).round()),
+                            color:
+                                isSelected
+                                    ? subjectColor
+                                    : theme.colorScheme.outline.withAlpha(
+                                      (0.2 * 255).round(),
+                                    ),
                             borderRadius: BorderRadius.circular(16),
                           ),
                           child: Center(
                             child: Text(
                               String.fromCharCode(65 + index), // A, B, C, D
                               style: theme.textTheme.bodyMedium?.copyWith(
-                                color: isSelected
-                                    ? Colors.white
-                                    : theme.colorScheme.onSurface,
+                                color:
+                                    isSelected
+                                        ? Colors.white
+                                        : theme.colorScheme.onSurface,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -106,7 +104,9 @@ class QuestionCard extends StatelessWidget {
                             style: theme.textTheme.bodyMedium?.copyWith(
                               color: theme.colorScheme.onSurface,
                               fontWeight:
-                                  isSelected ? FontWeight.w600 : FontWeight.normal,
+                                  isSelected
+                                      ? FontWeight.w600
+                                      : FontWeight.normal,
                             ),
                           ),
                         ),

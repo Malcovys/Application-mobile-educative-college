@@ -33,9 +33,9 @@ class SubjectTabBar extends StatelessWidget {
         indicatorWeight: 3,
         padding: const EdgeInsets.symmetric(horizontal: 20),
         tabs: const [
-          Tab(icon: Icon(Icons.book), text: 'Lessons'),
+          Tab(icon: Icon(Icons.book), text: 'Leçons'),
           Tab(icon: Icon(Icons.quiz), text: 'Exercises'),
-          Tab(icon: Icon(Icons.assignment), text: 'Exams'),
+          Tab(icon: Icon(Icons.assignment), text: 'Examens'),
         ],
       ),
     );
