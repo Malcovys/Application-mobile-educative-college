@@ -38,6 +38,7 @@ class _LoginPageState extends State<LoginPage> {
       });
     }
   }
+  bool _obscureText = true;
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +53,7 @@ class _LoginPageState extends State<LoginPage> {
               const Icon(Icons.school, size: 100, color: Colors.deepPurple),
               const SizedBox(height: 20),
               const Text(
-                "Welcome to Edulearn",
+                "Bienvenue to Edulearn",
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 30),
@@ -65,7 +66,17 @@ class _LoginPageState extends State<LoginPage> {
               CustomTextField(
                 controller: passwordController,
                 hintText: 'Mot de passe',
-                obscureText: true,
+                obscureText: _obscureText,
+                suffixIcon: IconButton(
+                  icon: Icon(
+                    _obscureText ? Icons.visibility_off : Icons.visibility,
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      _obscureText = !_obscureText;
+                    });
+                  },
+                ),
               ),
               const SizedBox(height: 25),
               if (errorMessage != null)

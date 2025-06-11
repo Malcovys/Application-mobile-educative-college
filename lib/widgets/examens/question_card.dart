@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
-import '../../models/exercise_model.dart';
+import '../../models/question_model.dart';
 
 class QuestionCard extends StatelessWidget {
   final QuestionModel question;
-  final int? userAnswer;
+  final int? selectedAnswer;
   final Color subjectColor;
   final Function(int) onAnswerSelected;
 
   const QuestionCard({
     super.key,
     required this.question,
-    required this.userAnswer,
+    required this.selectedAnswer,
     required this.subjectColor,
     required this.onAnswerSelected,
   });
@@ -18,16 +18,24 @@ class QuestionCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
+    
+    return Container(
+      margin: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(24),
+      decoration: BoxDecoration(
+        color: theme.colorScheme.surface,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(
+          color: theme.colorScheme.outline.withAlpha(50),
+        ),
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: subjectColor.withAlpha((0.1 * 255).round()),
+              color: subjectColor.withAlpha(25),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Text(
@@ -39,11 +47,11 @@ class QuestionCard extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(height: 14),
+          const SizedBox(height: 24),
           ...question.options.asMap().entries.map((entry) {
             final index = entry.key;
             final option = entry.value;
-            final isSelected = userAnswer == index;
+            final isSelected = selectedAnswer == index;
 
             return Container(
               margin: const EdgeInsets.only(bottom: 12),
@@ -55,18 +63,10 @@ class QuestionCard extends StatelessWidget {
                   child: Container(
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
-                      color:
-                          isSelected
-                              ? subjectColor.withAlpha((0.1 * 255).round())
-                              : theme.colorScheme.surface,
+                      color: isSelected ? subjectColor.withAlpha(25) : theme.colorScheme.surface,
                       borderRadius: BorderRadius.circular(12),
                       border: Border.all(
-                        color:
-                            isSelected
-                                ? subjectColor
-                                : theme.colorScheme.outline.withAlpha(
-                                  (0.3 * 255).round(),
-                                ),
+                        color: isSelected ? subjectColor : theme.colorScheme.outline.withAlpha(75),
                         width: isSelected ? 2 : 1,
                       ),
                     ),
@@ -76,22 +76,14 @@ class QuestionCard extends StatelessWidget {
                           width: 32,
                           height: 32,
                           decoration: BoxDecoration(
-                            color:
-                                isSelected
-                                    ? subjectColor
-                                    : theme.colorScheme.outline.withAlpha(
-                                      (0.2 * 255).round(),
-                                    ),
+                            color: isSelected ? subjectColor : theme.colorScheme.outline.withAlpha(50),
                             borderRadius: BorderRadius.circular(16),
                           ),
                           child: Center(
                             child: Text(
                               String.fromCharCode(65 + index), // A, B, C, D
                               style: theme.textTheme.bodyMedium?.copyWith(
-                                color:
-                                    isSelected
-                                        ? Colors.white
-                                        : theme.colorScheme.onSurface,
+                                color: isSelected ? Colors.white : theme.colorScheme.onSurface,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -103,10 +95,7 @@ class QuestionCard extends StatelessWidget {
                             option,
                             style: theme.textTheme.bodyMedium?.copyWith(
                               color: theme.colorScheme.onSurface,
-                              fontWeight:
-                                  isSelected
-                                      ? FontWeight.w600
-                                      : FontWeight.normal,
+                              fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
                             ),
                           ),
                         ),

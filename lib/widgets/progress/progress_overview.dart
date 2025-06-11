@@ -47,7 +47,7 @@ class ProgressOverview extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Your Progress',
+            'Votre Progrès',
             style: theme.textTheme.titleLarge?.copyWith(
               fontWeight: FontWeight.bold,
               color: theme.colorScheme.onSurface,
@@ -59,8 +59,8 @@ class ProgressOverview extends StatelessWidget {
               Expanded(
                 child: CustomProgressIndicator(
                   progress: overallProgress,
-                  title: 'Overall Progress',
-                  subtitle: 'All subjects combined',
+                  title: 'Progression Globale',
+                  subtitle: 'Toutes matières confondues',
                   color: theme.colorScheme.primary,
                   size: 100,
                 ),
@@ -71,19 +71,19 @@ class ProgressOverview extends StatelessWidget {
                 child: Column(
                   children: [
                     ProgressRow(
-                      label: 'Lessons Completed',
+                      label: 'Leçons Terminées',
                       progress: lessonProgress,
                       color: theme.colorScheme.secondary,
                       trailing: '$completedLessons/$totalLessons',
                     ),
                     ProgressRow(
-                      label: 'Exercises Passed',
+                      label: 'Exercices réussis',
                       progress: exerciseProgress,
                       color: theme.colorScheme.tertiary,
                       trailing: '$completedExercises/$totalExercises',
                     ),
                     ProgressRow(
-                      label: 'Exams Taken',
+                      label: 'Examen réussis',
                       progress: examProgress,
                       color: theme.colorScheme.primary,
                       trailing: '$completedExams/$totalExams',

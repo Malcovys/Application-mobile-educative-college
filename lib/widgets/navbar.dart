@@ -33,8 +33,8 @@ class _NavBarState extends State<NavBar> {
         unselectedItemColor: Colors.grey,
         elevation: 10,
         items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.task_alt), label: 'Tasks'),
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Acceuil'),
+          BottomNavigationBarItem(icon: Icon(Icons.task_alt), label: 'Tâches'),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
         ],
       ),

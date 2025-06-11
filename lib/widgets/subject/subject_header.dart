@@ -66,11 +66,11 @@ class SubjectHeader extends StatelessWidget {
           const SizedBox(height: 16),
           Row(
             children: [
-              _buildStatChip('$lessonCount Lessons', Icons.book),
+              _buildStatChip('$lessonCount Leçons', Icons.book),
               const SizedBox(width: 12),
               _buildStatChip('$exerciseCount Exercises', Icons.quiz),
               const SizedBox(width: 12),
-              _buildStatChip('$examCount Exams', Icons.assignment),
+              _buildStatChip('$examCount Examens', Icons.assignment),
             ],
           ),
         ],
