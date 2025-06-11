@@ -3,7 +3,7 @@ import '../models/lesson_model.dart';
 import '../models/exercise_model.dart';
 import '../models/exam_model.dart';
 import '../models/progress_model.dart';
-import 'storage_service.dart';
+import '../utils/storage_service.dart';
 
 class DataService {
   static List<LessonModel> _lessons = [];
