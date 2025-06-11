@@ -13,7 +13,7 @@ class Token {
   Token({required this.access, required this.refresh});
 
   factory Token.fromJson(Map<String, dynamic> json) {
-    return Token(access: json['access'], refresh: json['refresh']);
+    return Token(access: json['token'], refresh: json['refresh']);
   }
 
   Map<String, String> toJson() {
@@ -29,13 +29,13 @@ class Utilisateur {
 
   factory Utilisateur.fromJson(Map<String, dynamic> json) {
     return Utilisateur(
-      nom: json['nom'],
+      nom: json['name'],
       niveau: Niveau.fromString(json['niveau']),
     );
   }
 
   Map<String, String> toJson() {
-    return {'nom': nom, 'niveau': niveau.value};
+    return {'name': nom, 'niveau': niveau.value};
   }
 }
 
@@ -75,16 +75,15 @@ class AuthService {
       'password': password,
     });
 
-    // Parse et stocke les données
     _token = Token.fromJson(response.data);
     _utilisateur = Utilisateur.fromJson(response.data['user']);
-    _isAuth = true;
 
     apiClient.setAuthToken(_token!.access!);
 
     await StorageService.saveData(storageTokenKey, _token!.toJson());
-    await StorageService.saveData(
-        storageUtilisateurKey, _utilisateur!.toJson());
+    await StorageService.saveData(storageUtilisateurKey, _utilisateur!.toJson());
+
+    _isAuth = true;
   }
 
   static Future<void> logout() async {

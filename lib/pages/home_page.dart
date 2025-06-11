@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
-import '../../models/progress_model.dart';
-import '../../services/data_service.dart';
+
+// import '../widgets/quick_stats.dart';
+import '../widgets/subject/subjects_section.dart';
 import '../widgets/header_sliver_appbar.dart';
 import '../widgets/welcome_section.dart';
 import '../widgets/progress/progress_overview.dart';
-// import '../widgets/quick_stats.dart';
-import '../widgets/subject/subjects_section.dart';
+
+import '../services/auth_service.dart';
+import '../../models/progress_model.dart';
+import '../../services/data_service.dart';
+
+
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -73,7 +78,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      WelcomeSection(theme: theme, userProgress: userProgress!),
+                      WelcomeSection(theme: theme, userProgress: userProgress!, userName: AuthService.utilisateur?.nom ?? "Utilisateur"),
                       const SizedBox(height: 24),
                       ProgressOverview(
                         theme: theme,

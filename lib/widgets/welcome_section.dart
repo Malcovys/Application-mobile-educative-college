@@ -6,10 +6,12 @@ class WelcomeSection extends StatelessWidget {
     super.key,
     required this.userProgress,
     required this.theme,
+    required this.userName,
   });
 
   final models.UserProgress? userProgress;
   final ThemeData theme;
+  final String userName;
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +29,7 @@ class WelcomeSection extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            '👋 Hello, Emma!',
+            '👋 Hello, $userName!',
             style: theme.textTheme.headlineSmall?.copyWith(
               color: Colors.white,
               fontWeight: FontWeight.bold,

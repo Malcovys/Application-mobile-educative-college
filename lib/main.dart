@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 // import '../widgets/navbar.dart';
-import '../pages/login_page.dart';
+import 'services/auth_service.dart';
 
-void main() {
+import 'pages/login_page.dart';
+import 'pages/home_page.dart';
+
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await AuthService.initialize();
   runApp(const MyApp());
 }
 
@@ -15,7 +19,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'EduLearn - Apprendre Ensemble',
       themeMode: ThemeMode.system,
-      home: const LoginPage(),
+      home: AuthService.isAuth ? const HomePage() : const LoginPage(),
       debugShowCheckedModeBanner: false,
     );
   }
