@@ -981,7 +981,7 @@ class _ExamPageState extends State<ExamPage> with TickerProviderStateMixin {
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(context),
-                child: const Text('Continue'),
+                child: const Text('Continuer'),
               ),
               TextButton(
                 onPressed: () {
