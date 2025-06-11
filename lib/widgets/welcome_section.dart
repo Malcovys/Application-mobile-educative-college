@@ -27,7 +27,7 @@ class WelcomeSection extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            '👋 Hello, Emma!',
+            '👋 Bonjour, Emma!',
             style: theme.textTheme.headlineSmall?.copyWith(
               color: Colors.white,
               fontWeight: FontWeight.bold,
@@ -35,7 +35,7 @@ class WelcomeSection extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           Text(
-            'Ready to continue your learning today?',
+            'Prêt à poursuivre votre apprentissage aujourd’hui?',
             style: theme.textTheme.bodyMedium?.copyWith(
               color: Colors.white.withAlpha((0.9 * 255).round()),
             ),
@@ -46,7 +46,7 @@ class WelcomeSection extends StatelessWidget {
               Icon(Icons.local_fire_department, color: Colors.orange, size: 20),
               const SizedBox(width: 8),
               Text(
-                '${userProgress?.streak ?? 0} days streak!',
+                '${userProgress?.streak ?? 0} jours rachitiques!',
                 style: theme.textTheme.bodyMedium?.copyWith(
                   color: Colors.white,
                   fontWeight: FontWeight.w600,

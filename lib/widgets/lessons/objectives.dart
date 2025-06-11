@@ -27,7 +27,7 @@ class LessonObjectives extends StatelessWidget {
               Icon(Icons.flag, color: subjectColor),
               const SizedBox(width: 8),
               Text(
-                'Lesson Objectives',
+                'Objectifs',
                 style: theme.textTheme.titleMedium?.copyWith(
                   fontWeight: FontWeight.bold,
                 ),

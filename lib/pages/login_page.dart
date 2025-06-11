@@ -2,14 +2,20 @@ import 'package:flutter/material.dart';
 import '../widgets/custom_text_field.dart';
 import '../widgets/navbar.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final emailController = TextEditingController();
-    final passwordController = TextEditingController();
+  State<LoginPage> createState() => _LoginPageState();
+}
 
+class _LoginPageState extends State<LoginPage> {
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+  bool _obscureText = true;
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       body: Center(
@@ -21,7 +27,7 @@ class LoginPage extends StatelessWidget {
               const Icon(Icons.school, size: 100, color: Colors.deepPurple),
               const SizedBox(height: 20),
               const Text(
-                "Welcome to Edulearn",
+                "Bienvenue to Edulearn",
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 30),
@@ -34,7 +40,17 @@ class LoginPage extends StatelessWidget {
               CustomTextField(
                 controller: passwordController,
                 hintText: 'Mot de passe',
-                obscureText: true,
+                obscureText: _obscureText,
+                suffixIcon: IconButton(
+                  icon: Icon(
+                    _obscureText ? Icons.visibility_off : Icons.visibility,
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      _obscureText = !_obscureText;
+                    });
+                  },
+                ),
               ),
               const SizedBox(height: 25),
               ElevatedButton(

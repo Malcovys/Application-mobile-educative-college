@@ -130,19 +130,19 @@ class _ExercisePageState extends State<ExercisePage>
       context: context,
       builder:
           (context) => AlertDialog(
-            title: const Text('Exit exercise?'),
-            content: const Text('Your progress will be lost if you exit now.'),
+            title: const Text('Quitter l’exercice?'),
+            content: const Text('Votre progression sera perdue si vous sortez maintenant.'),
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(context),
-                child: const Text('Cancel'),
+                child: const Text('Annuler'),
               ),
               TextButton(
                 onPressed: () {
                   Navigator.pop(context);
                   Navigator.pop(context);
                 },
-                child: const Text('Exit'),
+                child: const Text('Quitter'),
               ),
             ],
           ),

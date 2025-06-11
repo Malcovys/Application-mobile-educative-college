@@ -93,7 +93,7 @@ class ResultsPage extends StatelessWidget {
                     ),
                     const SizedBox(height: 16),
                     Text(
-                      score >= 70 ? 'Congratulations!' : 'Good effort!',
+                      score >= 70 ? 'Félicitaions!' : 'Bel effort!',
                       style: theme.textTheme.headlineMedium?.copyWith(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
@@ -101,7 +101,7 @@ class ResultsPage extends StatelessWidget {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      'Exercise completed',
+                      'Exercice Térmnié',
                       style: theme.textTheme.bodyLarge?.copyWith(
                         color: Colors.white.withAlpha((0.9 * 255).round()),
                       ),
@@ -140,7 +140,7 @@ class ResultsPage extends StatelessWidget {
                         ),
                         _buildScoreStat(
                           context,
-                          'Time',
+                          'Temps',
                           _formatTime(exercise.timeLimit * 60 - remainingTime),
                           Colors.blue,
                         ),
@@ -165,7 +165,7 @@ class ResultsPage extends StatelessWidget {
                     ),
                   ),
                   child: Text(
-                    'Back to Exercises',
+                    'Revenir à l Exercises',
                     style: theme.textTheme.titleMedium?.copyWith(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,

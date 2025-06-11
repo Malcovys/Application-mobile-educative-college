@@ -25,7 +25,7 @@ class SubjectsSection extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              'Subjects',
+              'Matière',
               style: theme.textTheme.titleLarge?.copyWith(
                 fontWeight: FontWeight.bold,
                 color: theme.colorScheme.onSurface,
@@ -44,7 +44,7 @@ class SubjectsSection extends StatelessWidget {
                 size: 18,
               ),
               label: Text(
-                'See all',
+                'Voir toutes',
                 style: TextStyle(
                   color: theme.colorScheme.primary,
                   fontWeight: FontWeight.w600,

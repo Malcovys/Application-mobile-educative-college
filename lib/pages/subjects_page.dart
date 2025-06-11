@@ -49,15 +49,15 @@ class _SubjectsPageState extends State<SubjectsPage>
 
   Color _getSubjectColor() {
     switch (selectedSubject) {
-      case 'Mathematics':
+      case 'Mathematique':
         return const Color(0xFF6F61EF);
       case 'Science':
         return const Color(0xFF39D2C0);
       case 'Literature':
         return const Color(0xFFEE8B60);
-      case 'History':
+      case 'Histoire':
         return const Color(0xFFFF6B95);
-      case 'Geography':
+      case 'Geographie':
         return const Color(0xFF4ECDC4);
       default:
         return const Color(0xFF6F61EF);
@@ -137,11 +137,11 @@ class _SubjectsPageState extends State<SubjectsPage>
           const SizedBox(height: 16),
           Row(
             children: [
-              _buildStatChip('${lessons.length} Lessons', Icons.book),
+              _buildStatChip('${lessons.length} Leçons', Icons.book),
               const SizedBox(width: 12),
               _buildStatChip('${exercises.length} Exercises', Icons.quiz),
               const SizedBox(width: 12),
-              _buildStatChip('${exams.length} Exams', Icons.assignment),
+              _buildStatChip('${exams.length} Examens', Icons.assignment),
             ],
           ),
         ],
@@ -244,9 +244,9 @@ class _SubjectsPageState extends State<SubjectsPage>
         indicatorWeight: 3,
         padding: const EdgeInsets.symmetric(horizontal: 20),
         tabs: const [
-          Tab(icon: Icon(Icons.book), text: 'Lessons'),
+          Tab(icon: Icon(Icons.book), text: 'Leçons'),
           Tab(icon: Icon(Icons.quiz), text: 'Exercises'),
-          Tab(icon: Icon(Icons.assignment), text: 'Exams'),
+          Tab(icon: Icon(Icons.assignment), text: 'Examens'),
         ],
       ),
     );
@@ -254,7 +254,7 @@ class _SubjectsPageState extends State<SubjectsPage>
 
   Widget _buildLessonsTab() {
     if (lessons.isEmpty) {
-      return _buildEmptyState('No lessons available', Icons.book);
+      return _buildEmptyState('Pas de cours disponibles', Icons.book);
     }
 
     return AnimationLimiter(
@@ -279,7 +279,7 @@ class _SubjectsPageState extends State<SubjectsPage>
 
   Widget _buildExercisesTab() {
     if (exercises.isEmpty) {
-      return _buildEmptyState('No exercises available', Icons.quiz);
+      return _buildEmptyState('Pas de exercices disponibles', Icons.quiz);
     }
 
     return AnimationLimiter(
@@ -306,7 +306,7 @@ class _SubjectsPageState extends State<SubjectsPage>
 
   Widget _buildExamsTab() {
     if (exams.isEmpty) {
-      return _buildEmptyState('No exams available', Icons.assignment);
+      return _buildEmptyState('Pas de examens disponibles', Icons.assignment);
     }
 
     return AnimationLimiter(
@@ -694,7 +694,7 @@ class _SubjectsPageState extends State<SubjectsPage>
                             ),
                             const SizedBox(width: 4),
                             Text(
-                              'Score: ${exam.score}% (Required: ${exam.passingScore}%)',
+                              'Score: ${exam.score}% (Requis: ${exam.passingScore}%)',
                               style: theme.textTheme.bodySmall?.copyWith(
                                 color:
                                     exam.isPassed ? Colors.green : Colors.red,
@@ -754,15 +754,15 @@ class _SubjectsPageState extends State<SubjectsPage>
 
   IconData _getSubjectIcon(String subject) {
     switch (subject) {
-      case 'Mathematics':
+      case 'Mathematique':
         return Icons.calculate;
       case 'Science':
         return Icons.science;
       case 'Literature':
         return Icons.menu_book;
-      case 'History':
+      case 'Histoire':
         return Icons.account_balance;
-      case 'Geography':
+      case 'Geographie':
         return Icons.public;
       default:
         return Icons.school;
@@ -771,11 +771,11 @@ class _SubjectsPageState extends State<SubjectsPage>
 
   Color _getDifficultyColor(String difficulty) {
     switch (difficulty.toLowerCase()) {
-      case 'easy':
+      case 'facile':
         return Colors.green;
-      case 'medium':
+      case 'moyen':
         return Colors.orange;
-      case 'hard':
+      case 'difficile':
         return Colors.red;
       default:
         return Colors.grey;
