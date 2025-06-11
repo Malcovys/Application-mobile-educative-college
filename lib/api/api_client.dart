@@ -1,13 +1,12 @@
+import 'package:application_mobile_educative_college/api/endpoints.dart';
 import 'package:dio/dio.dart';
 
 class ApiClient {
   final dio = Dio();
 
-  static const String apiUrl = 'https://api_url_here';
-
   ApiClient() {
     dio.options = BaseOptions(
-      baseUrl: apiUrl,
+      baseUrl: ApiRoutes.apiUrl,
       connectTimeout: const Duration(seconds: 30),
       receiveTimeout: const Duration(seconds: 30),
       headers: {
@@ -65,6 +64,21 @@ class ApiClient {
     Options? options,
   }) async {
     return await dio.put<T>(
+      path,
+      data: data,
+      queryParameters: queryParameters,
+      options: options,
+    );
+  }
+
+  /// PATCH request
+  Future<Response<T>> patch<T>(
+    String path, {
+    dynamic data,
+    Map<String, dynamic>? queryParameters,
+    Options? options,
+  }) async {
+    return await dio.patch<T>(
       path,
       data: data,
       queryParameters: queryParameters,

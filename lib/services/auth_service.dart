@@ -1,3 +1,5 @@
+import 'package:application_mobile_educative_college/api/endpoints.dart';
+
 import 'storage_service.dart';
 import '../models/matiere_model.dart';
 import 'package:application_mobile_educative_college/api/api_client.dart';
@@ -68,7 +70,7 @@ class AuthService {
   }
 
   static Future<void> login(String email, String password) async {
-    final response = await apiClient.post('/auth/login', data: {
+    final response = await apiClient.post(ApiRoutes.login, data: {
       'email': email,
       'password': password,
     });
