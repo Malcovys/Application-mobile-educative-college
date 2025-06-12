@@ -1,18 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import '../../services/data_service.dart';
+import '../services/auth_service.dart';
+import '../api/services/api_lecon_service.dart';
+
 import '../../models/lesson_model.dart';
 import '../../models/exercise_model.dart';
 import '../../models/exam_model.dart';
 import '../../models/matiere_model.dart';
+import '../../models/chapitre_model.dart';
+
 import 'lesson_page.dart';
 import 'exercise_page.dart';
 import 'exam_page.dart';
 
 class SubjectsPage extends StatefulWidget {
-  final String? initialSubject;
+  final String? initalSubject;
 
-  const SubjectsPage({super.key, this.initialSubject});
+  const SubjectsPage({super.key, this.initalSubject});
 
   @override
   State<SubjectsPage> createState() => _SubjectsPageState();
@@ -20,21 +25,24 @@ class SubjectsPage extends StatefulWidget {
 
 class _SubjectsPageState extends State<SubjectsPage> with TickerProviderStateMixin {
   late TabController _tabController;
+
   String selectedSubject = '';
+  
   List<LessonModel> lessons = [];
+  List<ChapitreModel> chapitres = [];
   List<ExerciseModel> exercises = [];
   List<ExamModel> exams = [];
 
   @override
   void initState() {
     super.initState();
-    selectedSubject =
-        widget.initialSubject ??
-        (DataService.matieres.isNotEmpty
-            ? DataService.matieres.first.nom
-            : '');
+
+    selectedSubject = widget.initalSubject ?? (DataService.matieres.isNotEmpty ? DataService.matieres.first.nom : '');
+    
     _tabController = TabController(length: 3, vsync: this);
+    
     _loadSubjectData();
+
   }
 
   @override
@@ -43,9 +51,33 @@ class _SubjectsPageState extends State<SubjectsPage> with TickerProviderStateMix
     super.dispose();
   }
 
-  void _loadSubjectData() {
+  Future<void> _loadSubjectData() async {
+    final fetchedLessons = await ApiLeconService.getLecons();
+    final filteredLessons = fetchedLessons.where((lesson) => lesson.subject == selectedSubject).toList();
+
+    // Trouver l'id de la matière sélectionnée
+    final matiere = DataService.matieres.firstWhere(
+      (m) => m.nom == selectedSubject,
+      orElse:
+          () =>
+              DataService.matieres.isNotEmpty
+                  ? DataService.matieres.first
+                  : MatiereModel(
+                    id: 0,
+                    nom: '',
+                    niveau: AuthService.utilisateur?.niveau ?? Niveau.six,
+                    description: '',
+                    createdAt: DateTime.now(),
+                    updatedAt: DateTime.now(),
+                  ),
+    );
+
+    await DataService.loadMatiereChapitres(matiere.id);
+    final filteredChapitres = DataService.chapitres.where((c) => c.matiereId == matiere.id).toList();
+
     setState(() {
-      lessons = DataService.getLessonsBySubject(selectedSubject);
+      lessons = filteredLessons;
+      chapitres = filteredChapitres;
       exercises = DataService.getExercisesBySubject(selectedSubject);
       exams = DataService.getExamsBySubject(selectedSubject);
     });
@@ -84,6 +116,7 @@ class _SubjectsPageState extends State<SubjectsPage> with TickerProviderStateMix
               child: TabBarView(
                 controller: _tabController,
                 children: [
+                  _buildChapitresTab(),
                   _buildLessonsTab(),
                   _buildExercisesTab(),
                   _buildExamsTab(),
@@ -141,6 +174,8 @@ class _SubjectsPageState extends State<SubjectsPage> with TickerProviderStateMix
           const SizedBox(height: 16),
           Row(
             children: [
+              _buildStatChip('${chapitres.length} Chapitres', Icons.list),
+              const SizedBox(width: 12),
               _buildStatChip('${lessons.length} Leçons', Icons.book),
               const SizedBox(width: 12),
               _buildStatChip('${exercises.length} Exercises', Icons.quiz),
@@ -189,7 +224,7 @@ class _SubjectsPageState extends State<SubjectsPage> with TickerProviderStateMix
         itemBuilder: (context, index) {
           final MatiereModel matiere = DataService.matieres[index];
           final bool isSelected = matiere.nom == selectedSubject;
-          
+
           return Container(
             margin: const EdgeInsets.only(right: 12),
             child: FilterChip(
@@ -248,6 +283,7 @@ class _SubjectsPageState extends State<SubjectsPage> with TickerProviderStateMix
         indicatorWeight: 3,
         padding: const EdgeInsets.symmetric(horizontal: 20),
         tabs: const [
+          Tab(icon: Icon(Icons.list), text: 'Chapitres'),
           Tab(icon: Icon(Icons.book), text: 'Leçons'),
           Tab(icon: Icon(Icons.quiz), text: 'Exercises'),
           Tab(icon: Icon(Icons.assignment), text: 'Examens'),
@@ -274,6 +310,35 @@ class _SubjectsPageState extends State<SubjectsPage> with TickerProviderStateMix
             child: SlideAnimation(
               verticalOffset: 50.0,
               child: FadeInAnimation(child: _buildLessonCard(lesson, index)),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildChapitresTab() {
+    if (chapitres.isEmpty) {
+      return _buildEmptyState('Pas de chapitres disponibles', Icons.list);
+    }
+
+    final theme = Theme.of(context);
+    final subjectColor = _getSubjectColor();
+
+    return AnimationLimiter(
+      child: ListView.builder(
+        padding: const EdgeInsets.all(20),
+        itemCount: chapitres.length,
+        itemBuilder: (context, index) {
+          final chapitre = chapitres[index];
+          return AnimationConfiguration.staggeredList(
+            position: index,
+            duration: const Duration(milliseconds: 375),
+            child: SlideAnimation(
+              verticalOffset: 50.0,
+              child: FadeInAnimation(
+                child: _buildChapitreCard(chapitre, index, theme, subjectColor),
+              ),
             ),
           );
         },
@@ -447,6 +512,38 @@ class _SubjectsPageState extends State<SubjectsPage> with TickerProviderStateMix
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildChapitreCard(
+    ChapitreModel chapitre,
+    int index,
+    ThemeData theme,
+    Color subjectColor,
+  ) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 16),
+      decoration: BoxDecoration(
+        color: theme.colorScheme.surface,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: theme.colorScheme.outline.withAlpha((0.2 * 255).round()),
+        ),
+      ),
+      child: ListTile(
+        leading: CircleAvatar(
+          backgroundColor: subjectColor.withAlpha((0.15 * 255).round()),
+          child: Text('${index + 1}', style: TextStyle(color: subjectColor)),
+        ),
+        title: Text(chapitre.nom, style: theme.textTheme.titleMedium),
+        subtitle:
+            chapitre.description != null && chapitre.description!.isNotEmpty
+                ? Text(chapitre.description!)
+                : null,
+        onTap: () {
+          // Naviguer vers une page de détail du chapitre ou afficher ses leçons
+        },
       ),
     );
   }

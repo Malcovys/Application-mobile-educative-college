@@ -1,14 +1,14 @@
-import 'dart:math';
-
+import 'package:application_mobile_educative_college/api/api_service.dart';
 import 'package:application_mobile_educative_college/services/matiere_service.dart';
-
-import '../api/services/api_matiere_service.dart';
+import 'package:application_mobile_educative_college/services/chapitre_service.dart';
 
 import '../models/lesson_model.dart';
 import '../models/exercise_model.dart';
 import '../models/exam_model.dart';
 import '../models/progress_model.dart';
 import '../models/matiere_model.dart';
+import '../models/chapitre_model.dart';
+
 import 'storage_service.dart';
 
 class DataService {
@@ -16,16 +16,25 @@ class DataService {
   static List<ExerciseModel> _exercises = [];
   static List<ExamModel> _exams = [];
   static List<MatiereModel> _matieres = [];
+  static List<ChapitreModel> _chapitres = [];
   static UserProgress? _userProgress;
+
+  static List<ChapitreModel> get chapitres => _chapitres;
 
   static Future<void> initialize() async {
     await StorageService.init();
+
     await _loadOrCreateSampleData();
-    await loadMatieres(); 
+
+    await loadMatieres();
   }
 
   static Future<void> loadMatieres() async {
     _matieres = await MatiereService.loadMatieres();
+  }
+
+  static Future<void> loadMatiereChapitres(int matiereId) async {
+    _chapitres = await ChapitreService.loadMatiereChapitres(matiereId);
   }
 
   static List<MatiereModel> get matieres => _matieres;
@@ -33,6 +42,7 @@ class DataService {
   static Future<void> _loadOrCreateSampleData() async {
     // Load existing data
     final lessonsData = StorageService.loadLessons();
+    final chaptersData = StorageService.loadChapters();
     final exercisesData = StorageService.loadExercises();
     final examsData = StorageService.loadExams();
     final progressData = StorageService.loadProgress();
@@ -44,6 +54,22 @@ class DataService {
       await StorageService.saveLessons(
         _lessons.map((l) => l.toJson()).toList(),
       );
+    }
+
+    if (chaptersData.isNotEmpty) {
+      _chapitres =
+          chaptersData.map((json) => ChapitreModel.fromJson(json)).toList();
+    } else {
+      int? matiereId = _matieres.isNotEmpty ? _matieres.first.id : null;
+      if (matiereId != null) {
+        _chapitres = await ChapitreService.loadMatiereChapitres(matiereId);
+        await StorageService.saveChapters(
+          _chapitres.map((c) => c.toJson()).toList(),
+        );
+      } else {
+        _chapitres = [];
+        await StorageService.saveChapters([]);
+      }
     }
 
     if (exercisesData.isNotEmpty) {
@@ -298,8 +324,8 @@ La compréhension de la structure atomique est fondamentale pour la chimie et la
       streak: 5,
       lastLoginDate: now,
       achievements: ['Premier leçon términé', 'Premier semaine términee'],
-      subjectProgress: []
-      );
+      subjectProgress: [],
+    );
   }
 
   // Getters

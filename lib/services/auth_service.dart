@@ -13,7 +13,7 @@ class Token {
   Token({required this.access, required this.refresh});
 
   factory Token.fromJson(Map<String, dynamic> json) {
-    return Token(access: json['token'], refresh: json['refresh']);
+    return Token(access: json['token'], refresh: json['1']);
   }
 
   Map<String, String> toJson() {

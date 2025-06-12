@@ -8,7 +8,7 @@ class ApiRoutes {
   static const String login = '/auth/login';
 
   // endpoints des chapitres
-  static const String chapitres = '/chapitres';
+  static const String chapitres = '/chapitres/matiere/{matiereId}';
   static const String chapitre = '/chapitres/{chapitreId}';
 
   // endpoints des exercices

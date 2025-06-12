@@ -1,3 +1,4 @@
+import 'package:application_mobile_educative_college/models/matiere_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 
@@ -60,8 +61,8 @@ class SubjectsSection extends StatelessWidget {
             scrollDirection: Axis.horizontal,
             itemCount: DataService.matieres.length,
             itemBuilder: (context, index) {
-              final matiere = DataService.matieres[index];
-              final subjectName = matiere.nom;
+              final MatiereModel matiere = DataService.matieres[index];
+              final String subjectName = matiere.nom;
 
               final subjectProgress =
                   userProgress?.subjectProgress
@@ -87,9 +88,7 @@ class SubjectsSection extends StatelessWidget {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder:
-                                  (context) =>
-                                      SubjectsPage(initialSubject: subjectName),
+                              builder: (context) =>SubjectsPage(initalSubject: subjectName),
                             ),
                           );
                         },

@@ -17,7 +17,7 @@ class ChapitreModel {
   factory ChapitreModel.fromJson(Map<String, dynamic> json) {
     return ChapitreModel(
       id: json['id'], 
-      matiereId: json['matiere_id'],
+      matiereId: json['matiereId'],
       nom: json['nom'],
       description: json['description'], 
       createdAt: DateTime.parse(json['created_at']),
@@ -28,7 +28,7 @@ class ChapitreModel {
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'matiere_id': matiereId,
+      'matiereId': matiereId,
       'nom': nom,
       'description': description,
       'created_at': createdAt.toIso8601String(),
