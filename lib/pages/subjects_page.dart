@@ -1,8 +1,8 @@
+import 'package:application_mobile_educative_college/pages/chapter_lessons_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import '../../services/data_service.dart';
 import '../services/auth_service.dart';
-import '../api/services/api_lecon_service.dart';
 
 import '../../models/lesson_model.dart';
 import '../../models/exercise_model.dart';
@@ -10,7 +10,6 @@ import '../../models/exam_model.dart';
 import '../../models/matiere_model.dart';
 import '../../models/chapitre_model.dart';
 
-import 'lesson_page.dart';
 import 'exercise_page.dart';
 import 'exam_page.dart';
 
@@ -52,8 +51,8 @@ class _SubjectsPageState extends State<SubjectsPage> with TickerProviderStateMix
   }
 
   Future<void> _loadSubjectData() async {
-    final fetchedLessons = await ApiLeconService.getLecons();
-    final filteredLessons = fetchedLessons.where((lesson) => lesson.subject == selectedSubject).toList();
+    // final fetchedLessons = await ApiLeconService.getLecons();
+    // final filteredLessons = fetchedLessons.where((lesson) => lesson.subject == selectedSubject).toList();
 
     // Trouver l'id de la matière sélectionnée
     final matiere = DataService.matieres.firstWhere(
@@ -73,10 +72,11 @@ class _SubjectsPageState extends State<SubjectsPage> with TickerProviderStateMix
     );
 
     await DataService.loadMatiereChapitres(matiere.id);
-    final filteredChapitres = DataService.chapitres.where((c) => c.matiereId == matiere.id).toList();
+    // final filteredChapitres = DataService.chapitres.where((c) => c.matiereId == matiere.id).toList();
+    final filteredChapitres = DataService.chapitres;
 
     setState(() {
-      lessons = filteredLessons;
+      //lessons = filteredLessons;
       chapitres = filteredChapitres;
       exercises = DataService.getExercisesBySubject(selectedSubject);
       exams = DataService.getExamsBySubject(selectedSubject);
@@ -117,7 +117,6 @@ class _SubjectsPageState extends State<SubjectsPage> with TickerProviderStateMix
                 controller: _tabController,
                 children: [
                   _buildChapitresTab(),
-                  _buildLessonsTab(),
                   _buildExercisesTab(),
                   _buildExamsTab(),
                 ],
@@ -175,8 +174,6 @@ class _SubjectsPageState extends State<SubjectsPage> with TickerProviderStateMix
           Row(
             children: [
               _buildStatChip('${chapitres.length} Chapitres', Icons.list),
-              const SizedBox(width: 12),
-              _buildStatChip('${lessons.length} Leçons', Icons.book),
               const SizedBox(width: 12),
               _buildStatChip('${exercises.length} Exercises', Icons.quiz),
               const SizedBox(width: 12),
@@ -284,7 +281,6 @@ class _SubjectsPageState extends State<SubjectsPage> with TickerProviderStateMix
         padding: const EdgeInsets.symmetric(horizontal: 20),
         tabs: const [
           Tab(icon: Icon(Icons.list), text: 'Chapitres'),
-          Tab(icon: Icon(Icons.book), text: 'Leçons'),
           Tab(icon: Icon(Icons.quiz), text: 'Exercises'),
           Tab(icon: Icon(Icons.assignment), text: 'Examens'),
         ],
@@ -292,30 +288,30 @@ class _SubjectsPageState extends State<SubjectsPage> with TickerProviderStateMix
     );
   }
 
-  Widget _buildLessonsTab() {
-    if (lessons.isEmpty) {
-      return _buildEmptyState('Pas de cours disponibles', Icons.book);
-    }
+  // Widget _buildLessonsTab() {
+  //   if (lessons.isEmpty) {
+  //     return _buildEmptyState('Pas de cours disponibles', Icons.book);
+  //   }
 
-    return AnimationLimiter(
-      child: ListView.builder(
-        padding: const EdgeInsets.all(20),
-        itemCount: lessons.length,
-        itemBuilder: (context, index) {
-          final lesson = lessons[index];
+  //   return AnimationLimiter(
+  //     child: ListView.builder(
+  //       padding: const EdgeInsets.all(20),
+  //       itemCount: lessons.length,
+  //       itemBuilder: (context, index) {
+  //         final lesson = lessons[index];
 
-          return AnimationConfiguration.staggeredList(
-            position: index,
-            duration: const Duration(milliseconds: 375),
-            child: SlideAnimation(
-              verticalOffset: 50.0,
-              child: FadeInAnimation(child: _buildLessonCard(lesson, index)),
-            ),
-          );
-        },
-      ),
-    );
-  }
+  //         return AnimationConfiguration.staggeredList(
+  //           position: index,
+  //           duration: const Duration(milliseconds: 375),
+  //           child: SlideAnimation(
+  //             verticalOffset: 50.0,
+  //             child: FadeInAnimation(child: _buildLessonCard(lesson, index)),
+  //           ),
+  //         );
+  //       },
+  //     ),
+  //   );
+  // }
 
   Widget _buildChapitresTab() {
     if (chapitres.isEmpty) {
@@ -398,123 +394,123 @@ class _SubjectsPageState extends State<SubjectsPage> with TickerProviderStateMix
     );
   }
 
-  Widget _buildLessonCard(LessonModel lesson, int index) {
-    final theme = Theme.of(context);
-    final subjectColor = _getSubjectColor();
+  // Widget _buildLessonCard(LessonModel lesson, int index) {
+  //   final theme = Theme.of(context);
+  //   final subjectColor = _getSubjectColor();
 
-    return Container(
-      margin: const EdgeInsets.only(bottom: 16),
-      decoration: BoxDecoration(
-        color: theme.colorScheme.surface,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: theme.colorScheme.outline.withAlpha((0.2 * 255).round()),
-        ),
-      ),
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => LessonPage(lesson: lesson),
-              ),
-            );
-          },
-          borderRadius: BorderRadius.circular(16),
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Row(
-              children: [
-                Container(
-                  width: 50,
-                  height: 50,
-                  decoration: BoxDecoration(
-                    color: subjectColor.withAlpha((0.1 * 255).round()),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Center(
-                    child: Text(
-                      '${index + 1}',
-                      style: theme.textTheme.titleMedium?.copyWith(
-                        color: subjectColor,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        lesson.title,
-                        style: theme.textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: theme.colorScheme.onSurface,
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Row(
-                        children: [
-                          Icon(
-                            Icons.access_time,
-                            size: 16,
-                            color: theme.colorScheme.onSurface.withAlpha(
-                              (0.6 * 255).round(),
-                            ),
-                          ),
-                          const SizedBox(width: 4),
-                          Text(
-                            '${lesson.duration} min',
-                            style: theme.textTheme.bodySmall?.copyWith(
-                              color: theme.colorScheme.onSurface.withAlpha(
-                                (0.6 * 255).round(),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(width: 16),
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 8,
-                              vertical: 4,
-                            ),
-                            decoration: BoxDecoration(
-                              color: _getDifficultyColor(
-                                lesson.difficulty,
-                              ).withAlpha((0.1 * 255).round()),
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: Text(
-                              lesson.difficulty,
-                              style: theme.textTheme.bodySmall?.copyWith(
-                                color: _getDifficultyColor(lesson.difficulty),
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                if (lesson.isCompleted)
-                  const Icon(Icons.check_circle, color: Colors.green, size: 24)
-                else
-                  Icon(
-                    Icons.play_circle_outline,
-                    color: subjectColor,
-                    size: 24,
-                  ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
+  //   return Container(
+  //     margin: const EdgeInsets.only(bottom: 16),
+  //     decoration: BoxDecoration(
+  //       color: theme.colorScheme.surface,
+  //       borderRadius: BorderRadius.circular(16),
+  //       border: Border.all(
+  //         color: theme.colorScheme.outline.withAlpha((0.2 * 255).round()),
+  //       ),
+  //     ),
+  //     child: Material(
+  //       color: Colors.transparent,
+  //       child: InkWell(
+  //         onTap: () {
+  //           Navigator.push(
+  //             context,
+  //             MaterialPageRoute(
+  //               builder: (context) => LessonPage(lesson: lesson),
+  //             ),
+  //           );
+  //         },
+  //         borderRadius: BorderRadius.circular(16),
+  //         child: Padding(
+  //           padding: const EdgeInsets.all(16),
+  //           child: Row(
+  //             children: [
+  //               Container(
+  //                 width: 50,
+  //                 height: 50,
+  //                 decoration: BoxDecoration(
+  //                   color: subjectColor.withAlpha((0.1 * 255).round()),
+  //                   borderRadius: BorderRadius.circular(12),
+  //                 ),
+  //                 child: Center(
+  //                   child: Text(
+  //                     '${index + 1}',
+  //                     style: theme.textTheme.titleMedium?.copyWith(
+  //                       color: subjectColor,
+  //                       fontWeight: FontWeight.bold,
+  //                     ),
+  //                   ),
+  //                 ),
+  //               ),
+  //               const SizedBox(width: 16),
+  //               Expanded(
+  //                 child: Column(
+  //                   crossAxisAlignment: CrossAxisAlignment.start,
+  //                   children: [
+  //                     Text(
+  //                       lesson.title,
+  //                       style: theme.textTheme.titleMedium?.copyWith(
+  //                         fontWeight: FontWeight.bold,
+  //                         color: theme.colorScheme.onSurface,
+  //                       ),
+  //                     ),
+  //                     const SizedBox(height: 4),
+  //                     Row(
+  //                       children: [
+  //                         Icon(
+  //                           Icons.access_time,
+  //                           size: 16,
+  //                           color: theme.colorScheme.onSurface.withAlpha(
+  //                             (0.6 * 255).round(),
+  //                           ),
+  //                         ),
+  //                         const SizedBox(width: 4),
+  //                         Text(
+  //                           '${lesson.duration} min',
+  //                           style: theme.textTheme.bodySmall?.copyWith(
+  //                             color: theme.colorScheme.onSurface.withAlpha(
+  //                               (0.6 * 255).round(),
+  //                             ),
+  //                           ),
+  //                         ),
+  //                         const SizedBox(width: 16),
+  //                         Container(
+  //                           padding: const EdgeInsets.symmetric(
+  //                             horizontal: 8,
+  //                             vertical: 4,
+  //                           ),
+  //                           decoration: BoxDecoration(
+  //                             color: _getDifficultyColor(
+  //                               lesson.difficulty,
+  //                             ).withAlpha((0.1 * 255).round()),
+  //                             borderRadius: BorderRadius.circular(8),
+  //                           ),
+  //                           child: Text(
+  //                             lesson.difficulty,
+  //                             style: theme.textTheme.bodySmall?.copyWith(
+  //                               color: _getDifficultyColor(lesson.difficulty),
+  //                               fontWeight: FontWeight.w500,
+  //                             ),
+  //                           ),
+  //                         ),
+  //                       ],
+  //                     ),
+  //                   ],
+  //                 ),
+  //               ),
+  //               if (lesson.isCompleted)
+  //                 const Icon(Icons.check_circle, color: Colors.green, size: 24)
+  //               else
+  //                 Icon(
+  //                   Icons.play_circle_outline,
+  //                   color: subjectColor,
+  //                   size: 24,
+  //                 ),
+  //             ],
+  //           ),
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
 
   Widget _buildChapitreCard(
     ChapitreModel chapitre,
@@ -542,7 +538,15 @@ class _SubjectsPageState extends State<SubjectsPage> with TickerProviderStateMix
                 ? Text(chapitre.description!)
                 : null,
         onTap: () {
-          // Naviguer vers une page de détail du chapitre ou afficher ses leçons
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ChapterLessonsPage(
+                chapitre: chapitre,
+                subjectColor: subjectColor,
+              ),
+            ),
+          );
         },
       ),
     );

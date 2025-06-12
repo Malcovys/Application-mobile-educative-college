@@ -21,7 +21,7 @@ class LessonModel {
 
   factory LessonModel.fromJson(Map<String, dynamic> json) {
     return LessonModel(
-      id: json['id'],
+      id: json['id'] ?? "",
       title: json['title'],
       subject: json['subject'],
       content: json['content'],

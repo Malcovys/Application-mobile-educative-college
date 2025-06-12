@@ -117,12 +117,12 @@ class _ExamPageState extends State<ExamPage> with TickerProviderStateMixin {
     score = ((correctAnswers / widget.exam.questions.length) * 100).round();
 
     // Save progress
-    DataService.updateExamProgress(
-      widget.exam.id,
-      true,
-      score,
-      userAnswers.map((e) => e ?? -1).toList(),
-    );
+    // DataService.updateExamProgress(
+    //   widget.exam.id,
+    //   true,
+    //   score,
+    //   userAnswers.map((e) => e ?? -1).toList(),
+    // );
 
     setState(() {
       isCompleted = true;

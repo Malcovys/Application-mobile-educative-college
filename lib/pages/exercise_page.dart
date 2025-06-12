@@ -116,9 +116,6 @@ class _ExercisePageState extends State<ExercisePage>
 
     score = ((correctAnswers / widget.exercise.questions.length) * 100).round();
 
-    // Save progress
-    DataService.updateExerciseProgress(widget.exercise.id, true, score);
-
     setState(() {
       isCompleted = true;
       showResults = true;

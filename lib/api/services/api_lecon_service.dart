@@ -1,17 +1,21 @@
 import 'package:application_mobile_educative_college/api/api_client.dart';
 import 'package:application_mobile_educative_college/api/endpoints.dart';
-import '../../models/lesson_model.dart';
+import '../../models/lecon_model.dart';
 
 class ApiLeconService {
   static final apiClient = ApiClient();
   
-  static Future<List<LessonModel>> getLecons() async {
-    final response = await apiClient.get(ApiRoutes.lecons);
-    final data = response.data;
-    final lecons = data['lecons'] ?? [];
-    return List<LessonModel>.from(
-      lecons.map((json) => LessonModel.fromJson(json)),
-    );
+  static Future<List<LeconModel>> getLeconsByChapitre(int chapitreId) async {
+    final List<LeconModel> listLecon = [];
+
+    final path = ApiRoutes.path(ApiRoutes.lecons, params: {'chapitreId': chapitreId } );
+    final response = await apiClient.get(path);
+
+    for (var data in response.data["lecons"]) {
+      listLecon.add(LeconModel.fromJson(data));
+    }
+
+    return listLecon;
   }
   
   static Future<Map<String, dynamic>> getLecon(int leconId) async {

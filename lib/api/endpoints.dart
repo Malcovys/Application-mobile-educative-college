@@ -1,7 +1,5 @@
 class ApiRoutes {
-  // static const String apiUrl = 'http://localhost:3000';
-  // static const String apiUrl = 'http://192.168.105.239:3000/api';
-  static const String apiUrl = 'http://192.168.16.172:3000/api';
+  static const String apiUrl = 'http://192.168.20.71:3000/api';
 
   // endpoints d'authentification
   static const String register = '/auth/register';
@@ -20,7 +18,7 @@ class ApiRoutes {
   static const String exerciceResultat = '/exercices-resultats/{resultatId}';
 
   // endpoints des leçons
-  static const String lecons = '/lecons';
+  static const String lecons = '/lecons/chapitre/{chapitreId}';
   static const String lecon = '/lecons/{leconId}';
 
   // endpoints des matières
