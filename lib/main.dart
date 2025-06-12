@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 // import '../widgets/navbar.dart';
 import 'services/auth_service.dart';
-
 import 'pages/login_page.dart';
 import 'pages/home_page.dart';
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

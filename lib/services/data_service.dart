@@ -1,28 +1,34 @@
 import 'dart:math';
+
+import 'package:application_mobile_educative_college/services/matiere_service.dart';
+
+import '../api/services/api_matiere_service.dart';
+
 import '../models/lesson_model.dart';
 import '../models/exercise_model.dart';
 import '../models/exam_model.dart';
 import '../models/progress_model.dart';
+import '../models/matiere_model.dart';
 import 'storage_service.dart';
 
 class DataService {
   static List<LessonModel> _lessons = [];
   static List<ExerciseModel> _exercises = [];
   static List<ExamModel> _exams = [];
+  static List<MatiereModel> _matieres = [];
   static UserProgress? _userProgress;
-
-  static final List<String> subjects = [
-    'Mathematique',
-    'Science',
-    'Literature',
-    'Histoire',
-    'Geographie',
-  ];
 
   static Future<void> initialize() async {
     await StorageService.init();
     await _loadOrCreateSampleData();
+    await loadMatieres(); 
   }
+
+  static Future<void> loadMatieres() async {
+    _matieres = await MatiereService.loadMatieres();
+  }
+
+  static List<MatiereModel> get matieres => _matieres;
 
   static Future<void> _loadOrCreateSampleData() async {
     // Load existing data
@@ -292,29 +298,8 @@ La compréhension de la structure atomique est fondamentale pour la chimie et la
       streak: 5,
       lastLoginDate: now,
       achievements: ['Premier leçon términé', 'Premier semaine términee'],
-      subjectProgress:
-          subjects.map((subject) {
-            final random = Random();
-            final lessonsForSubject =
-                _lessons.where((l) => l.subject == subject).length;
-            final exercisesForSubject =
-                _exercises.where((e) => e.subject == subject).length;
-            final examsForSubject =
-                _exams.where((e) => e.subject == subject).length;
-
-            return SubjectProgress(
-              subject: subject,
-              completedLessons: random.nextInt(lessonsForSubject + 1),
-              totalLessons: lessonsForSubject.clamp(1, 4),
-              completedExercises: random.nextInt(exercisesForSubject + 1),
-              totalExercises: exercisesForSubject.clamp(1, 6),
-              completedExams: random.nextInt(examsForSubject + 1),
-              totalExams: examsForSubject.clamp(1, 3),
-              averageScore: 60 + random.nextDouble() * 35,
-              lastActivity: now.subtract(Duration(days: random.nextInt(7))),
-            );
-          }).toList(),
-    );
+      subjectProgress: []
+      );
   }
 
   // Getters

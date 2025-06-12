@@ -58,12 +58,15 @@ class SubjectsSection extends StatelessWidget {
           height: 180,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
-            itemCount: DataService.subjects.length,
+            itemCount: DataService.matieres.length,
             itemBuilder: (context, index) {
-              final subject = DataService.subjects[index];
-              final subjectProgress = userProgress?.subjectProgress
-                  .where((p) => p.subject == subject)
-                  .firstOrNull;
+              final matiere = DataService.matieres[index];
+              final subjectName = matiere.nom;
+
+              final subjectProgress =
+                  userProgress?.subjectProgress
+                      .where((p) => p.subject == subjectName)
+                      .firstOrNull;
 
               return AnimationConfiguration.staggeredList(
                 position: index,
@@ -74,17 +77,19 @@ class SubjectsSection extends StatelessWidget {
                     child: Container(
                       width: 200,
                       margin: EdgeInsets.only(
-                        right: index < DataService.subjects.length - 1 ? 16 : 0,
+                        right: index < DataService.matieres.length - 1 ? 16 : 0,
                       ),
                       child: SubjectCard(
-                        subject: subject,
+                        subject: subjectName,
                         progress: subjectProgress,
                         index: index,
                         onTap: () {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => SubjectsPage(initialSubject: subject),
+                              builder:
+                                  (context) =>
+                                      SubjectsPage(initialSubject: subjectName),
                             ),
                           );
                         },

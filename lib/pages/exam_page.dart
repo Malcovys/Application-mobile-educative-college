@@ -209,7 +209,7 @@ class _ExamPageState extends State<ExamPage> with TickerProviderStateMixin {
                   ),
                 ],
               ),
-              const SizedBox(height: 32),
+              const SizedBox(height: 12),
               Container(
                 padding: const EdgeInsets.all(32),
                 decoration: BoxDecoration(
@@ -245,7 +245,7 @@ class _ExamPageState extends State<ExamPage> with TickerProviderStateMixin {
                   ],
                 ),
               ),
-              const SizedBox(height: 32),
+              const SizedBox(height: 12),
               Container(
                 padding: const EdgeInsets.all(24),
                 decoration: BoxDecoration(
@@ -289,7 +289,7 @@ class _ExamPageState extends State<ExamPage> with TickerProviderStateMixin {
                   ],
                 ),
               ),
-              const SizedBox(height: 32),
+              const SizedBox(height: 12),
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
@@ -778,7 +778,7 @@ class _ExamPageState extends State<ExamPage> with TickerProviderStateMixin {
                   ],
                 ),
               ),
-              const SizedBox(height: 32),
+              const SizedBox(height: 12),
               Container(
                 padding: const EdgeInsets.all(24),
                 decoration: BoxDecoration(

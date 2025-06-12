@@ -4,6 +4,7 @@ import '../../services/data_service.dart';
 import '../../models/lesson_model.dart';
 import '../../models/exercise_model.dart';
 import '../../models/exam_model.dart';
+import '../../models/matiere_model.dart';
 import 'lesson_page.dart';
 import 'exercise_page.dart';
 import 'exam_page.dart';
@@ -17,8 +18,7 @@ class SubjectsPage extends StatefulWidget {
   State<SubjectsPage> createState() => _SubjectsPageState();
 }
 
-class _SubjectsPageState extends State<SubjectsPage>
-    with TickerProviderStateMixin {
+class _SubjectsPageState extends State<SubjectsPage> with TickerProviderStateMixin {
   late TabController _tabController;
   String selectedSubject = '';
   List<LessonModel> lessons = [];
@@ -28,7 +28,11 @@ class _SubjectsPageState extends State<SubjectsPage>
   @override
   void initState() {
     super.initState();
-    selectedSubject = widget.initialSubject ?? DataService.subjects.first;
+    selectedSubject =
+        widget.initialSubject ??
+        (DataService.matieres.isNotEmpty
+            ? DataService.matieres.first.nom
+            : '');
     _tabController = TabController(length: 3, vsync: this);
     _loadSubjectData();
   }
@@ -181,20 +185,20 @@ class _SubjectsPageState extends State<SubjectsPage>
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: 20),
-        itemCount: DataService.subjects.length,
+        itemCount: DataService.matieres.length,
         itemBuilder: (context, index) {
-          final subject = DataService.subjects[index];
-          final isSelected = subject == selectedSubject;
-
+          final MatiereModel matiere = DataService.matieres[index];
+          final bool isSelected = matiere.nom == selectedSubject;
+          
           return Container(
             margin: const EdgeInsets.only(right: 12),
             child: FilterChip(
-              label: Text(subject),
+              label: Text(matiere.nom),
               selected: isSelected,
               onSelected: (selected) {
                 if (selected) {
                   setState(() {
-                    selectedSubject = subject;
+                    isSelected;
                   });
                   _loadSubjectData();
                 }
