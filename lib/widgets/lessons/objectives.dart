@@ -3,14 +3,14 @@ import '../../models/lesson_model.dart';
 import './subject_utils.dart';
 
 class LessonObjectives extends StatelessWidget {
-  final LessonModel lesson;
+  final LessonModel lecon;
 
-  const LessonObjectives({super.key, required this.lesson});
+  const LessonObjectives({super.key, required this.lecon});
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final subjectColor = getSubjectColor(lesson.subject);
+    final subjectColor = getSubjectColor(lecon.subject);
 
     return Container(
       padding: const EdgeInsets.all(20),
@@ -35,7 +35,7 @@ class LessonObjectives extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 16),
-          ...lesson.objectives.asMap().entries.map((e) {
+          ...lecon.objectives.asMap().entries.map((e) {
             return Padding(
               padding: const EdgeInsets.only(bottom: 12),
               child: Row(

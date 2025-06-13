@@ -1,16 +1,12 @@
 import 'package:flutter/material.dart';
-import '../../models/lesson_model.dart';
-import '../../services/data_service.dart';
+import '../../models/lecon_model.dart';
 import '../widgets/lessons/sliver_app_bar.dart';
-import '../widgets/lessons/lesson_info.dart';
-import '../widgets/lessons/objectives.dart';
 import '../widgets/lessons/lesson_content.dart';
-import '../widgets/lessons/action_button.dart';
 
 class LessonPage extends StatefulWidget {
-  final LessonModel lesson;
+  final LeconModel lecon;
 
-  const LessonPage({super.key, required this.lesson});
+  const LessonPage({super.key, required this.lecon});
 
   @override
   State<LessonPage> createState() => _LessonPageState();
@@ -25,7 +21,6 @@ class _LessonPageState extends State<LessonPage> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    isCompleted = widget.lesson.isCompleted;
 
     _animationController = AnimationController(
       duration: const Duration(milliseconds: 800),
@@ -52,26 +47,6 @@ class _LessonPageState extends State<LessonPage> with TickerProviderStateMixin {
     super.dispose();
   }
 
-  Future<void> _markAsCompleted() async {
-    await DataService.updateLessonProgress(widget.lesson.id, true);
-    setState(() {
-      isCompleted = true;
-    });
-
-    if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: const Text('Leçon marqué comme términé! 🎉'),
-          backgroundColor: Colors.green,
-          behavior: SnackBarBehavior.floating,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
-        ),
-      );
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -83,7 +58,7 @@ class _LessonPageState extends State<LessonPage> with TickerProviderStateMixin {
             child: CustomScrollView(
               slivers: [
                 LessonSliverAppBar(
-                  lesson: widget.lesson,
+                  lesson: widget.lecon,
                   isCompleted: isCompleted,
                 ),
                 SliverToBoxAdapter(
@@ -92,17 +67,11 @@ class _LessonPageState extends State<LessonPage> with TickerProviderStateMixin {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        LessonInfo(lesson: widget.lesson),
                         const SizedBox(height: 24),
-                        LessonObjectives(lesson: widget.lesson),
-                        const SizedBox(height: 24),
-                        LessonContent(content: widget.lesson.content),
+                        // LessonObjectives(lesson: widget.lecon),
+                        // const SizedBox(height: 24),
+                        LessonContent(content: widget.lecon.contenu),
                         const SizedBox(height: 32),
-                        ActionButton(
-                          isCompleted: isCompleted,
-                          subject: widget.lesson.subject,
-                          onPressed: _markAsCompleted,
-                        ),
                       ],
                     ),
                   ),

@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
-import '../models/exam_model.dart';
+
+import '../models/examen_model.dart';
+import '../models/exercice_model.dart';
+import '../models/exercice_resultat_model.dart';
+
 import '../services/data_service.dart';
 
 class ExamPage extends StatefulWidget {
-  final ExamModel exam;
+  final ExamenModel exam;
 
   const ExamPage({super.key, required this.exam});
 
@@ -18,19 +22,31 @@ class _ExamPageState extends State<ExamPage> with TickerProviderStateMixin {
   late Animation<Offset> _slideAnimation;
 
   int currentQuestionIndex = 0;
-  List<int?> userAnswers = [];
+  List<ReponseModel> userAnswers = [];
+
   Timer? timer;
   int remainingTime = 0;
+
   bool isCompleted = false;
   bool showResults = false;
   bool examStarted = false;
+
   int score = 0;
+
+  late String examenSubject;
 
   @override
   void initState() {
     super.initState();
-    userAnswers = List.filled(widget.exam.questions.length, null);
-    remainingTime = widget.exam.timeLimit * 60; // Convert to seconds
+
+    examenSubject = DataService.getMatiereOfExamen(widget.exam);
+
+    userAnswers = List.filled(
+      widget.exam.questions.length,
+      ReponseModel(selectionne: "", correcte: false, questionIdx: -1),
+    );
+
+    remainingTime = widget.exam.duree * 60; // Convert to seconds
 
     _animationController = AnimationController(
       duration: const Duration(milliseconds: 600),
@@ -54,7 +70,9 @@ class _ExamPageState extends State<ExamPage> with TickerProviderStateMixin {
   @override
   void dispose() {
     timer?.cancel();
+
     _animationController.dispose();
+
     super.dispose();
   }
 
@@ -62,6 +80,7 @@ class _ExamPageState extends State<ExamPage> with TickerProviderStateMixin {
     setState(() {
       examStarted = true;
     });
+
     _startTimer();
   }
 
@@ -77,9 +96,13 @@ class _ExamPageState extends State<ExamPage> with TickerProviderStateMixin {
     });
   }
 
-  void _selectAnswer(int answerIndex) {
+  void _selectAnswer(String selectedLabel, bool isCorrect, int answerIndex) {
     setState(() {
-      userAnswers[currentQuestionIndex] = answerIndex;
+      userAnswers[currentQuestionIndex] = ReponseModel(
+        selectionne: selectedLabel,
+        correcte: isCorrect,
+        questionIdx: currentQuestionIndex,
+      );
     });
   }
 
@@ -109,7 +132,14 @@ class _ExamPageState extends State<ExamPage> with TickerProviderStateMixin {
     // Calculate score
     int correctAnswers = 0;
     for (int i = 0; i < widget.exam.questions.length; i++) {
-      if (userAnswers[i] == widget.exam.questions[i].correctAnswerIndex) {
+      // if (userAnswers[i] == widget.exam.questions[i].correctAnswerIndex) {
+      //   correctAnswers++;
+      // }
+      final QuestionModel question = widget.exam.questions[i];
+      final OptionModel correctOption = question.options.firstWhere(
+        (option) => option.correcte,
+      );
+      if (userAnswers[i].selectionne == correctOption.label) {
         correctAnswers++;
       }
     }
@@ -117,12 +147,12 @@ class _ExamPageState extends State<ExamPage> with TickerProviderStateMixin {
     score = ((correctAnswers / widget.exam.questions.length) * 100).round();
 
     // Save progress
-    DataService.updateExamProgress(
-      widget.exam.id,
-      true,
-      score,
-      userAnswers.map((e) => e ?? -1).toList(),
-    );
+    // DataService.updateExamProgress(
+    //   widget.exam.id,
+    //   true,
+    //   score,
+    //   userAnswers.map((e) => e ?? -1).toList(),
+    // );
 
     setState(() {
       isCompleted = true;
@@ -131,7 +161,7 @@ class _ExamPageState extends State<ExamPage> with TickerProviderStateMixin {
   }
 
   Color _getSubjectColor() {
-    switch (widget.exam.subject) {
+    switch (examenSubject) {
       case 'Mathematique':
         return const Color(0xFF6F61EF);
       case 'Science':
@@ -200,7 +230,7 @@ class _ExamPageState extends State<ExamPage> with TickerProviderStateMixin {
                   ),
                   Expanded(
                     child: Text(
-                      'Examen de ${widget.exam.subject}',
+                      'Examen de $examenSubject',
                       style: theme.textTheme.titleLarge?.copyWith(
                         fontWeight: FontWeight.bold,
                         color: theme.colorScheme.onSurface,
@@ -209,7 +239,7 @@ class _ExamPageState extends State<ExamPage> with TickerProviderStateMixin {
                   ),
                 ],
               ),
-              const SizedBox(height: 32),
+              const SizedBox(height: 12),
               Container(
                 padding: const EdgeInsets.all(32),
                 decoration: BoxDecoration(
@@ -228,7 +258,7 @@ class _ExamPageState extends State<ExamPage> with TickerProviderStateMixin {
                     Icon(Icons.assignment, color: Colors.white, size: 64),
                     const SizedBox(height: 16),
                     Text(
-                      widget.exam.title,
+                      widget.exam.nom,
                       textAlign: TextAlign.center,
                       style: theme.textTheme.headlineMedium?.copyWith(
                         color: Colors.white,
@@ -245,7 +275,7 @@ class _ExamPageState extends State<ExamPage> with TickerProviderStateMixin {
                   ],
                 ),
               ),
-              const SizedBox(height: 32),
+              const SizedBox(height: 12),
               Container(
                 padding: const EdgeInsets.all(24),
                 decoration: BoxDecoration(
@@ -269,27 +299,16 @@ class _ExamPageState extends State<ExamPage> with TickerProviderStateMixin {
                     _buildExamInfo(
                       theme,
                       'Duré',
-                      '${widget.exam.timeLimit} minutes',
+                      '${widget.exam.duree} minutes',
                       Icons.timer,
                     ),
                     const SizedBox(height: 16),
-                    _buildExamInfo(
-                      theme,
-                      'Score requis',
-                      '${widget.exam.passingScore}%',
-                      Icons.grade,
-                    ),
+                    _buildExamInfo(theme, 'Score requis', '50%', Icons.grade),
                     const SizedBox(height: 16),
-                    _buildExamInfo(
-                      theme,
-                      'Difficulté',
-                      widget.exam.difficulty,
-                      Icons.trending_up,
-                    ),
                   ],
                 ),
               ),
-              const SizedBox(height: 32),
+              const SizedBox(height: 12),
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
@@ -401,7 +420,7 @@ class _ExamPageState extends State<ExamPage> with TickerProviderStateMixin {
               ),
               Expanded(
                 child: Text(
-                  widget.exam.title,
+                  widget.exam.nom,
                   style: theme.textTheme.titleLarge?.copyWith(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
@@ -454,8 +473,13 @@ class _ExamPageState extends State<ExamPage> with TickerProviderStateMixin {
 
   Widget _buildProgressIndicator(ThemeData theme, Color subjectColor) {
     final progress = (currentQuestionIndex + 1) / widget.exam.questions.length;
+
     final answeredQuestions =
-        userAnswers.where((answer) => answer != null).length;
+        userAnswers
+            .where(
+              (answer) => answer.selectionne != "" || answer.questionIdx != -1,
+            )
+            .length;
 
     return Container(
       padding: const EdgeInsets.all(20),
@@ -495,16 +519,8 @@ class _ExamPageState extends State<ExamPage> with TickerProviderStateMixin {
   Widget _buildQuestionCard(ThemeData theme, Color subjectColor) {
     final question = widget.exam.questions[currentQuestionIndex];
 
-    return Container(
-      margin: const EdgeInsets.all(20),
-      padding: const EdgeInsets.all(24),
-      decoration: BoxDecoration(
-        color: theme.colorScheme.surface,
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: theme.colorScheme.outline.withAlpha((0.2 * 255).round()),
-        ),
-      ),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -515,7 +531,7 @@ class _ExamPageState extends State<ExamPage> with TickerProviderStateMixin {
               borderRadius: BorderRadius.circular(12),
             ),
             child: Text(
-              question.question,
+              question.ennonce,
               style: theme.textTheme.titleMedium?.copyWith(
                 fontWeight: FontWeight.bold,
                 color: theme.colorScheme.onSurface,
@@ -525,16 +541,22 @@ class _ExamPageState extends State<ExamPage> with TickerProviderStateMixin {
           ),
           const SizedBox(height: 24),
           ...question.options.asMap().entries.map((entry) {
-            final index = entry.key;
-            final option = entry.value;
-            final isSelected = userAnswers[currentQuestionIndex] == index;
+            final int optionIndex = entry.key;
+            final OptionModel option = entry.value;
+            final isSelected =
+                userAnswers[currentQuestionIndex].selectionne == option.label;
 
             return Container(
               margin: const EdgeInsets.only(bottom: 12),
               child: Material(
                 color: Colors.transparent,
                 child: InkWell(
-                  onTap: () => _selectAnswer(index),
+                  onTap:
+                      () => _selectAnswer(
+                        option.label,
+                        option.correcte,
+                        optionIndex,
+                      ),
                   borderRadius: BorderRadius.circular(12),
                   child: Container(
                     padding: const EdgeInsets.all(16),
@@ -570,7 +592,9 @@ class _ExamPageState extends State<ExamPage> with TickerProviderStateMixin {
                           ),
                           child: Center(
                             child: Text(
-                              String.fromCharCode(65 + index), // A, B, C, D
+                              String.fromCharCode(
+                                65 + optionIndex,
+                              ), // A, B, C, D
                               style: theme.textTheme.bodyMedium?.copyWith(
                                 color:
                                     isSelected
@@ -584,7 +608,7 @@ class _ExamPageState extends State<ExamPage> with TickerProviderStateMixin {
                         const SizedBox(width: 16),
                         Expanded(
                           child: Text(
-                            option,
+                            option.valeur,
                             style: theme.textTheme.bodyMedium?.copyWith(
                               color: theme.colorScheme.onSurface,
                               fontWeight:
@@ -616,10 +640,14 @@ class _ExamPageState extends State<ExamPage> with TickerProviderStateMixin {
     final isLastQuestion =
         currentQuestionIndex == widget.exam.questions.length - 1;
     final answeredQuestions =
-        userAnswers.where((answer) => answer != null).length;
+        userAnswers
+            .where(
+              (answer) => answer.selectionne != "" || answer.questionIdx != -1,
+            )
+            .length;
     final allAnswered = answeredQuestions == widget.exam.questions.length;
 
-    return Container(
+    return Padding(
       padding: const EdgeInsets.all(20),
       child: Column(
         children: [
@@ -693,7 +721,7 @@ class _ExamPageState extends State<ExamPage> with TickerProviderStateMixin {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        isLastQuestion ? 'Finire' : 'Suivant',
+                        isLastQuestion ? 'Finir' : 'Suivant',
                         style: const TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
@@ -716,18 +744,27 @@ class _ExamPageState extends State<ExamPage> with TickerProviderStateMixin {
   }
 
   Widget _buildResultsPage(ThemeData theme, Color subjectColor) {
-    final correctAnswers =
-        userAnswers
-            .asMap()
-            .entries
-            .where(
-              (entry) =>
-                  entry.value ==
-                  widget.exam.questions[entry.key].correctAnswerIndex,
-            )
-            .length;
+    // final correctAnswers =
+    //     userAnswers
+    //         .asMap()
+    //         .entries
+    //         .where(
+    //           (entry) =>
+    //               entry.value ==
+    //               widget.exam.questions[entry.key].correctAnswerIndex,
+    //         )
+    //         .length;
 
-    final isPassed = score >= widget.exam.passingScore;
+    final correctAnswers =
+        userAnswers.where((response) {
+          final question = widget.exam.questions[response.questionIdx];
+          final correctOption = question.options.firstWhere(
+            (option) => option.correcte,
+          );
+          return response.selectionne == correctOption.label;
+        }).length;
+
+    final isPassed = score >= 50;
 
     return Scaffold(
       body: SafeArea(
@@ -778,7 +815,7 @@ class _ExamPageState extends State<ExamPage> with TickerProviderStateMixin {
                   ],
                 ),
               ),
-              const SizedBox(height: 32),
+              const SizedBox(height: 12),
               Container(
                 padding: const EdgeInsets.all(24),
                 decoration: BoxDecoration(
@@ -801,12 +838,7 @@ class _ExamPageState extends State<ExamPage> with TickerProviderStateMixin {
                           '$score%',
                           isPassed ? Colors.green : Colors.red,
                         ),
-                        _buildScoreStat(
-                          theme,
-                          'Requis',
-                          '${widget.exam.passingScore}%',
-                          Colors.grey,
-                        ),
+                        _buildScoreStat(theme, 'Requis', '${50}%', Colors.grey),
                       ],
                     ),
                     const SizedBox(height: 20),
@@ -876,12 +908,13 @@ class _ExamPageState extends State<ExamPage> with TickerProviderStateMixin {
                         onPressed: () {
                           // Reset and restart exam
                           setState(() {
-                            userAnswers = List.filled(
-                              widget.exam.questions.length,
-                              null,
-                            );
+                            // userAnswers = List.filled(
+                            //   widget.exam.questions.length,
+                            //   null,
+                            // );
+                            userAnswers = [];
                             currentQuestionIndex = 0;
-                            remainingTime = widget.exam.timeLimit * 60;
+                            remainingTime = widget.exam.duree * 60;
                             isCompleted = false;
                             showResults = false;
                             examStarted = false;

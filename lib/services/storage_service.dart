@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 
 class StorageService {
   static const String _lessonsKey = 'lessons';
+  static const String _chaptersKey = 'chapters';
   static const String _exercisesKey = 'exercises';
   static const String _examsKey = 'exams';
   static const String _progressKey = 'progress';
@@ -93,6 +94,25 @@ class StorageService {
     } catch (e) {
       if (kDebugMode) {
         print('Error loading lessons: $e');
+      }
+    }
+    return [];
+  }
+
+  static Future<bool> saveChapters(List<dynamic> chapters) async {
+    return await saveData(_chaptersKey, chapters);
+  }
+
+  static List<Map<String, dynamic>> loadChapters() {
+    try {
+      final jsonString = _prefs!.getString(_chaptersKey);
+      if (jsonString != null) {
+        final List<dynamic> jsonList = jsonDecode(jsonString);
+        return jsonList.cast<Map<String, dynamic>>();
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error loading chapters: $e');
       }
     }
     return [];

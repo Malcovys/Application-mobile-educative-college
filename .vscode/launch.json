@@ -1,0 +1,48 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "application_mobile_educative_college",
+            "cwd": "home/malcovys/dev/application_mobile_educative_college",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "application_mobile_educative_college (profile mode)",
+            "cwd": "home/malcovys/dev/application_mobile_educative_college",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "application_mobile_educative_college (release mode)",
+            "cwd": "home/malcovys/dev/application_mobile_educative_college",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        },
+        {
+            "name": "hello_flutter",
+            "cwd": "home/malcovys/dev/hello_flutter",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "hello_flutter (profile mode)",
+            "cwd": "home/malcovys/dev/hello_flutter",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "hello_flutter (release mode)",
+            "cwd": "home/malcovys/dev/hello_flutter",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        }
+    ]
+}

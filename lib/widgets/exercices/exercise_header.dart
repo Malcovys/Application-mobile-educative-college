@@ -1,25 +1,17 @@
 import 'package:flutter/material.dart';
-import '../../models/exercise_model.dart';
+import '../../models/exercice_model.dart';
 
 class ExerciseHeader extends StatelessWidget {
-  final ExerciseModel exercise;
-  final int remainingTime;
+  final ExerciceModel exercise;
   final Color subjectColor;
   final VoidCallback onBackPressed;
 
   const ExerciseHeader({
     super.key,
     required this.exercise,
-    required this.remainingTime,
     required this.subjectColor,
     required this.onBackPressed,
   });
-
-  String _formatTime(int seconds) {
-    final minutes = seconds ~/ 60;
-    final remainingSeconds = seconds % 60;
-    return '${minutes.toString().padLeft(2, '0')}:${remainingSeconds.toString().padLeft(2, '0')}';
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +36,7 @@ class ExerciseHeader extends StatelessWidget {
               ),
               Expanded(
                 child: Text(
-                  exercise.title,
+                  exercise.nom,
                   style: theme.textTheme.titleLarge?.copyWith(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
@@ -64,14 +56,6 @@ class ExerciseHeader extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     const Icon(Icons.timer, color: Colors.white, size: 16),
-                    const SizedBox(width: 4),
-                    Text(
-                      _formatTime(remainingTime),
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
                   ],
                 ),
               ),

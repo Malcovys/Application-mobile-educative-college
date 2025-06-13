@@ -1,3 +1,5 @@
+import 'package:application_mobile_educative_college/pages/login_page.dart';
+import 'package:application_mobile_educative_college/services/auth_service.dart';
 import 'package:flutter/material.dart';
 
 class ProfilePage extends StatelessWidget {
@@ -5,10 +7,25 @@ class ProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String userName = AuthService.utilisateur?.nom ?? "Indéfini";
+    String userNiveau = AuthService.utilisateur?.niveau.value ?? "Indéfini";
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Mon Profil', style: TextStyle(color: Colors.white)),
         backgroundColor: Colors.deepPurple,
+        actions: [
+          IconButton(
+            tooltip: 'Déconnexion',
+            onPressed: () async {
+              await AuthService.logout();
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(builder: (context) => const LoginPage())
+              );
+            },
+            icon: const Icon(Icons.logout, color: Colors.white),
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
@@ -19,12 +36,12 @@ class ProfilePage extends StatelessWidget {
               backgroundImage: AssetImage(''), // Remplacer par votre image
             ),
             const SizedBox(height: 12),
-            const Text(
-              'Emma Dubois',
+            Text(
+              userName,
               style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
             ),
-            const Text(
-              '5e - Collège Jean Moulin',
+            Text(
+              userNiveau,
               style: TextStyle(fontSize: 16, color: Colors.grey),
             ),
             const SizedBox(height: 20),

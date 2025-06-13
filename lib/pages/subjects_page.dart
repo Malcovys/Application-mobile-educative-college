@@ -1,17 +1,22 @@
+import 'package:application_mobile_educative_college/pages/chapter_lessons_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
-import '../../services/data_service.dart';
-import '../../models/lesson_model.dart';
-import '../../models/exercise_model.dart';
-import '../../models/exam_model.dart';
-import 'lesson_page.dart';
+
+import '../services/data_service.dart';
+import '../services/auth_service.dart';
+
+import '../models/exercice_model.dart';
+import '../models/examen_model.dart';
+import '../models/matiere_model.dart';
+import '../models/chapitre_model.dart';
+
 import 'exercise_page.dart';
 import 'exam_page.dart';
 
 class SubjectsPage extends StatefulWidget {
-  final String? initialSubject;
+  final String? initalSubject;
 
-  const SubjectsPage({super.key, this.initialSubject});
+  const SubjectsPage({super.key, this.initalSubject});
 
   @override
   State<SubjectsPage> createState() => _SubjectsPageState();
@@ -20,16 +25,23 @@ class SubjectsPage extends StatefulWidget {
 class _SubjectsPageState extends State<SubjectsPage>
     with TickerProviderStateMixin {
   late TabController _tabController;
+
   String selectedSubject = '';
-  List<LessonModel> lessons = [];
-  List<ExerciseModel> exercises = [];
-  List<ExamModel> exams = [];
+
+  List<ChapitreModel> chapitres = [];
+  List<ExerciceModel> exercises = [];
+  List<ExamenModel> exams = [];
 
   @override
   void initState() {
     super.initState();
-    selectedSubject = widget.initialSubject ?? DataService.subjects.first;
+
+    selectedSubject =
+        widget.initalSubject ??
+        (DataService.matieres.isNotEmpty ? DataService.matieres.first.nom : '');
+
     _tabController = TabController(length: 3, vsync: this);
+
     _loadSubjectData();
   }
 
@@ -39,11 +51,35 @@ class _SubjectsPageState extends State<SubjectsPage>
     super.dispose();
   }
 
-  void _loadSubjectData() {
+  Future<void> _loadSubjectData() async {
+    // final fetchedLessons = await ApiLeconService.getLecons();
+    // final filteredLessons = fetchedLessons.where((lesson) => lesson.subject == selectedSubject).toList();
+
+    // Trouver l'id de la matière sélectionnée
+    final matiere = DataService.matieres.firstWhere(
+      (m) => m.nom == selectedSubject,
+      orElse:
+          () =>
+              DataService.matieres.isNotEmpty
+                  ? DataService.matieres.first
+                  : MatiereModel(
+                    id: 0,
+                    nom: '',
+                    niveau: AuthService.utilisateur?.niveau ?? Niveau.six,
+                    description: '',
+                    createdAt: DateTime.now(),
+                    updatedAt: DateTime.now(),
+                  ),
+    );
+
+    await DataService.loadMatiereChapitres(matiere.id);
+    await DataService.loadMatiereExercices(matiere.id);
+    await DataService.loadMatiereExamens(matiere.id);
+
     setState(() {
-      lessons = DataService.getLessonsBySubject(selectedSubject);
-      exercises = DataService.getExercisesBySubject(selectedSubject);
-      exams = DataService.getExamsBySubject(selectedSubject);
+      chapitres = DataService.chapitres;
+      exercises = DataService.exercises;
+      exams = DataService.examens;
     });
   }
 
@@ -80,7 +116,7 @@ class _SubjectsPageState extends State<SubjectsPage>
               child: TabBarView(
                 controller: _tabController,
                 children: [
-                  _buildLessonsTab(),
+                  _buildChapitresTab(),
                   _buildExercisesTab(),
                   _buildExamsTab(),
                 ],
@@ -137,7 +173,7 @@ class _SubjectsPageState extends State<SubjectsPage>
           const SizedBox(height: 16),
           Row(
             children: [
-              _buildStatChip('${lessons.length} Leçons', Icons.book),
+              _buildStatChip('${chapitres.length} Chapitres', Icons.list),
               const SizedBox(width: 12),
               _buildStatChip('${exercises.length} Exercises', Icons.quiz),
               const SizedBox(width: 12),
@@ -181,20 +217,20 @@ class _SubjectsPageState extends State<SubjectsPage>
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: 20),
-        itemCount: DataService.subjects.length,
+        itemCount: DataService.matieres.length,
         itemBuilder: (context, index) {
-          final subject = DataService.subjects[index];
-          final isSelected = subject == selectedSubject;
+          final MatiereModel matiere = DataService.matieres[index];
+          final bool isSelected = matiere.nom == selectedSubject;
 
           return Container(
             margin: const EdgeInsets.only(right: 12),
             child: FilterChip(
-              label: Text(subject),
+              label: Text(matiere.nom),
               selected: isSelected,
               onSelected: (selected) {
                 if (selected) {
                   setState(() {
-                    selectedSubject = subject;
+                    isSelected;
                   });
                   _loadSubjectData();
                 }
@@ -244,7 +280,7 @@ class _SubjectsPageState extends State<SubjectsPage>
         indicatorWeight: 3,
         padding: const EdgeInsets.symmetric(horizontal: 20),
         tabs: const [
-          Tab(icon: Icon(Icons.book), text: 'Leçons'),
+          Tab(icon: Icon(Icons.list), text: 'Chapitres'),
           Tab(icon: Icon(Icons.quiz), text: 'Exercises'),
           Tab(icon: Icon(Icons.assignment), text: 'Examens'),
         ],
@@ -252,24 +288,28 @@ class _SubjectsPageState extends State<SubjectsPage>
     );
   }
 
-  Widget _buildLessonsTab() {
-    if (lessons.isEmpty) {
-      return _buildEmptyState('Pas de cours disponibles', Icons.book);
+  Widget _buildChapitresTab() {
+    if (chapitres.isEmpty) {
+      return _buildEmptyState('Pas de chapitres disponibles', Icons.list);
     }
+
+    final theme = Theme.of(context);
+    final subjectColor = _getSubjectColor();
 
     return AnimationLimiter(
       child: ListView.builder(
         padding: const EdgeInsets.all(20),
-        itemCount: lessons.length,
+        itemCount: chapitres.length,
         itemBuilder: (context, index) {
-          final lesson = lessons[index];
-
+          final chapitre = chapitres[index];
           return AnimationConfiguration.staggeredList(
             position: index,
             duration: const Duration(milliseconds: 375),
             child: SlideAnimation(
               verticalOffset: 50.0,
-              child: FadeInAnimation(child: _buildLessonCard(lesson, index)),
+              child: FadeInAnimation(
+                child: _buildChapitreCard(chapitre, index, theme, subjectColor),
+              ),
             ),
           );
         },
@@ -329,10 +369,12 @@ class _SubjectsPageState extends State<SubjectsPage>
     );
   }
 
-  Widget _buildLessonCard(LessonModel lesson, int index) {
-    final theme = Theme.of(context);
-    final subjectColor = _getSubjectColor();
-
+  Widget _buildChapitreCard(
+    ChapitreModel chapitre,
+    int index,
+    ThemeData theme,
+    Color subjectColor,
+  ) {
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
       decoration: BoxDecoration(
@@ -342,112 +384,33 @@ class _SubjectsPageState extends State<SubjectsPage>
           color: theme.colorScheme.outline.withAlpha((0.2 * 255).round()),
         ),
       ),
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => LessonPage(lesson: lesson),
-              ),
-            );
-          },
-          borderRadius: BorderRadius.circular(16),
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Row(
-              children: [
-                Container(
-                  width: 50,
-                  height: 50,
-                  decoration: BoxDecoration(
-                    color: subjectColor.withAlpha((0.1 * 255).round()),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Center(
-                    child: Text(
-                      '${index + 1}',
-                      style: theme.textTheme.titleMedium?.copyWith(
-                        color: subjectColor,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        lesson.title,
-                        style: theme.textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: theme.colorScheme.onSurface,
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Row(
-                        children: [
-                          Icon(
-                            Icons.access_time,
-                            size: 16,
-                            color: theme.colorScheme.onSurface.withAlpha(
-                              (0.6 * 255).round(),
-                            ),
-                          ),
-                          const SizedBox(width: 4),
-                          Text(
-                            '${lesson.duration} min',
-                            style: theme.textTheme.bodySmall?.copyWith(
-                              color: theme.colorScheme.onSurface.withAlpha(
-                                (0.6 * 255).round(),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(width: 16),
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 8,
-                              vertical: 4,
-                            ),
-                            decoration: BoxDecoration(
-                              color: _getDifficultyColor(
-                                lesson.difficulty,
-                              ).withAlpha((0.1 * 255).round()),
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: Text(
-                              lesson.difficulty,
-                              style: theme.textTheme.bodySmall?.copyWith(
-                                color: _getDifficultyColor(lesson.difficulty),
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                if (lesson.isCompleted)
-                  const Icon(Icons.check_circle, color: Colors.green, size: 24)
-                else
-                  Icon(
-                    Icons.play_circle_outline,
-                    color: subjectColor,
-                    size: 24,
-                  ),
-              ],
-            ),
-          ),
+      child: ListTile(
+        leading: CircleAvatar(
+          backgroundColor: subjectColor.withAlpha((0.15 * 255).round()),
+          child: Text('${index + 1}', style: TextStyle(color: subjectColor)),
         ),
+        title: Text(chapitre.nom, style: theme.textTheme.titleMedium),
+        subtitle:
+            chapitre.description != null && chapitre.description!.isNotEmpty
+                ? Text(chapitre.description!)
+                : null,
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder:
+                  (context) => ChapterLessonsPage(
+                    chapitre: chapitre,
+                    subjectColor: subjectColor,
+                  ),
+            ),
+          );
+        },
       ),
     );
   }
 
-  Widget _buildExerciseCard(ExerciseModel exercise, int index) {
+  Widget _buildExerciseCard(ExerciceModel exercise, int index) {
     final theme = Theme.of(context);
     final subjectColor = _getSubjectColor();
 
@@ -491,7 +454,7 @@ class _SubjectsPageState extends State<SubjectsPage>
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        exercise.title,
+                        exercise.nom,
                         style: theme.textTheme.titleMedium?.copyWith(
                           fontWeight: FontWeight.bold,
                           color: theme.colorScheme.onSurface,
@@ -524,48 +487,40 @@ class _SubjectsPageState extends State<SubjectsPage>
                               (0.6 * 255).round(),
                             ),
                           ),
-                          const SizedBox(width: 4),
-                          Text(
-                            '${exercise.timeLimit} min',
-                            style: theme.textTheme.bodySmall?.copyWith(
-                              color: theme.colorScheme.onSurface.withAlpha(
-                                (0.6 * 255).round(),
-                              ),
-                            ),
-                          ),
                         ],
                       ),
-                      if (exercise.isCompleted && exercise.score != null) ...[
-                        const SizedBox(height: 8),
-                        Row(
-                          children: [
-                            Icon(
-                              Icons.grade,
-                              size: 16,
-                              color: _getScoreColor(exercise.score!),
-                            ),
-                            const SizedBox(width: 4),
-                            Text(
-                              'Score: ${exercise.score}%',
-                              style: theme.textTheme.bodySmall?.copyWith(
-                                color: _getScoreColor(exercise.score!),
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
+                      // if (exercise.isCompleted && exercise.score != null) ...[
+                      //   const SizedBox(height: 8),
+                      //   Row(
+                      //     children: [
+                      //       Icon(
+                      //         Icons.grade,
+                      //         size: 16,
+                      //         color: _getScoreColor(exercise.score!),
+                      //       ),
+                      //       const SizedBox(width: 4),
+                      //       Text(
+                      //         'Score: ${exercise.score}%',
+                      //         style: theme.textTheme.bodySmall?.copyWith(
+                      //           color: _getScoreColor(exercise.score!),
+                      //           fontWeight: FontWeight.w600,
+                      //         ),
+                      //       ),
+                      //     ],
+                      //   ),
+                      // ],
                     ],
                   ),
                 ),
-                if (exercise.isCompleted)
-                  const Icon(Icons.check_circle, color: Colors.green, size: 24)
-                else
-                  Icon(
-                    Icons.play_circle_outline,
-                    color: subjectColor,
-                    size: 24,
-                  ),
+                Icon(Icons.play_circle_outline, color: subjectColor, size: 24),
+                //   if (exercise.isCompleted)
+                //     const Icon(Icons.check_circle, color: Colors.green, size: 24)
+                //   else
+                //     Icon(
+                //       Icons.play_circle_outline,
+                //       color: subjectColor,
+                //       size: 24,
+                //     ),
               ],
             ),
           ),
@@ -574,7 +529,7 @@ class _SubjectsPageState extends State<SubjectsPage>
     );
   }
 
-  Widget _buildExamCard(ExamModel exam, int index) {
+  Widget _buildExamCard(ExamenModel exam, int index) {
     final theme = Theme.of(context);
     final subjectColor = _getSubjectColor();
 
@@ -616,7 +571,7 @@ class _SubjectsPageState extends State<SubjectsPage>
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        exam.title,
+                        exam.nom,
                         style: theme.textTheme.titleMedium?.copyWith(
                           fontWeight: FontWeight.bold,
                           color: theme.colorScheme.onSurface,
@@ -625,27 +580,6 @@ class _SubjectsPageState extends State<SubjectsPage>
                       const SizedBox(height: 4),
                       Row(
                         children: [
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 6,
-                              vertical: 2,
-                            ),
-                            decoration: BoxDecoration(
-                              color: _getDifficultyColor(
-                                exam.difficulty,
-                              ).withAlpha((0.1 * 255).round()),
-                              borderRadius: BorderRadius.circular(6),
-                            ),
-                            child: Text(
-                              exam.difficulty,
-                              style: theme.textTheme.bodySmall?.copyWith(
-                                color: _getDifficultyColor(exam.difficulty),
-                                fontWeight: FontWeight.w500,
-                                fontSize: 10,
-                              ),
-                            ),
-                          ),
-                          const SizedBox(width: 8),
                           Icon(
                             Icons.timer,
                             size: 14,
@@ -655,7 +589,7 @@ class _SubjectsPageState extends State<SubjectsPage>
                           ),
                           const SizedBox(width: 2),
                           Text(
-                            '${exam.timeLimit} min',
+                            '${exam.duree} min',
                             style: theme.textTheme.bodySmall?.copyWith(
                               color: theme.colorScheme.onSurface.withAlpha(
                                 (0.6 * 255).round(),
@@ -683,43 +617,14 @@ class _SubjectsPageState extends State<SubjectsPage>
                           ),
                         ],
                       ),
-                      if (exam.isCompleted && exam.score != null) ...[
-                        const SizedBox(height: 8),
-                        Row(
-                          children: [
-                            Icon(
-                              exam.isPassed ? Icons.check_circle : Icons.cancel,
-                              size: 16,
-                              color: exam.isPassed ? Colors.green : Colors.red,
-                            ),
-                            const SizedBox(width: 4),
-                            Text(
-                              'Score: ${exam.score}% (Requis: ${exam.passingScore}%)',
-                              style: theme.textTheme.bodySmall?.copyWith(
-                                color:
-                                    exam.isPassed ? Colors.green : Colors.red,
-                                fontWeight: FontWeight.w600,
-                                fontSize: 12,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
                     ],
                   ),
                 ),
-                if (exam.isCompleted)
-                  Icon(
-                    exam.isPassed ? Icons.check_circle : Icons.cancel,
-                    color: exam.isPassed ? Colors.green : Colors.red,
-                    size: 24,
-                  )
-                else
-                  Icon(
-                    Icons.play_circle_outline,
-                    color: subjectColor,
-                    size: 24,
-                  ),
+                Icon(
+                  Icons.play_circle_outline,
+                  color: subjectColor,
+                  size: 24,
+                ),
               ],
             ),
           ),
@@ -769,22 +674,22 @@ class _SubjectsPageState extends State<SubjectsPage>
     }
   }
 
-  Color _getDifficultyColor(String difficulty) {
-    switch (difficulty.toLowerCase()) {
-      case 'facile':
-        return Colors.green;
-      case 'moyen':
-        return Colors.orange;
-      case 'difficile':
-        return Colors.red;
-      default:
-        return Colors.grey;
-    }
-  }
+  // Color _getDifficultyColor(String difficulty) {
+  //   switch (difficulty.toLowerCase()) {
+  //     case 'facile':
+  //       return Colors.green;
+  //     case 'moyen':
+  //       return Colors.orange;
+  //     case 'difficile':
+  //       return Colors.red;
+  //     default:
+  //       return Colors.grey;
+  //   }
+  // }
 
-  Color _getScoreColor(int score) {
-    if (score >= 80) return Colors.green;
-    if (score >= 60) return Colors.orange;
-    return Colors.red;
-  }
+  // Color _getScoreColor(int score) {
+  //   if (score >= 80) return Colors.green;
+  //   if (score >= 60) return Colors.orange;
+  //   return Colors.red;
+  // }
 }

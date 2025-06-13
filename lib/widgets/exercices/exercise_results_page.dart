@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import '../../models/exercise_model.dart';
+
+import '../../models/exercice_model.dart';
 
 class ResultsPage extends StatelessWidget {
   final int score;
   final List<int?> userAnswers;
-  final ExerciseModel exercise;
-  final int remainingTime;
+  final ExerciceModel exercise;
+  // final int remainingTime;
   final Color subjectColor;
 
   const ResultsPage({
@@ -13,15 +14,15 @@ class ResultsPage extends StatelessWidget {
     required this.score,
     required this.userAnswers,
     required this.exercise,
-    required this.remainingTime,
+    // required this.remainingTime,
     required this.subjectColor,
   });
 
-  String _formatTime(int seconds) {
-    final minutes = seconds ~/ 60;
-    final remainingSeconds = seconds % 60;
-    return '${minutes.toString().padLeft(2, '0')}:${remainingSeconds.toString().padLeft(2, '0')}';
-  }
+  // String _formatTime(int seconds) {
+  //   final minutes = seconds ~/ 60;
+  //   final remainingSeconds = seconds % 60;
+  //   return '${minutes.toString().padLeft(2, '0')}:${remainingSeconds.toString().padLeft(2, '0')}';
+  // }
 
   Widget _buildScoreStat(
     BuildContext context,
@@ -60,8 +61,8 @@ class ResultsPage extends StatelessWidget {
             .entries
             .where(
               (entry) =>
-                  entry.value ==
-                  exercise.questions[entry.key].correctAnswerIndex,
+                  entry.value != null &&
+                  exercise.questions[entry.key].options[entry.value!].correcte,
             )
             .length;
 
@@ -138,12 +139,12 @@ class ResultsPage extends StatelessWidget {
                           '$correctAnswers/${exercise.questions.length}',
                           Colors.green,
                         ),
-                        _buildScoreStat(
-                          context,
-                          'Temps',
-                          _formatTime(exercise.timeLimit * 60 - remainingTime),
-                          Colors.blue,
-                        ),
+                        // _buildScoreStat(
+                        //   context,
+                        //   'Temps',
+                        //   _formatTime(exercise.timeLimit * 60 - remainingTime),
+                        //   Colors.blue,
+                        // ),
                       ],
                     ),
                   ],

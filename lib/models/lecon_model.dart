@@ -17,18 +17,18 @@ class LeconModel {
   factory LeconModel.fromJson(Map<String, dynamic> json) {
     return LeconModel(
       id: json['id'], 
-      chapitreId: json['chapitre_id'], 
+      chapitreId: json['chapitreId'], 
       titre: json['titre'], 
       contenu: json['contenu'], 
-      createdAt: json['created_at'], 
-      updatedAt: json['updated_at']
+      createdAt: DateTime.parse(json['created_at']), 
+      updatedAt: DateTime.parse(json['updated_at'])
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'chapitre_id': chapitreId,
+      'chapitreId': chapitreId,
       'titre': titre,
       'contenu': contenu,
       'created_at': createdAt.toIso8601String(),

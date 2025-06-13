@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import '../../models/lesson_model.dart';
+import '../../models/lecon_model.dart';
 import './subject_utils.dart';
+import '../../services/data_service.dart';
 
 class LessonSliverAppBar extends StatelessWidget {
-  final LessonModel lesson;
+  final LeconModel lesson;
   final bool isCompleted;
 
   const LessonSliverAppBar({
@@ -14,8 +15,9 @@ class LessonSliverAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final subjectColor = getSubjectColor(lesson.subject);
-    final theme = Theme.of(context);
+    final String lessonSubject = DataService.getMatiereOfLecon(lesson);
+    final Color subjectColor = getSubjectColor(lessonSubject);
+    final ThemeData theme = Theme.of(context);
 
     return SliverAppBar(
       expandedHeight: 200,
@@ -36,7 +38,7 @@ class LessonSliverAppBar extends StatelessWidget {
       ],
       flexibleSpace: FlexibleSpaceBar(
         title: Text(
-          lesson.title,
+          lesson.titre,
           style: theme.textTheme.titleMedium?.copyWith(
             color: Colors.white,
             fontWeight: FontWeight.bold,
@@ -60,7 +62,7 @@ class LessonSliverAppBar extends StatelessWidget {
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Icon(
-                getSubjectIcon(lesson.subject),
+                getSubjectIcon(lessonSubject),
                 size: 48,
                 color: Colors.white,
               ),

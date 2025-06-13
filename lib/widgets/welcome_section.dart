@@ -16,6 +16,7 @@ class WelcomeSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: double.infinity,
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         gradient: LinearGradient(
@@ -41,20 +42,6 @@ class WelcomeSection extends StatelessWidget {
             style: theme.textTheme.bodyMedium?.copyWith(
               color: Colors.white.withAlpha((0.9 * 255).round()),
             ),
-          ),
-          const SizedBox(height: 16),
-          Row(
-            children: [
-              Icon(Icons.local_fire_department, color: Colors.orange, size: 20),
-              const SizedBox(width: 8),
-              Text(
-                '${userProgress?.streak ?? 0} jours rachitiques!',
-                style: theme.textTheme.bodyMedium?.copyWith(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ],
           ),
         ],
       ),

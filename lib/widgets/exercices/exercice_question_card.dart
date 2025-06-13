@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../models/exercise_model.dart';
+import '../../models/exercice_model.dart';
 
 class QuestionCard extends StatelessWidget {
   final QuestionModel question;
@@ -31,7 +31,7 @@ class QuestionCard extends StatelessWidget {
               borderRadius: BorderRadius.circular(12),
             ),
             child: Text(
-              question.question,
+              question.ennonce,
               style: theme.textTheme.titleMedium?.copyWith(
                 fontWeight: FontWeight.bold,
                 color: theme.colorScheme.onSurface,
@@ -40,9 +40,11 @@ class QuestionCard extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 14),
-          ...question.options.asMap().entries.map((entry) {
-            final index = entry.key;
-            final option = entry.value;
+          ...question.options.asMap().entries.map((entry) { 
+            final int index = entry.key;
+            
+            final OptionModel option = entry.value;
+
             final isSelected = userAnswer == index;
 
             return Container(
@@ -50,23 +52,15 @@ class QuestionCard extends StatelessWidget {
               child: Material(
                 color: Colors.transparent,
                 child: InkWell(
-                  onTap: () => onAnswerSelected(index),
+                  onTap: () => onAnswerSelected(index), //
                   borderRadius: BorderRadius.circular(12),
                   child: Container(
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
-                      color:
-                          isSelected
-                              ? subjectColor.withAlpha((0.1 * 255).round())
-                              : theme.colorScheme.surface,
+                      color: isSelected ? subjectColor.withAlpha((0.1 * 255).round()) : theme.colorScheme.surface,
                       borderRadius: BorderRadius.circular(12),
                       border: Border.all(
-                        color:
-                            isSelected
-                                ? subjectColor
-                                : theme.colorScheme.outline.withAlpha(
-                                  (0.3 * 255).round(),
-                                ),
+                        color: isSelected ? subjectColor : theme.colorScheme.outline.withAlpha((0.3 * 255).round()),
                         width: isSelected ? 2 : 1,
                       ),
                     ),
@@ -76,22 +70,14 @@ class QuestionCard extends StatelessWidget {
                           width: 32,
                           height: 32,
                           decoration: BoxDecoration(
-                            color:
-                                isSelected
-                                    ? subjectColor
-                                    : theme.colorScheme.outline.withAlpha(
-                                      (0.2 * 255).round(),
-                                    ),
+                            color: isSelected ? subjectColor : theme.colorScheme.outline.withAlpha((0.2 * 255).round()),
                             borderRadius: BorderRadius.circular(16),
                           ),
                           child: Center(
                             child: Text(
-                              String.fromCharCode(65 + index), // A, B, C, D
+                              option.label,
                               style: theme.textTheme.bodyMedium?.copyWith(
-                                color:
-                                    isSelected
-                                        ? Colors.white
-                                        : theme.colorScheme.onSurface,
+                                color: isSelected ? Colors.white : theme.colorScheme.onSurface,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -100,13 +86,10 @@ class QuestionCard extends StatelessWidget {
                         const SizedBox(width: 16),
                         Expanded(
                           child: Text(
-                            option,
+                            option.valeur,
                             style: theme.textTheme.bodyMedium?.copyWith(
                               color: theme.colorScheme.onSurface,
-                              fontWeight:
-                                  isSelected
-                                      ? FontWeight.w600
-                                      : FontWeight.normal,
+                              fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
                             ),
                           ),
                         ),

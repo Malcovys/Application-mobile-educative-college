@@ -1,12 +1,25 @@
 import 'package:application_mobile_educative_college/api/api_client.dart';
 import 'package:application_mobile_educative_college/api/endpoints.dart';
 
-class ChapitreService {
+import 'package:application_mobile_educative_college/models/chapitre_model.dart';
+
+class ApiChapitreService {
   static final apiClient = ApiClient();
-  
-  static Future<List<Map<String, dynamic>>> getChapitres() async {
-    final response = await apiClient.get(ApiRoutes.chapitres);
-    return List<Map<String, dynamic>>.from(response.data);
+
+  static Future<List<ChapitreModel>> getChapitresByMatiere(int matiereId) async {
+    final List<ChapitreModel> listChapitre = [];
+
+    try{
+      final path = ApiRoutes.path(ApiRoutes.chapitres, params: {'matiereId': matiereId});
+      final response = await apiClient.get(path);
+
+      for (var data in response.data["chapitres"]) {
+        listChapitre.add(ChapitreModel.fromJson(data));
+      }
+    }catch (error) {
+      print(error);
+    }
+    return listChapitre;
   }
   
   static Future<Map<String, dynamic>> getChapitre(int chapitreId) async {
