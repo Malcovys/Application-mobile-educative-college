@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import '../../models/exercise_model.dart';
+import '../../models/exercice_model.dart';
 
 class ProgressIndicatorWidget extends StatelessWidget {
   final int currentQuestionIndex;
-  final ExerciseModel exercise;
+  final ExerciceModel exercise;
   final Color subjectColor;
 
   const ProgressIndicatorWidget({

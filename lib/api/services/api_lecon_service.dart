@@ -5,16 +5,20 @@ import '../../models/lecon_model.dart';
 class ApiLeconService {
   static final apiClient = ApiClient();
   
+
   static Future<List<LeconModel>> getLeconsByChapitre(int chapitreId) async {
     final List<LeconModel> listLecon = [];
 
-    final path = ApiRoutes.path(ApiRoutes.lecons, params: {'chapitreId': chapitreId } );
-    final response = await apiClient.get(path);
+    try{
+      final path = ApiRoutes.path(ApiRoutes.lecons, params: {'chapitreId': chapitreId } );
+      final response = await apiClient.get(path);
 
-    for (var data in response.data["lecons"]) {
-      listLecon.add(LeconModel.fromJson(data));
+      for (var data in response.data["lecons"]) {
+        listLecon.add(LeconModel.fromJson(data));
+      }
+    }catch (error) {
+      print(error);
     }
-
     return listLecon;
   }
   

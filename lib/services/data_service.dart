@@ -1,15 +1,15 @@
-import 'package:application_mobile_educative_college/api/api_service.dart';
-
+import 'package:application_mobile_educative_college/services/examen_service.dart';
 import 'package:application_mobile_educative_college/services/matiere_service.dart';
 import 'package:application_mobile_educative_college/services/chapitre_service.dart';
 import 'package:application_mobile_educative_college/services/lecon_service.dart';
+import 'package:application_mobile_educative_college/services/exercice_service.dart';
 
 import '../models/lecon_model.dart';
-import '../models/exercise_model.dart';
-import '../models/exam_model.dart';
+import '../models/examen_model.dart';
 import '../models/progress_model.dart';
 import '../models/matiere_model.dart';
 import '../models/chapitre_model.dart';
+import '../models/exercice_model.dart';
 
 import 'storage_service.dart';
 
@@ -17,17 +17,16 @@ class DataService {
   static List<MatiereModel> _matieres = [];
   static List<ChapitreModel> _chapitres = [];
   static List<LeconModel> _lecons = [];
-
-  static List<ExerciseModel> _exercises = [];
-  static List<ExamModel> _exams = [];
+  static List<ExerciceModel> _exercises = [];
+  static List<ExamenModel> _examens = [];
   static UserProgress? _userProgress;
 
+  // Getter
   static List<MatiereModel> get matieres => _matieres;
   static List<ChapitreModel> get chapitres => _chapitres;
   static List<LeconModel> get lecons => _lecons;
-
-  static List<ExerciseModel> get exercises => _exercises;
-  static List<ExamModel> get exams => _exams;
+  static List<ExerciceModel> get exercises => _exercises;
+  static List<ExamenModel> get examens => _examens;
   static UserProgress? get userProgress => _userProgress;
 
   static Future<void> initialize() async {
@@ -50,19 +49,46 @@ class DataService {
     _lecons = await LeconService.loadChapitreLecons(chapitreId);
   }
 
+  static Future<void> loadMatiereExercices(int matiereId) async {
+    _exercises = await ExerciceService.loadMatiereExercices(matiereId);
+  }
+
+  static Future<void> loadMatiereExamens(int matiereId) async {
+    _examens = await ExamenService.loadMatiereExamens(matiereId);
+  }
+
   static String getMatiereOfLecon(LeconModel lecon) {
     ChapitreModel? chapitre = _chapitres.firstWhere(
       (c) => c.id == lecon.chapitreId,
-      orElse: () => throw Exception('Chapitre non trouvé pour la leçon ${lecon.id}'),
+      orElse:
+          () =>
+              throw Exception('Chapitre non trouvé pour la leçon ${lecon.id}'),
     );
-    
+
     MatiereModel matiere = _matieres.firstWhere(
       (m) => m.id == chapitre.matiereId,
-      orElse: () => throw Exception('Matière non trouvée pour le chapitre ${chapitre.id}'),
+      orElse:
+          () =>
+              throw Exception(
+                'Matière non trouvée pour le chapitre ${chapitre.id}',
+              ),
     );
-  
-  return matiere.nom;
-}
+
+    return matiere.nom;
+  }
+
+  static String getMatiereOfExamen(ExamenModel examen) {
+    MatiereModel matiere = _matieres.firstWhere(
+      (m) => m.id == examen.matiereId,
+      orElse:
+          () =>
+              throw Exception(
+                'Matière non trouvée pour le chapitre ${examen.id}',
+              ),
+    );
+
+    return matiere.nom;
+  }
 
   static Future<void> _loadOrCreateSampleData() async {
     final chaptersData = StorageService.loadChapters();
@@ -105,11 +131,11 @@ class DataService {
     );
   }
 
-  static List<ExerciseModel> getExercisesBySubject(String subject) {
-    return _exercises.where((exercise) => exercise.subject == subject).toList();
-  }
+  // static List<ExerciseModel> getExercisesBySubject(String subject) {
+  //   return _exercises.where((exercise) => exercise.subject == subject).toList();
+  // }
 
-  static List<ExamModel> getExamsBySubject(String subject) {
-    return _exams.where((exam) => exam.subject == subject).toList();
-  }
+  // static List<ExamenModel> getExamsBySubject(String subject) {
+  //   return _examens.where((exam) => exam.subject == subject).toList();
+  // }
 }

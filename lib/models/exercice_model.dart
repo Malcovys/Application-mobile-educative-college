@@ -29,21 +29,18 @@ class OptionModel {
 class QuestionModel {
   final String ennonce;
   final List<OptionModel> options;
-  final String explication;
 
   QuestionModel({
     required this.ennonce,
     required this.options,
-    required this.explication
   });
 
   factory QuestionModel.fromJson(Map<String, dynamic> json) {
     return QuestionModel(
-      ennonce: json['ennonce'],
+      ennonce: json['enoncer'],
       options: (json['options'] as List)
           .map((op) => OptionModel.fromJson(op))
           .toList(),
-      explication: json['explication']
     );
   }
 
@@ -51,7 +48,6 @@ class QuestionModel {
     return {
       'ennonce': ennonce,
       'options': options,
-      'explication': explication,
     };
   }
 }
@@ -75,7 +71,7 @@ class ExerciceModel {
   factory ExerciceModel.fromJson(Map<String, dynamic> json) {
     return ExerciceModel(
       id: json['id'], 
-      leconId: json['lecon_id'], 
+      leconId: json['leconId'], 
       nom: json['nom'], 
       questions:(json['questions'] as List)
         .map((q) => QuestionModel.fromJson(q))

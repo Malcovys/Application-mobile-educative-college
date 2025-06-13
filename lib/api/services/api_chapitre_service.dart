@@ -5,26 +5,20 @@ import 'package:application_mobile_educative_college/models/chapitre_model.dart'
 
 class ApiChapitreService {
   static final apiClient = ApiClient();
-  
-  // static Future<List<ChapitreModel>> getChapitres() async {
-  //   final response = await apiClient.get(ApiRoutes.chapitres);
-  //   final data = response.data;
-  //   final chapitres = data['chapitres'] ?? [];
-  //   return List<ChapitreModel>.from(
-  //     chapitres.map((json) => ChapitreModel.fromJson(json)),
-  //   );
-  // }
 
   static Future<List<ChapitreModel>> getChapitresByMatiere(int matiereId) async {
     final List<ChapitreModel> listChapitre = [];
 
-    final path = ApiRoutes.path(ApiRoutes.chapitres, params: {'matiereId': matiereId});
-    final response = await apiClient.get(path);
+    try{
+      final path = ApiRoutes.path(ApiRoutes.chapitres, params: {'matiereId': matiereId});
+      final response = await apiClient.get(path);
 
-    for (var data in response.data["chapitres"]) {
-      listChapitre.add(ChapitreModel.fromJson(data));
+      for (var data in response.data["chapitres"]) {
+        listChapitre.add(ChapitreModel.fromJson(data));
+      }
+    }catch (error) {
+      print(error);
     }
-    
     return listChapitre;
   }
   

@@ -11,13 +11,16 @@ class ApiMatiereService {
   static Future<List<MatiereModel>> getMatieres() async {
     final List<MatiereModel> listMatiere = [];
     
-    apiClient.setAuthToken(AuthService.accessToken ?? "");
-    final response = await apiClient.get(ApiRoutes.matieres);
+    try{
+      apiClient.setAuthToken(AuthService.accessToken ?? "");
+      final response = await apiClient.get(ApiRoutes.matieres);
 
-    for (var data in response.data["matieres"]) {
-      listMatiere.add(MatiereModel.fromJson(data));
+      for (var data in response.data["matieres"]) {
+        listMatiere.add(MatiereModel.fromJson(data));
+      }
+    }catch (error) {
+      print(error);
     }
-
     return listMatiere;
   }
 

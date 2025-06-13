@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
-import 'dart:async';
-import '../../models/exercise_model.dart';
-import '../../services/data_service.dart';
+
+import '../../models/exercice_model.dart';
+
+import '../../utils/subject_utils.dart';
+
 import '../widgets/exercices/exercise_header.dart';
 import '../widgets/exercices/exercice_progress_indicator.dart';
 import '../widgets/exercices/exercice_question_card.dart';
 import '../widgets/exercices/exercice_navigation_buttons.dart';
 import '../widgets/exercices/exercise_results_page.dart';
-import '../../utils/subject_utils.dart';
+
 
 class ExercisePage extends StatefulWidget {
-  final ExerciseModel exercise;
+  final ExerciceModel exercise;
 
   const ExercisePage({super.key, required this.exercise});
 
@@ -26,8 +28,6 @@ class _ExercisePageState extends State<ExercisePage>
 
   int currentQuestionIndex = 0;
   List<int?> userAnswers = [];
-  Timer? timer;
-  int remainingTime = 0;
   bool isCompleted = false;
   bool showResults = false;
   int score = 0;
@@ -36,7 +36,6 @@ class _ExercisePageState extends State<ExercisePage>
   void initState() {
     super.initState();
     userAnswers = List.filled(widget.exercise.questions.length, null);
-    remainingTime = widget.exercise.timeLimit * 60; // Convert to seconds
 
     _animationController = AnimationController(
       duration: const Duration(milliseconds: 600),
@@ -55,26 +54,12 @@ class _ExercisePageState extends State<ExercisePage>
     );
 
     _animationController.forward();
-    _startTimer();
   }
 
   @override
   void dispose() {
-    timer?.cancel();
     _animationController.dispose();
     super.dispose();
-  }
-
-  void _startTimer() {
-    timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      if (remainingTime > 0) {
-        setState(() {
-          remainingTime--;
-        });
-      } else {
-        _finishExercise();
-      }
-    });
   }
 
   void _selectAnswer(int answerIndex) {
@@ -104,12 +89,13 @@ class _ExercisePageState extends State<ExercisePage>
   }
 
   void _finishExercise() {
-    timer?.cancel();
-
     // Calculate score
     int correctAnswers = 0;
     for (int i = 0; i < widget.exercise.questions.length; i++) {
-      if (userAnswers[i] == widget.exercise.questions[i].correctAnswerIndex) {
+      final question = widget.exercise.questions[i];
+      final userAnswerIndex = userAnswers[i];
+      if (userAnswerIndex != null &&
+          question.options[userAnswerIndex].correcte) {
         correctAnswers++;
       }
     }
@@ -148,13 +134,14 @@ class _ExercisePageState extends State<ExercisePage>
 
   @override
   Widget build(BuildContext context) {
-    final subjectColor = SubjectUtils.getSubjectColor(widget.exercise.subject);
+    final String exerciceSubject = widget.exercise.nom;
+    final subjectColor = SubjectUtils.getSubjectColor(exerciceSubject);
+
     if (showResults) {
       return ResultsPage(
         score: score,
         userAnswers: userAnswers,
         exercise: widget.exercise,
-        remainingTime: remainingTime,
         subjectColor: subjectColor,
       );
     }
@@ -165,7 +152,6 @@ class _ExercisePageState extends State<ExercisePage>
           children: [
             ExerciseHeader(
               exercise: widget.exercise,
-              remainingTime: remainingTime,
               subjectColor: subjectColor,
               onBackPressed: _showExitDialog,
             ),

@@ -1,5 +1,5 @@
 class ApiRoutes {
-  static const String apiUrl = 'http://192.168.20.71:3000/api';
+  static const String apiUrl = 'http://192.168.154.172:3000/api';
 
   // endpoints d'authentification
   static const String register = '/auth/register';
@@ -10,7 +10,7 @@ class ApiRoutes {
   static const String chapitre = '/chapitres/{chapitreId}';
 
   // endpoints des exercices
-  static const String exercices = '/exercices';
+  static const String exercices = '/exercices/matiere/{matiereId}';
   static const String exercice = '/exercices/{exerciceId}';
 
   // endpoints des résultats d'exercices
@@ -26,7 +26,7 @@ class ApiRoutes {
   static const String matiere = '/matieres/{matiereId}';
 
   // endpoints des simulations d'examen
-  static const String examens = '/simulations';
+  static const String examens = '/simulations-examens/matiere/{matiereId}';
   static const String examen = '/simulations/{examenId}';
 
   // Remplace les paramètres dans une route

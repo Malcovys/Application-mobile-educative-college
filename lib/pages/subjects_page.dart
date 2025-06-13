@@ -1,14 +1,14 @@
 import 'package:application_mobile_educative_college/pages/chapter_lessons_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
-import '../../services/data_service.dart';
+
+import '../services/data_service.dart';
 import '../services/auth_service.dart';
 
-import '../../models/lesson_model.dart';
-import '../../models/exercise_model.dart';
-import '../../models/exam_model.dart';
-import '../../models/matiere_model.dart';
-import '../../models/chapitre_model.dart';
+import '../models/exercice_model.dart';
+import '../models/examen_model.dart';
+import '../models/matiere_model.dart';
+import '../models/chapitre_model.dart';
 
 import 'exercise_page.dart';
 import 'exam_page.dart';
@@ -22,26 +22,27 @@ class SubjectsPage extends StatefulWidget {
   State<SubjectsPage> createState() => _SubjectsPageState();
 }
 
-class _SubjectsPageState extends State<SubjectsPage> with TickerProviderStateMixin {
+class _SubjectsPageState extends State<SubjectsPage>
+    with TickerProviderStateMixin {
   late TabController _tabController;
 
   String selectedSubject = '';
-  
-  List<LessonModel> lessons = [];
+
   List<ChapitreModel> chapitres = [];
-  List<ExerciseModel> exercises = [];
-  List<ExamModel> exams = [];
+  List<ExerciceModel> exercises = [];
+  List<ExamenModel> exams = [];
 
   @override
   void initState() {
     super.initState();
 
-    selectedSubject = widget.initalSubject ?? (DataService.matieres.isNotEmpty ? DataService.matieres.first.nom : '');
-    
-    _tabController = TabController(length: 3, vsync: this);
-    
-    _loadSubjectData();
+    selectedSubject =
+        widget.initalSubject ??
+        (DataService.matieres.isNotEmpty ? DataService.matieres.first.nom : '');
 
+    _tabController = TabController(length: 3, vsync: this);
+
+    _loadSubjectData();
   }
 
   @override
@@ -72,14 +73,13 @@ class _SubjectsPageState extends State<SubjectsPage> with TickerProviderStateMix
     );
 
     await DataService.loadMatiereChapitres(matiere.id);
-    // final filteredChapitres = DataService.chapitres.where((c) => c.matiereId == matiere.id).toList();
-    final filteredChapitres = DataService.chapitres;
+    await DataService.loadMatiereExercices(matiere.id);
+    await DataService.loadMatiereExamens(matiere.id);
 
     setState(() {
-      //lessons = filteredLessons;
-      chapitres = filteredChapitres;
-      exercises = DataService.getExercisesBySubject(selectedSubject);
-      exams = DataService.getExamsBySubject(selectedSubject);
+      chapitres = DataService.chapitres;
+      exercises = DataService.exercises;
+      exams = DataService.examens;
     });
   }
 
@@ -288,31 +288,6 @@ class _SubjectsPageState extends State<SubjectsPage> with TickerProviderStateMix
     );
   }
 
-  // Widget _buildLessonsTab() {
-  //   if (lessons.isEmpty) {
-  //     return _buildEmptyState('Pas de cours disponibles', Icons.book);
-  //   }
-
-  //   return AnimationLimiter(
-  //     child: ListView.builder(
-  //       padding: const EdgeInsets.all(20),
-  //       itemCount: lessons.length,
-  //       itemBuilder: (context, index) {
-  //         final lesson = lessons[index];
-
-  //         return AnimationConfiguration.staggeredList(
-  //           position: index,
-  //           duration: const Duration(milliseconds: 375),
-  //           child: SlideAnimation(
-  //             verticalOffset: 50.0,
-  //             child: FadeInAnimation(child: _buildLessonCard(lesson, index)),
-  //           ),
-  //         );
-  //       },
-  //     ),
-  //   );
-  // }
-
   Widget _buildChapitresTab() {
     if (chapitres.isEmpty) {
       return _buildEmptyState('Pas de chapitres disponibles', Icons.list);
@@ -394,124 +369,6 @@ class _SubjectsPageState extends State<SubjectsPage> with TickerProviderStateMix
     );
   }
 
-  // Widget _buildLessonCard(LessonModel lesson, int index) {
-  //   final theme = Theme.of(context);
-  //   final subjectColor = _getSubjectColor();
-
-  //   return Container(
-  //     margin: const EdgeInsets.only(bottom: 16),
-  //     decoration: BoxDecoration(
-  //       color: theme.colorScheme.surface,
-  //       borderRadius: BorderRadius.circular(16),
-  //       border: Border.all(
-  //         color: theme.colorScheme.outline.withAlpha((0.2 * 255).round()),
-  //       ),
-  //     ),
-  //     child: Material(
-  //       color: Colors.transparent,
-  //       child: InkWell(
-  //         onTap: () {
-  //           Navigator.push(
-  //             context,
-  //             MaterialPageRoute(
-  //               builder: (context) => LessonPage(lesson: lesson),
-  //             ),
-  //           );
-  //         },
-  //         borderRadius: BorderRadius.circular(16),
-  //         child: Padding(
-  //           padding: const EdgeInsets.all(16),
-  //           child: Row(
-  //             children: [
-  //               Container(
-  //                 width: 50,
-  //                 height: 50,
-  //                 decoration: BoxDecoration(
-  //                   color: subjectColor.withAlpha((0.1 * 255).round()),
-  //                   borderRadius: BorderRadius.circular(12),
-  //                 ),
-  //                 child: Center(
-  //                   child: Text(
-  //                     '${index + 1}',
-  //                     style: theme.textTheme.titleMedium?.copyWith(
-  //                       color: subjectColor,
-  //                       fontWeight: FontWeight.bold,
-  //                     ),
-  //                   ),
-  //                 ),
-  //               ),
-  //               const SizedBox(width: 16),
-  //               Expanded(
-  //                 child: Column(
-  //                   crossAxisAlignment: CrossAxisAlignment.start,
-  //                   children: [
-  //                     Text(
-  //                       lesson.title,
-  //                       style: theme.textTheme.titleMedium?.copyWith(
-  //                         fontWeight: FontWeight.bold,
-  //                         color: theme.colorScheme.onSurface,
-  //                       ),
-  //                     ),
-  //                     const SizedBox(height: 4),
-  //                     Row(
-  //                       children: [
-  //                         Icon(
-  //                           Icons.access_time,
-  //                           size: 16,
-  //                           color: theme.colorScheme.onSurface.withAlpha(
-  //                             (0.6 * 255).round(),
-  //                           ),
-  //                         ),
-  //                         const SizedBox(width: 4),
-  //                         Text(
-  //                           '${lesson.duration} min',
-  //                           style: theme.textTheme.bodySmall?.copyWith(
-  //                             color: theme.colorScheme.onSurface.withAlpha(
-  //                               (0.6 * 255).round(),
-  //                             ),
-  //                           ),
-  //                         ),
-  //                         const SizedBox(width: 16),
-  //                         Container(
-  //                           padding: const EdgeInsets.symmetric(
-  //                             horizontal: 8,
-  //                             vertical: 4,
-  //                           ),
-  //                           decoration: BoxDecoration(
-  //                             color: _getDifficultyColor(
-  //                               lesson.difficulty,
-  //                             ).withAlpha((0.1 * 255).round()),
-  //                             borderRadius: BorderRadius.circular(8),
-  //                           ),
-  //                           child: Text(
-  //                             lesson.difficulty,
-  //                             style: theme.textTheme.bodySmall?.copyWith(
-  //                               color: _getDifficultyColor(lesson.difficulty),
-  //                               fontWeight: FontWeight.w500,
-  //                             ),
-  //                           ),
-  //                         ),
-  //                       ],
-  //                     ),
-  //                   ],
-  //                 ),
-  //               ),
-  //               if (lesson.isCompleted)
-  //                 const Icon(Icons.check_circle, color: Colors.green, size: 24)
-  //               else
-  //                 Icon(
-  //                   Icons.play_circle_outline,
-  //                   color: subjectColor,
-  //                   size: 24,
-  //                 ),
-  //             ],
-  //           ),
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
-
   Widget _buildChapitreCard(
     ChapitreModel chapitre,
     int index,
@@ -541,10 +398,11 @@ class _SubjectsPageState extends State<SubjectsPage> with TickerProviderStateMix
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => ChapterLessonsPage(
-                chapitre: chapitre,
-                subjectColor: subjectColor,
-              ),
+              builder:
+                  (context) => ChapterLessonsPage(
+                    chapitre: chapitre,
+                    subjectColor: subjectColor,
+                  ),
             ),
           );
         },
@@ -552,7 +410,7 @@ class _SubjectsPageState extends State<SubjectsPage> with TickerProviderStateMix
     );
   }
 
-  Widget _buildExerciseCard(ExerciseModel exercise, int index) {
+  Widget _buildExerciseCard(ExerciceModel exercise, int index) {
     final theme = Theme.of(context);
     final subjectColor = _getSubjectColor();
 
@@ -596,7 +454,7 @@ class _SubjectsPageState extends State<SubjectsPage> with TickerProviderStateMix
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        exercise.title,
+                        exercise.nom,
                         style: theme.textTheme.titleMedium?.copyWith(
                           fontWeight: FontWeight.bold,
                           color: theme.colorScheme.onSurface,
@@ -629,48 +487,40 @@ class _SubjectsPageState extends State<SubjectsPage> with TickerProviderStateMix
                               (0.6 * 255).round(),
                             ),
                           ),
-                          const SizedBox(width: 4),
-                          Text(
-                            '${exercise.timeLimit} min',
-                            style: theme.textTheme.bodySmall?.copyWith(
-                              color: theme.colorScheme.onSurface.withAlpha(
-                                (0.6 * 255).round(),
-                              ),
-                            ),
-                          ),
                         ],
                       ),
-                      if (exercise.isCompleted && exercise.score != null) ...[
-                        const SizedBox(height: 8),
-                        Row(
-                          children: [
-                            Icon(
-                              Icons.grade,
-                              size: 16,
-                              color: _getScoreColor(exercise.score!),
-                            ),
-                            const SizedBox(width: 4),
-                            Text(
-                              'Score: ${exercise.score}%',
-                              style: theme.textTheme.bodySmall?.copyWith(
-                                color: _getScoreColor(exercise.score!),
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
+                      // if (exercise.isCompleted && exercise.score != null) ...[
+                      //   const SizedBox(height: 8),
+                      //   Row(
+                      //     children: [
+                      //       Icon(
+                      //         Icons.grade,
+                      //         size: 16,
+                      //         color: _getScoreColor(exercise.score!),
+                      //       ),
+                      //       const SizedBox(width: 4),
+                      //       Text(
+                      //         'Score: ${exercise.score}%',
+                      //         style: theme.textTheme.bodySmall?.copyWith(
+                      //           color: _getScoreColor(exercise.score!),
+                      //           fontWeight: FontWeight.w600,
+                      //         ),
+                      //       ),
+                      //     ],
+                      //   ),
+                      // ],
                     ],
                   ),
                 ),
-                if (exercise.isCompleted)
-                  const Icon(Icons.check_circle, color: Colors.green, size: 24)
-                else
-                  Icon(
-                    Icons.play_circle_outline,
-                    color: subjectColor,
-                    size: 24,
-                  ),
+                Icon(Icons.play_circle_outline, color: subjectColor, size: 24),
+                //   if (exercise.isCompleted)
+                //     const Icon(Icons.check_circle, color: Colors.green, size: 24)
+                //   else
+                //     Icon(
+                //       Icons.play_circle_outline,
+                //       color: subjectColor,
+                //       size: 24,
+                //     ),
               ],
             ),
           ),
@@ -679,7 +529,7 @@ class _SubjectsPageState extends State<SubjectsPage> with TickerProviderStateMix
     );
   }
 
-  Widget _buildExamCard(ExamModel exam, int index) {
+  Widget _buildExamCard(ExamenModel exam, int index) {
     final theme = Theme.of(context);
     final subjectColor = _getSubjectColor();
 
@@ -721,7 +571,7 @@ class _SubjectsPageState extends State<SubjectsPage> with TickerProviderStateMix
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        exam.title,
+                        exam.nom,
                         style: theme.textTheme.titleMedium?.copyWith(
                           fontWeight: FontWeight.bold,
                           color: theme.colorScheme.onSurface,
@@ -730,27 +580,6 @@ class _SubjectsPageState extends State<SubjectsPage> with TickerProviderStateMix
                       const SizedBox(height: 4),
                       Row(
                         children: [
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 6,
-                              vertical: 2,
-                            ),
-                            decoration: BoxDecoration(
-                              color: _getDifficultyColor(
-                                exam.difficulty,
-                              ).withAlpha((0.1 * 255).round()),
-                              borderRadius: BorderRadius.circular(6),
-                            ),
-                            child: Text(
-                              exam.difficulty,
-                              style: theme.textTheme.bodySmall?.copyWith(
-                                color: _getDifficultyColor(exam.difficulty),
-                                fontWeight: FontWeight.w500,
-                                fontSize: 10,
-                              ),
-                            ),
-                          ),
-                          const SizedBox(width: 8),
                           Icon(
                             Icons.timer,
                             size: 14,
@@ -760,7 +589,7 @@ class _SubjectsPageState extends State<SubjectsPage> with TickerProviderStateMix
                           ),
                           const SizedBox(width: 2),
                           Text(
-                            '${exam.timeLimit} min',
+                            '${exam.duree} min',
                             style: theme.textTheme.bodySmall?.copyWith(
                               color: theme.colorScheme.onSurface.withAlpha(
                                 (0.6 * 255).round(),
@@ -788,43 +617,14 @@ class _SubjectsPageState extends State<SubjectsPage> with TickerProviderStateMix
                           ),
                         ],
                       ),
-                      if (exam.isCompleted && exam.score != null) ...[
-                        const SizedBox(height: 8),
-                        Row(
-                          children: [
-                            Icon(
-                              exam.isPassed ? Icons.check_circle : Icons.cancel,
-                              size: 16,
-                              color: exam.isPassed ? Colors.green : Colors.red,
-                            ),
-                            const SizedBox(width: 4),
-                            Text(
-                              'Score: ${exam.score}% (Requis: ${exam.passingScore}%)',
-                              style: theme.textTheme.bodySmall?.copyWith(
-                                color:
-                                    exam.isPassed ? Colors.green : Colors.red,
-                                fontWeight: FontWeight.w600,
-                                fontSize: 12,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
                     ],
                   ),
                 ),
-                if (exam.isCompleted)
-                  Icon(
-                    exam.isPassed ? Icons.check_circle : Icons.cancel,
-                    color: exam.isPassed ? Colors.green : Colors.red,
-                    size: 24,
-                  )
-                else
-                  Icon(
-                    Icons.play_circle_outline,
-                    color: subjectColor,
-                    size: 24,
-                  ),
+                Icon(
+                  Icons.play_circle_outline,
+                  color: subjectColor,
+                  size: 24,
+                ),
               ],
             ),
           ),
@@ -874,22 +674,22 @@ class _SubjectsPageState extends State<SubjectsPage> with TickerProviderStateMix
     }
   }
 
-  Color _getDifficultyColor(String difficulty) {
-    switch (difficulty.toLowerCase()) {
-      case 'facile':
-        return Colors.green;
-      case 'moyen':
-        return Colors.orange;
-      case 'difficile':
-        return Colors.red;
-      default:
-        return Colors.grey;
-    }
-  }
+  // Color _getDifficultyColor(String difficulty) {
+  //   switch (difficulty.toLowerCase()) {
+  //     case 'facile':
+  //       return Colors.green;
+  //     case 'moyen':
+  //       return Colors.orange;
+  //     case 'difficile':
+  //       return Colors.red;
+  //     default:
+  //       return Colors.grey;
+  //   }
+  // }
 
-  Color _getScoreColor(int score) {
-    if (score >= 80) return Colors.green;
-    if (score >= 60) return Colors.orange;
-    return Colors.red;
-  }
+  // Color _getScoreColor(int score) {
+  //   if (score >= 80) return Colors.green;
+  //   if (score >= 60) return Colors.orange;
+  //   return Colors.red;
+  // }
 }

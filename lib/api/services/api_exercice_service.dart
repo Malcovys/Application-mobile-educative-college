@@ -1,13 +1,25 @@
 import 'package:application_mobile_educative_college/api/api_client.dart';
 import 'package:application_mobile_educative_college/api/endpoints.dart';
+import '../../models/exercice_model.dart';
 
-class ExerciceService {
+class ApiExerciceService {
   static final apiClient = ApiClient();
 
   // Récupérer tous les exercices
-  static Future<List<Map<String, dynamic>>> getExercices() async {
-    final response = await apiClient.get(ApiRoutes.exercices);
-    return List<Map<String, dynamic>>.from(response.data);
+  static Future<List<ExerciceModel>> getExercicesByMatiere(int matiereId) async {
+    final List<ExerciceModel> listExercice = [];
+
+    try{
+      final path = ApiRoutes.path(ApiRoutes.exercices, params: {'matiereId': matiereId});
+      final response = await apiClient.get(path);
+
+      for (var data in response.data["exercice"]) {
+        listExercice.add(ExerciceModel.fromJson(data));
+      }
+    }catch (error) {
+      print(error);
+    }
+    return listExercice;
   }
 
   // Récupérer un exercice par ID

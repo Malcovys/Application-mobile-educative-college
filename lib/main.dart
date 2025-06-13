@@ -7,7 +7,9 @@ import 'pages/home_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   await AuthService.initialize();
+  
   runApp(const MyApp());
 }
 
