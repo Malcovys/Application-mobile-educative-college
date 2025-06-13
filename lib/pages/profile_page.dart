@@ -1,3 +1,4 @@
+import 'package:application_mobile_educative_college/pages/login_page.dart';
 import 'package:application_mobile_educative_college/services/auth_service.dart';
 import 'package:flutter/material.dart';
 
@@ -13,6 +14,18 @@ class ProfilePage extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Mon Profil', style: TextStyle(color: Colors.white)),
         backgroundColor: Colors.deepPurple,
+        actions: [
+          IconButton(
+            tooltip: 'Déconnexion',
+            onPressed: () async {
+              await AuthService.logout();
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(builder: (context) => const LoginPage())
+              );
+            },
+            icon: const Icon(Icons.logout, color: Colors.white),
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),

@@ -44,6 +44,7 @@ class _ChapterLessonsPageState extends State<ChapterLessonsPage> {
       appBar: AppBar(
         title: Text(widget.chapitre.nom),
         backgroundColor: widget.subjectColor,
+        foregroundColor: Colors.white,
       ),
       body: isLoading
           ? const Center(child: CircularProgressIndicator())

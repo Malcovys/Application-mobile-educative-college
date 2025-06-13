@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../pages/home_page.dart';
-import '../pages/task_page.dart';
 import '../pages/profile_page.dart';
 
 class NavBar extends StatefulWidget {
@@ -14,7 +13,7 @@ class NavBar extends StatefulWidget {
 class _NavBarState extends State<NavBar> {
   int _selectedIndex = 0;
 
-  final List<Widget> _pages = const [HomePage(), Task(), ProfilePage()];
+  final List<Widget> _pages = const [HomePage(), ProfilePage()];
 
   void _onItemTapped(int index) {
     setState(() {
@@ -34,7 +33,6 @@ class _NavBarState extends State<NavBar> {
         elevation: 10,
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Acceuil'),
-          BottomNavigationBarItem(icon: Icon(Icons.task_alt), label: 'Tâches'),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
         ],
       ),

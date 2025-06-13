@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../models/lecon_model.dart';
 import '../widgets/lessons/sliver_app_bar.dart';
-import '../widgets/lessons/lesson_info.dart';
-import '../widgets/lessons/objectives.dart';
 import '../widgets/lessons/lesson_content.dart';
 
 class LessonPage extends StatefulWidget {
